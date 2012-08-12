@@ -25,7 +25,7 @@ chat.command( "adduser", "adduser", {
 
 		client:msg( "Ok! Tell #lw%s#d their password is #lw%s#d.", name, chat.pendingUsers[ lower ].code )
 	end,
-}, "[name]", "Create a new user account" )
+}, "<name>", "Create a new user account" )
 
 chat.command( "password", "user", function( client, password )
 	if password == "" then
@@ -41,3 +41,5 @@ chat.command( "password", "user", function( client, password )
 	
 	client:msg( "Your password has been updated!" )
 end, "Change your password" )
+
+chat.command( "
