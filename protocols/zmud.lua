@@ -56,10 +56,10 @@ function ZMudClient:msg( form, ... )
 	self:send( "pm", "%s<%s>#d %s" % { self.stamp, chat.config.name, form:format( ... ) } )
 end
 
-function ZMudClient:chat( form, ... )
-	enforce( form, "form", "string" )
+function ZMudClient:chat( message )
+	enforce( message, "message", "string" )
 
-	self:send( "all", self.stamp .. form:format( ... ) )
+	self:send( "all", self.stamp .. message )
 end
 
 return {

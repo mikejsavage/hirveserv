@@ -49,10 +49,10 @@ function MMClient:msg( form, ... )
 	self:send( "pm", "<%s>#d %s" % { chat.config.name, form:format( ... ) } )
 end
 
-function MMClient:chat( form, ... )
-	enforce( form, "form", "string" )
+function MMClient:chat( message )
+	enforce( message, "message", "string" )
 
-	self:send( "all", form:format( ... ) )
+	self:send( "all", message )
 end
 
 return {
