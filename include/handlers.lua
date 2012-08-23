@@ -195,11 +195,11 @@ local function registrationHandler( client )
 		local salt = bcrypt.salt( chat.config.bcryptRounds )
 		local digest = bcrypt.digest( password, salt )
 
-		chat.db.users( "INSERT INTO users ( name, password ) VALUES ( ?, ? )", client.name:lower(), digest )()
-		
-		local userID = chat.db.users( "SELECT last_insert_rowid()" )()
-
 		chat.db.users( function()
+			chat.db.users( "INSERT INTO users ( name, password ) VALUES ( ?, ? )", client.name:lower(), digest )()
+			
+			local userID = chat.db.users( "SELECT last_insert_rowid()" )()
+
 			if client.privs.all then
 				chat.db.users( "INSERT INTO privs ( userid, priv ) VALUES ( ?, ? )", userID, "all" )()
 			end
