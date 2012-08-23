@@ -97,8 +97,7 @@ function enforce( var, name, ... )
 	end
 end
 
-local ColourSequences =
-{
+local ColourSequences = {
 	d = 0,
 	r = 31,
 	g = 32,
