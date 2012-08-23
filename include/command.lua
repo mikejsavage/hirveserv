@@ -91,7 +91,7 @@ end
 chat.command( "help", nil, {
 	[ "^$" ] = function( client )
 		local lines = {
-			"Commands list: (use #lwhelp <command>#d for detailed help)",
+			"Commands: (use #lwhelp <command>#d for detailed help)",
 		}
 
 		local maxCommandLen = 0
