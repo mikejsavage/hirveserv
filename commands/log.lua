@@ -1,12 +1,67 @@
 local Logs = { }
 
+local function sendLogs( client, messages, needle )
+	messages = math.min( tonumber( messages ) or 20, 50 )
+	needle = needle and needle:lower() or ""
+
+	local output = { }
+	local i = #Logs
+	local n = 0
+
+	while i >= 1 and n < messages do
+		if needle == "" or Logs[ i ].lower:find( needle, 1, true ) then
+			table.insert( output, 1, Logs[ i ].normal )
+
+			n = n + 1
+		end
+
+		i = i - 1
+	end
+
+	if needle == "" then
+		client:msg( "Last #lw%d#d message%s:\n%s", n, string.plural( n ), table.concat( output, "\n" ) )
+	else
+		client:msg( "Last #lw%d#d message%s containing #lw%s#d:\n%s", n, string.plural( n ), needle, table.concat( output, "\n" ) )
+	end
+end
+
+local function addLog( message )
+	table.insert( Logs, {
+		normal = os.date( "#lr[#lw%H:%M#lr] " ) .. message,
+		lower = message:lower(),
+	} )
+end
+
 chat.command( "log", nil, {
+	[ "^$" ] = function( client )
+		sendLogs( client )
+	end,
+
 	[ "^(%d+)$" ] = function( client, messages )
+		sendLogs( client, messages )
 	end,
 
 	[ "^(%D.*)$" ] = function( client, needle )
+		sendLogs( client, nil, needle )
 	end,
 
-	[ "^(%d+) (%S+)$" ] = function( client, messages, needle )
+	[ "^(%d+)%s+(.+)$" ] = function( client, messages, needle )
+		sendLogs( client, messages, needle )
 	end,
 }, "<number/needle> [needle]", "Show recent messages" )
+
+chat.listen( "message", function( client, message )
+	addLog( message:trim() )
+end )
+
+chat.listen( "connect", function( client )
+	addLog( "<%s> #lw%s#d is in the house!" % { chat.config.name, client.name } )
+end )
+
+chat.listen( "nameChange", function( client, newName )
+	addLog( "<%s> #lw%s#d changed their name to #lw%s#d." % { chat.config.name, client.name, newName } )
+end )
+
+chat.listen( "disconnect", function( client )
+	addLog( "<%s> #lw%s#d left chat." % { chat.config.name, client.name } )
+end )

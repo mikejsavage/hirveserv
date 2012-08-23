@@ -135,6 +135,7 @@ chat.command( "help", nil, {
 require( "commands.auth" )
 require( "commands.roll" )
 require( "commands.who" )
+require( "commands.log" )
 
 return {
 	doCommand = doCommand,
