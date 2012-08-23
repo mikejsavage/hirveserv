@@ -8,6 +8,7 @@ require( "config" )
 math.randomseed( os.time() )
 
 require( "include.utils" )
+require( "include.event" )
 require( "include.sqlite" )
 
 local schema = require( "include.schema" )

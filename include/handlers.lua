@@ -1,7 +1,5 @@
 require( "bcrypt" )
 
-local onauth = require( "include.onauth" )
-
 chat.pendingUsers = { }
 
 local Protocols = {
@@ -32,7 +30,7 @@ local function chatHandler( client )
 	client.state = "chatting"
 	chat.msg( "#lw%s#d is in the house!", client.name )
 
-	onauth.doOnAuths( client )
+	chat.event( "connect", client )
 
 	while true do
 		local command, args = coroutine.yield()

@@ -11,4 +11,4 @@ local function who( client )
 end
 
 chat.command( "who", nil, who, "Shows who is online" )
-chat.onAuth( who )
+chat.listen( "connect", who )

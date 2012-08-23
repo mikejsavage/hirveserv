@@ -28,6 +28,8 @@ function Client:kill()
 	self.socket:shutdown()
 
 	if self.state == "chatting" then
+		chat.event( "disconnect", self )
+
 		self:xmsg( "#lw%s#d left chat.", self.name )
 	end
 
@@ -77,6 +79,8 @@ function Client:xmsg( form, ... )
 end
 
 function Client:chatAll( message )
+	chat.event( "message", self, message )
+
 	for _, client in ipairs( chat.clients ) do
 		if client ~= self and client.state == "chatting" then
 			client:chat( message )
@@ -90,6 +94,8 @@ end
 
 function Client:nameChange( newName )
 	if self.state == "chatting" then
+		chat.event( "nameChange", self, newName )
+
 		self:xmsg( "#lw%s#d changed their name to #lw%s#d.", self.name, newName )
 	end
 
