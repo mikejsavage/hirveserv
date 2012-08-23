@@ -109,6 +109,8 @@ local ColourSequences = {
 }
 
 function chat.parseColours( message )
+	message = assert( tostring( message ) )
+
 	return ( message:gsub( "()#(l?)(%l)", function( patternPos, bold, sequence )
 		if message:sub( patternPos - 1, patternPos - 1 ) == "#" then
 			return
