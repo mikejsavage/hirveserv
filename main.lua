@@ -67,7 +67,19 @@ local function connectHandler()
 	):start( loop )
 end
 
+local function sendPings()
+	local now = loop:update_now()
+
+	for _, client in ipairs( chat.clients ) do
+		if client.state ~= "connecting" then
+			client:ping( now )
+		end
+	end
+end
+
 addons.load()
 
 ev.IO.new( connectHandler, server:getfd(), ev.READ ):start( loop )
+ev.Timer.new( sendPings, 30, 30 ):start( loop )
+
 loop:loop()

@@ -26,7 +26,7 @@ local function dataHandler( client )
 			client:send( "pingResponse", args )
 		elseif command == "stamp" then
 			self.stamp = arg:sub( 1, -2 ) .. string.char( ( arg:byte( -1 ) +  1 ) % 256 )
-		elseif command then
+		elseif command and command ~= "pingResponse" then
 			client:command( command, args )
 		end
 	end
@@ -60,6 +60,10 @@ function ZMudClient:chat( message )
 	enforce( message, "message", "string" )
 
 	self:send( "all", self.stamp .. message )
+end
+
+function ZMudClient:ping( now )
+	self:send( "pingRequest", now )
 end
 
 return {

@@ -23,7 +23,7 @@ local function dataHandler( client )
 			client:command( "pm", args:match( "chats to you, '(.*)'\n$" ) )
 		elseif command == "pingRequest" then
 			client:send( "pingResponse", args )
-		elseif command then
+		elseif command and command ~= "pingResponse" then
 			client:command( command, args )
 		end
 	end
@@ -53,6 +53,10 @@ function MMClient:chat( message )
 	enforce( message, "message", "string" )
 
 	self:send( "all", message )
+end
+
+function MMClient:ping( now )
+	self:send( "pingRequest", now )
 end
 
 return {

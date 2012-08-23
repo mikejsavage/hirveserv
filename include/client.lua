@@ -62,6 +62,10 @@ function Client:handleCommand()
 	error( "Client:handleCommand not implemented for protocol `%s'" % self.protocol )
 end
 
+function Client:ping()
+	error( "Client:ping not implemented for protocol `%s'" % self.protocol )
+end
+
 function Client:hasPriv( priv )
 	if priv == "user" then
 		return self.userID ~= nil
