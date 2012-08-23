@@ -7,6 +7,7 @@ chat.clients = { }
 
 function Client:new( socket )
 	socket:settimeout( 0 )
+	socket:setoption( "keepalive", true )
 
 	local client = {
 		socket = socket,
