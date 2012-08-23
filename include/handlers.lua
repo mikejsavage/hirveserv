@@ -332,6 +332,10 @@ local function connectHandler( client )
 
 	client:raw( "YES:" .. chat.config.name .. "\n" )
 
+	table.insertBy( chat.clients, client, function( a, b )
+		return a.name:lower() < b.name:lower()
+	end )
+
 	if chat.config.noAuth then
 		client:pushHandler( chatHandler )
 	else

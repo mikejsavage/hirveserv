@@ -21,8 +21,6 @@ function Client:new( socket )
 
 	setmetatable( client, { __index = Client } )
 
-	table.insert( chat.clients, client )
-
 	return client
 end
 
@@ -33,13 +31,7 @@ function Client:kill()
 		self:xmsg( "#lw%s#d left chat.", self.name )
 	end
 
-	for i, client in ipairs( chat.clients ) do
-		if client == self then
-			table.remove( chat.clients, i )
-
-			break
-		end
-	end
+	table.removeValue( chat.clients, self )
 end
 
 function Client:raw( data )
@@ -102,6 +94,11 @@ function Client:nameChange( newName )
 	end
 
 	self.name = newName
+
+	table.removeValue( chat.clients, self )
+	table.insertBy( chat.clients, self, function( a, b )
+		return a.name:lower() < b.name:lower()
+	end )
 end
 
 function Client:setDataHandler( handler )

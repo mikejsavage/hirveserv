@@ -80,6 +80,26 @@ function io.readable( path )
 	return true
 end
 
+function table.insertBy( self, value, cmp )
+	local idx = 1
+
+	while idx <= #self and not cmp( value, self[ idx ] ) do
+		idx = idx + 1
+	end
+
+	table.insert( self, idx, value )
+end
+
+function table.removeValue( self, value )
+	for i, elem in ipairs( self ) do
+		if elem == value then
+			table.remove( self, i )
+			
+			break
+		end
+	end
+end
+
 function enforce( var, name, ... )
 	local acceptable = { ... }
 	local ok = false
