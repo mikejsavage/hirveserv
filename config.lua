@@ -1,6 +1,6 @@
 chat.config = {
 	name = "hirveserv",
 	port = 4050,
-	noAuth = false,
+	noAuth = true,
 	bcryptRounds = 5,
 }
