@@ -29,7 +29,7 @@ end
 function Client:kill()
 	self.socket:shutdown()
 
-	if self.state == "authed" then
+	if self.state == "chatting" then
 		self:xmsg( "#lw%s#d left chat.", self.name )
 	end
 
@@ -74,7 +74,7 @@ function Client:xmsg( form, ... )
 	local message = form:format( ... )
 
 	for _, client in ipairs( chat.clients ) do
-		if client ~= self and client.state == "authed" then
+		if client ~= self and client.state == "chatting" then
 			client:msg( message )
 		end
 	end
@@ -82,7 +82,7 @@ end
 
 function Client:chatAll( message )
 	for _, client in ipairs( chat.clients ) do
-		if client ~= self and client.state == "authed" then
+		if client ~= self and client.state == "chatting" then
 			client:chat( message )
 		end
 	end
@@ -93,7 +93,7 @@ function Client:pm( message )
 end
 
 function Client:nameChange( newName )
-	if self.state == "authed" then
+	if self.state == "chatting" then
 		self:xmsg( "#lw%s#d changed their name to #lw%s#d.", self.name, newName )
 	end
 
@@ -139,7 +139,7 @@ function chat.msg( form, ... )
 	local message = form:format( ... )
 
 	for _, client in ipairs( chat.clients ) do
-		if  client.state == "authed" then
+		if  client.state == "chatting" then
 			client:msg( message )
 		end
 	end

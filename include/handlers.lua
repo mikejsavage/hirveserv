@@ -29,7 +29,7 @@ local function cleanPendingUsers()
 end
 
 local function chatHandler( client )
-	client.state = "authed"
+	client.state = "chatting"
 	chat.msg( "#lw%s#d is in the house!", client.name )
 
 	onauth.doOnAuths( client )
