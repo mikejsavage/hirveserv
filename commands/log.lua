@@ -27,6 +27,15 @@ end
 
 local function addLog( message )
 	table.insert( Logs, {
+		normal = os.date( "#lr[#lw%H:%M#lr] " ) .. message:gsub( "#", "##" ),
+		lower = message:lower(),
+	} )
+end
+
+local function addMsg( message )
+	message = "<%s> %s" % { chat.config.name, message }
+
+	table.insert( Logs, {
 		normal = os.date( "#lr[#lw%H:%M#lr] " ) .. message,
 		lower = message:lower(),
 	} )
@@ -55,13 +64,13 @@ chat.listen( "message", function( client, message )
 end )
 
 chat.listen( "connect", function( client )
-	addLog( "<%s> #lw%s#d is in the house!" % { chat.config.name, client.name } )
+	addMsg( "#lw%s#d is in the house!" % client.name )
 end )
 
 chat.listen( "nameChange", function( client, newName )
-	addLog( "<%s> #lw%s#d changed their name to #lw%s#d." % { chat.config.name, client.name, newName } )
+	addMsg( "#lw%s#d changed their name to #lw%s#d." % { client.name, newName } )
 end )
 
 chat.listen( "disconnect", function( client )
-	addLog( "<%s> #lw%s#d left chat." % { chat.config.name, client.name } )
+	addMsg( "#lw%s#d left chat." % client.name )
 end )

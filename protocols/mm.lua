@@ -2,6 +2,7 @@ local CommandBytes = {
 	nameChange = "\1",
 	all = "\4",
 	pm = "\5",
+	message = "\7",
 	pingRequest = "\26",
 	pingResponse = "\27",
 }
@@ -36,7 +37,7 @@ function MMClient:send( command, data )
 
 	assert( byte, "bad command: " .. command )
 
-	self:raw( byte .. chat.parseColours( data ) .. "\255" )
+	self:raw( byte .. data .. "\255" )
 end
 
 function MMClient:msg( form, ... )
@@ -46,7 +47,7 @@ function MMClient:msg( form, ... )
 		form = table.concat( form, "\n" )
 	end
 
-	self:send( "pm", "<%s>#d %s" % { chat.config.name, form:format( ... ) } )
+	self:send( "message", chat.parseColours( "<%s>#d %s" % { chat.config.name, form:format( ... ) } ) )
 end
 
 function MMClient:chat( message )

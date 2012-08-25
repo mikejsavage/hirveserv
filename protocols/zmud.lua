@@ -2,6 +2,7 @@ local CommandBytes = {
 	nameChange = string.ushort( 1 ),
 	all = string.ushort( 4 ),
 	pm = string.ushort( 5 ),
+	message = string.ushort( 7 ),
 	pingRequest = string.ushort( 26 ),
 	pingResponse = string.ushort( 27 ),
 	stamp = string.ushort( 106 ),
@@ -42,8 +43,7 @@ function ZMudClient:send( command, data )
 
 	assert( byte, "bad command: " .. command )
 
-	local coloured = chat.parseColours( data )
-	self:raw( byte .. string.ushort( coloured:len() ) .. coloured )
+	self:raw( byte .. string.ushort( data:len() ) .. data )
 end
 
 function ZMudClient:msg( form, ... )
@@ -53,7 +53,7 @@ function ZMudClient:msg( form, ... )
 		form = table.concat( form, "\n" )
 	end
 
-	self:send( "pm", "%s<%s>#d %s" % { self.stamp, chat.config.name, form:format( ... ) } )
+	self:send( "message", chat.parseColours( "%s<%s>#d %s" % { self.stamp, chat.config.name, form:format( ... ) } ) )
 end
 
 function ZMudClient:chat( message )
