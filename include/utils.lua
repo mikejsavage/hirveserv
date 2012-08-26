@@ -136,12 +136,11 @@ function chat.parseColours( message )
 			return
 		end
 
-		-- set bold after colour so #ld works
 		if bold == "l" then
-			return "\27[%d;1m" % { ColourSequences[ sequence ] }
+			return "\27[1m\27[%dm" % { ColourSequences[ sequence ] }
 		end
 
-		return "\27[0;%dm" % { ColourSequences[ sequence ] }
+		return "\27[0m\27[%dm" % { ColourSequences[ sequence ] }
 	end ):gsub( "##", "#" ) )
 end
 
