@@ -18,10 +18,12 @@ local function dataHandler( client )
 	while true do
 		local data = coroutine.yield()
 
-		local commandByte, args = data:match( "^(..)......(.*)$" )
+		local commandByte, args = data:match( "^(..)..(.*)$" )
 		local command = Commands[ commandByte ]
 
-		if command == "pm" then
+		if command == "all" then
+			client:command( "all", args:match( "^....(.*)$" ) )
+		elseif command == "pm" then
 			client:command( "pm", args:match( "chats to you[:,] '(.*)'\n$" ) )
 		elseif command == "pingRequest" then
 			client:send( "pingResponse", args )
