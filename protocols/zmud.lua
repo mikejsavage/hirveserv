@@ -41,6 +41,8 @@ local ZMudClient = setmetatable( {
 }, { __index = Client } )
 
 function ZMudClient:send( command, data )
+	data = tostring( data )
+
 	local byte = CommandBytes[ command ]
 
 	assert( byte, "bad command: " .. command )
