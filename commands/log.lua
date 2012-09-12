@@ -1,4 +1,5 @@
 local Logs = { }
+local MaxLogs = 250
 
 local function sendLogs( client, messages, needle )
 	messages = math.min( tonumber( messages ) or 20, 50 )
@@ -30,6 +31,10 @@ local function addLog( message )
 		normal = os.date( "#lr[#lw%H:%M#lr] " ) .. message:gsub( "#", "##" ),
 		lower = message:lower(),
 	} )
+
+	if #Logs > MaxLogs then
+		table.remove( Logs, 1 )
+	end
 end
 
 local function addMsg( message )
@@ -39,6 +44,10 @@ local function addMsg( message )
 		normal = os.date( "#lr[#lw%H:%M#lr] " ) .. message,
 		lower = message:lower(),
 	} )
+
+	if #Logs > MaxLogs then
+		table.remove( Logs, 1 )
+	end
 end
 
 chat.command( "log", nil, {
