@@ -42,4 +42,68 @@ chat.command( "password", "user", function( client, password )
 	client:msg( "Your password has been updated!" )
 end, "Change your password" )
 
-chat.command( "
+chat.command( "addprivs", "privs", {
+	[ "^(.-)%s+(.-)$" ] = function( client, name, privStr )
+		local privs = { }
+		local target = chat.clientFromName( name, true ) 
+
+		if not target then
+			client:msg( "There's nobody called #lw%s#d.", name )
+
+			return
+		end
+
+		chat.db.users( function()
+			for priv in privStr:gmatch( "([^,]+)" ) do
+				if target.privs then
+					if not target.privs[ priv ] then
+						target.privs[ priv ] = true
+
+						table.insert( privs, priv )
+					end
+				end
+
+				chat.db.users( "INSERT INTO privs ( userid, priv ) VALUES ( ?, ? )", target.userID, priv )()
+			end
+		end )
+
+		if target.state == "chatting" and #privs > 0 then
+			target:msg( "You have been granted #lw%s#d privs.", table.concat( privs, "#d,#lw " ) )
+		end
+
+		client:msg( "Ok." )
+	end,
+}, "<name> <privs>", "Add privs to an account" )
+
+chat.command( "remprivs", "privs", {
+	[ "^(.-)%s+(.-)$" ] = function( client, name, privStr )
+		local privs = { }
+		local target = chat.clientFromName( name, true ) 
+
+		if not target then
+			client:msg( "There's nobody called #lw%s#d.", name )
+
+			return
+		end
+
+		chat.db.users( function()
+			for priv in privStr:gmatch( "([^,]+)" ) do
+				if target.privs then
+					if target.privs[ priv ] then
+						target.privs[ priv ] = nil
+
+						table.insert( privs, priv )
+					end
+				end
+
+				chat.db.users( "DELETE FROM privs WHERE userid = ? AND priv = ?", target.userID, priv )()
+			end
+		end )
+
+		if target.state == "chatting" and #privs > 0 then
+			target:msg( "Your #lw%s#d privs have been revoked.", table.concat( privs, "#d,#lw " ) )
+		end
+
+		client:msg( "Ok." )
+	end,
+}, "<name> <privs>", "Remove privs from an account" )

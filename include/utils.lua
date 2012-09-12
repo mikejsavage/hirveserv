@@ -28,6 +28,10 @@ function string.plural( count, plur, sing )
 	return count == 1 and ( sing or "" ) or ( plur or "s" )
 end
 
+function string.startsWith( self, needle )
+	return self:sub( 1, needle:len() ) == needle
+end
+
 function string.commas( num )
 	num = tonumber( num )
 
@@ -78,6 +82,20 @@ function io.readable( path )
 	io.close( file )
 
 	return true
+end
+
+function io.contents( path )
+	local file, err = io.open( path, "r" )
+
+	if not file then
+		return nil, err
+	end
+
+	local contents = file:read( "*a" )
+
+	file:close()
+
+	return contents
 end
 
 function table.insertBy( self, value, cmp )

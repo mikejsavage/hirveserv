@@ -149,6 +149,36 @@ function chat.msg( form, ... )
 	for _, client in ipairs( chat.clients ) do
 		if  client.state == "chatting" then
 			client:msg( message )
+
+function chat.clientFromName( name, registered )
+	if registered then
+		for _, client in ipairs( chat.clients ) do
+			if client.name == name then
+				return client
+			end
+		end
+
+		local userID = chat.db.users( "SELECT userid FROM users WHERE name = ?", name )()
+
+		if not userID then
+			return nil, "not found"
+		end
+
+		return {
+			name = name,
+			userID = userID,
+		}
+	else
+		local match
+
+		for _, client in ipairs( chat.clients ) do
+			if client.name:startsWith( name ) then
+				if match then
+					return nil
+				else
+					match = client
+				end
+			end
 		end
 	end
 end
