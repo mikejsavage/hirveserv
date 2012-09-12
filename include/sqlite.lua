@@ -13,9 +13,13 @@ local function newDB( file )
 		if type( query ) == "function" then
 			self:exec( "BEGIN TRANSACTION" )
 
-			query()
+			local ok = pcall( query )
 
-			self:exec( "COMMIT TRANSACTION" )
+			if ok then
+				self:exec( "COMMIT TRANSACTION" )
+			else
+				self:exec( "ROLLBACK TRANSACTION" )
+			end
 		else
 			if not statementCache[ query ] then
 				statementCache[ query ] = assert( ( self:prepare( query ) ), self:errmsg() )
