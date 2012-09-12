@@ -12,20 +12,27 @@ chat.command( "adduser", "adduser", {
 			return
 		end
 
-		if chat.pendingUsers[ lower ] then
-			chat.pendingUsers[ lower ].time = os.time()
-		else
-			local code = words.random()
+		local code = chat.db.users( "SELECT code FROM pending WHERE name = ?", lower )()
 
-			chat.pendingUsers[ lower ] = {
-				time = os.time(),
-				code = code,
-			}
+		if not code then
+			code = words.random()
+
+			chat.db.users( "INSERT INTO pending ( name, code ) VALUES ( ?, ? )", lower, code )()
 		end
 
-		client:msg( "Ok! Tell #lw%s#d their password is #lw%s#d.", name, chat.pendingUsers[ lower ].code )
+		client:msg( "Ok! Tell #lw%s#d their password is #lw%s#d.", name, code )
 	end,
 }, "<name>", "Create a new user account" )
+
+chat.command( "rempending", "adduser", {
+	[ "^(.+)$" ] = function( client, name )
+		local lower = name:lower()
+
+		chat.db.users( "DELETE FROM pending WHERE name = ?", lower )()
+
+		client:msg( "Ok." )
+	end
+}, "<name>", "Remove a pending account" )
 
 chat.command( "password", "user", function( client, password )
 	if password == "" then

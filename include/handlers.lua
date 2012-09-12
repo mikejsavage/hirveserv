@@ -1,7 +1,5 @@
 require( "bcrypt" )
 
-chat.pendingUsers = { }
-
 local Protocols = {
 	mm = require( "protocols.mm" ),
 	zmud = require( "protocols.zmud" ),
@@ -14,16 +12,6 @@ if userCount == 0 then
 	adminCode = bcrypt.salt( 1 ):match( "([^$]+)$" )
 
 	print( chat.parseColours( "Use the password #lw%s#d to create admin account" % adminCode ) )
-end
-
-local function cleanPendingUsers()
-	local now = os.time()
-
-	for name, details in pairs( chat.pendingUsers ) do
-		if os.difftime( details.time, now ) >= 60 * 5 then
-			chat.pendingUsers[ name ] = nil
-		end
-	end
 end
 
 local function chatHandler( client )
@@ -86,7 +74,7 @@ local function findAliasPattern( message, needle )
 	return pattern, outline
 end
 
-local function registrationHandler( client )
+local function oldregistrationHandler( client )
 	local state = "password"
 
 	local password
@@ -222,18 +210,69 @@ local function registrationHandler( client )
 	end
 end
 
-local function checkRegistrationHandler( client )
-	client:msg( "Hey, #lw%s#d, you should have been given an #lwextremely secret password#d. PM me that!", client.name )
+local function registrationHandler( client )
+	client:msg( "Cool. What do you want your #lwactual#d password to be?" )
 
-	local code = chat.pendingUsers[ client.name:lower() ].code
+	local password
+	local createAccount = false
+
+	while true do
+		local command, args = coroutine.yield()
+
+		if command == "pm" then
+			if args == "" then
+				client:msg( "A blank password is not a good password." ) 
+			else
+				password = args
+				createAccount = true
+
+				break
+			end
+		end
+
+		if command == "nameChange" then
+			client:msg( "Don't do that..." )
+			client:kill()
+
+			break
+		end
+	end
+
+	if createAccount then
+		local lower = client.name:lower()
+		local salt = bcrypt.salt( chat.config.bcryptRounds )
+		local digest = bcrypt.digest( password, salt )
+		local userID
+
+		chat.db.users( function()
+			chat.db.users( "INSERT INTO users ( name, password ) VALUES ( ?, ? )", lower, digest )()
+			
+			userID = chat.db.users( "SELECT last_insert_rowid()" )()
+
+			if client.privs.all then
+				chat.db.users( "INSERT INTO privs ( userid, priv ) VALUES ( ?, ? )", userID, "all" )()
+			end
+
+			chat.db.users( "DELETE FROM pending WHERE name = ?", lower )()
+		end )
+
+		client.userID = userID
+
+		client:msg( "You're all set - #lw/chat#d me #lwhelp#d for exciting things." )
+		client:replaceHandler( chatHandler )
+
+		adminCode = nil
+	end
+end
+
+local function checkRegistrationHandler( client, code )
+	client:msg( "Hey, #lw%s#d, you should have been given an #lwextremely secret#d password. #lw/chat#d me that!", client.name )
 
 	while true do
 		local command, args = coroutine.yield()
 
 		if command == "pm" then
 			if args == code then
-				client:msg( "Cool. You'll need to disable reps etc briefly so they don't mess things up." )
-
 				client:replaceHandler( registrationHandler )
 			else
 				client:msg( "Nope." )
@@ -253,10 +292,10 @@ local function checkRegistrationHandler( client )
 end
 
 local function authHandler( client )
-	cleanPendingUsers()
+	local code = chat.db.users( "SELECT code FROM pending WHERE name = ?", client.name:lower() )()
 
-	if chat.pendingUsers[ client.name:lower() ] then
-		client:replaceHandler( checkRegistrationHandler )
+	if code then
+		client:replaceHandler( checkRegistrationHandler, code )
 
 		return
 	end
