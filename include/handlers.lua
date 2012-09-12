@@ -300,7 +300,7 @@ local function authHandler( client )
 		return
 	end
 
-	client:msg( "Hey, #lw%s#d! PM me your password.", client.name )
+	client:msg( "Hey, #lw%s#d! #lw/chat#d me your password.", client.name )
 
 	while true do
 		local command, args = coroutine.yield()
