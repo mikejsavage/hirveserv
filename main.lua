@@ -2,6 +2,16 @@
 
 chat = { }
 
+local lfs = require( "lfs" )
+
+local serverDir = arg[ 0 ]:match( "^(.-)/[^/]*$" )
+
+if serverDir then
+	lfs.chdir( serverDir )
+end
+
+lfs.mkdir( "data" )
+
 require( "picky" )
 require( "config" )
 
@@ -25,15 +35,8 @@ require( "include.client" )
 
 local addons = require( "include.addons" )
 
-local lfs = require( "lfs" )
 local socket = require( "socket" )
 local ev = require( "ev" )
-
-local serverDir = arg[ 0 ]:match( "^(.-)/[^/]*$" )
-
-if serverDir then
-	lfs.chdir( serverDir )
-end
 
 local loop = ev.Loop.default
 local server = assert( socket.bind( "*", chat.config.port ) )
