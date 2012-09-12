@@ -334,10 +334,10 @@ local function connectHandler( client )
 		return a.name:lower() < b.name:lower()
 	end )
 
-	if chat.config.noAuth then
-		client:pushHandler( chatHandler )
-	else
+	if chat.config.auth then
 		client:pushHandler( authHandler )
+	else
+		client:pushHandler( chatHandler )
 	end
 end
 
