@@ -68,18 +68,12 @@ chat.command( "log", nil, {
 	end,
 }, "<number/needle> [needle]", "Show recent messages" )
 
-chat.listen( "message", function( client, message )
+chat.listen( "chatAll", function( client, message )
 	addLog( message:trim() )
 end )
 
-chat.listen( "connect", function( client )
-	addMsg( "#lw%s#d is in the house!" % client.name )
-end )
+chat.listen( "msg", addMsg )
 
-chat.listen( "nameChange", function( client, newName )
-	addMsg( "#lw%s#d changed their name to #lw%s#d." % { client.name, newName } )
-end )
-
-chat.listen( "disconnect", function( client )
-	addMsg( "#lw%s#d left chat." % client.name )
+chat.listen( "xmsg", function( client, message )
+	addMsg( message )
 end )

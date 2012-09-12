@@ -72,6 +72,8 @@ end
 function Client:xmsg( form, ... )
 	local message = form:format( ... )
 
+	chat.event( "xmsg", self, message )
+
 	for _, client in ipairs( chat.clients ) do
 		if client ~= self and client.state == "chatting" then
 			client:msg( message )
@@ -80,7 +82,7 @@ function Client:xmsg( form, ... )
 end
 
 function Client:chatAll( message )
-	chat.event( "message", self, message )
+	chat.event( "chatAll", self, message )
 
 	for _, client in ipairs( chat.clients ) do
 		if client ~= self and client.state == "chatting" then
@@ -146,9 +148,14 @@ end
 function chat.msg( form, ... )
 	local message = form:format( ... )
 
+	chat.event( "msg", message )
+
 	for _, client in ipairs( chat.clients ) do
 		if  client.state == "chatting" then
 			client:msg( message )
+		end
+	end
+end
 
 function chat.clientFromName( name, registered )
 	if registered then
