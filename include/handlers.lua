@@ -219,6 +219,10 @@ local function registrationHandler( client )
 	while true do
 		local command, args = coroutine.yield()
 
+		if command == "all" then
+			client:msg( "#lw%s %s <password>#d, not global chat!", client.pmSyntax, chat.config.name )
+		end
+
 		if command == "pm" then
 			if args == "" then
 				client:msg( "A blank password is not a good password." ) 
@@ -258,7 +262,7 @@ local function registrationHandler( client )
 
 		client.userID = userID
 
-		client:msg( "You're all set - #lw/chat#d me #lwhelp#d for exciting things." )
+		client:msg( "You're all set - #lw%s#d me #lwhelp#d for exciting things.", client.pmSyntax )
 		client:replaceHandler( chatHandler )
 
 		adminCode = nil
@@ -266,10 +270,14 @@ local function registrationHandler( client )
 end
 
 local function checkRegistrationHandler( client, code )
-	client:msg( "Hey, #lw%s#d, you should have been given an #lwextremely secret#d password. #lw/chat#d me that!", client.name )
+	client:msg( "Hey, #lw%s#d, you should have been given an #lwextremely secret#d password. #lw%s#d me that!", client.name, client.pmSyntax )
 
 	while true do
 		local command, args = coroutine.yield()
+
+		if command == "all" then
+			client:msg( "#lw%s %s <password>#d, not global chat!", client.pmSyntax, chat.config.name )
+		end
 
 		if command == "pm" then
 			if args == code then
@@ -300,7 +308,7 @@ local function authHandler( client )
 		return
 	end
 
-	client:msg( "Hey, #lw%s#d! #lw/chat#d me your password.", client.name )
+	client:msg( "Hey, #lw%s#d! #lw%s#d me your password.", client.name, client.pmSyntax )
 
 	while true do
 		local command, args = coroutine.yield()

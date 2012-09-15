@@ -70,6 +70,8 @@ function ZMudClient:ping( now )
 	self:send( "pingRequest", now )
 end
 
+ZMudClient.pmSyntax = "##chat"
+
 return {
 	client = ZMudClient,
 	handler = dataHandler,

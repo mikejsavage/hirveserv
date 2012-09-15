@@ -3,6 +3,7 @@ local CommandBytes = {
 	all = "\4",
 	pm = "\5",
 	message = "\7",
+	version = "\19",
 	pingRequest = "\26",
 	pingResponse = "\27",
 }
@@ -24,6 +25,10 @@ local function dataHandler( client )
 			client:command( "pm", args:match( "chats to you, '(.*)'\n$" ) )
 		elseif command == "pingRequest" then
 			client:send( "pingResponse", args )
+		elseif command == "version" then
+			if args:find( "TinTin" ) then
+				client.pmSyntax = "##chat m"
+			end
 		elseif command and command ~= "pingResponse" then
 			client:command( command, args )
 		end
@@ -59,6 +64,8 @@ end
 function MMClient:ping( now )
 	self:send( "pingRequest", now )
 end
+
+MMClient.pmSyntax = "/chat"
 
 return {
 	client = MMClient,

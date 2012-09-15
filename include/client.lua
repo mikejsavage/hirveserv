@@ -61,6 +61,10 @@ function Client:ping()
 	error( "Client:ping not implemented for protocol `%s'" % self.protocol )
 end
 
+function Client:pmSyntax()
+	error( "Client:pmSyntax not implemented for protocol `%s'" % self.protocol )
+end
+
 function Client:hasPriv( priv )
 	if priv == "user" then
 		return self.userID ~= nil
