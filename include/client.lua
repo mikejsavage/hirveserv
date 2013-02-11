@@ -162,9 +162,11 @@ function chat.msg( form, ... )
 end
 
 function chat.clientFromName( name, registered )
+	name = name:lower()
+
 	if registered then
 		for _, client in ipairs( chat.clients ) do
-			if client.name == name then
+			if client.name:lower() == name then
 				return client
 			end
 		end
@@ -183,7 +185,7 @@ function chat.clientFromName( name, registered )
 		local match
 
 		for _, client in ipairs( chat.clients ) do
-			if client.name:startsWith( name ) then
+			if client.name:lower():startsWith( name ) then
 				if match then
 					return nil
 				else
