@@ -1,0 +1,94 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+Client:chat	/home/mike/code/hirveserv/include/client.lua	/^function Client:chat()$/;"	f	language:Lua
+Client:chatAll	/home/mike/code/hirveserv/include/client.lua	/^function Client:chatAll( message )$/;"	f	language:Lua
+Client:command	/home/mike/code/hirveserv/include/client.lua	/^function Client:command( command, args )$/;"	f	language:Lua
+Client:data	/home/mike/code/hirveserv/include/client.lua	/^function Client:data( data )$/;"	f	language:Lua
+Client:handleCommand	/home/mike/code/hirveserv/include/client.lua	/^function Client:handleCommand()$/;"	f	language:Lua
+Client:hasPriv	/home/mike/code/hirveserv/include/client.lua	/^function Client:hasPriv( priv )$/;"	f	language:Lua
+Client:kill	/home/mike/code/hirveserv/include/client.lua	/^function Client:kill()$/;"	f	language:Lua
+Client:msg	/home/mike/code/hirveserv/include/client.lua	/^function Client:msg()$/;"	f	language:Lua
+Client:nameChange	/home/mike/code/hirveserv/include/client.lua	/^function Client:nameChange( newName )$/;"	f	language:Lua
+Client:new	/home/mike/code/hirveserv/include/client.lua	/^function Client:new( socket )$/;"	f	language:Lua
+Client:ping	/home/mike/code/hirveserv/include/client.lua	/^function Client:ping()$/;"	f	language:Lua
+Client:pm	/home/mike/code/hirveserv/include/client.lua	/^function Client:pm( message )$/;"	f	language:Lua
+Client:pmSyntax	/home/mike/code/hirveserv/include/client.lua	/^function Client:pmSyntax()$/;"	f	language:Lua
+Client:pushHandler	/home/mike/code/hirveserv/include/client.lua	/^function Client:pushHandler( handler, name )$/;"	f	language:Lua
+Client:raw	/home/mike/code/hirveserv/include/client.lua	/^function Client:raw( data )$/;"	f	language:Lua
+Client:replaceHandler	/home/mike/code/hirveserv/include/client.lua	/^function Client:replaceHandler( handler, name )$/;"	f	language:Lua
+Client:send	/home/mike/code/hirveserv/include/client.lua	/^function Client:send()$/;"	f	language:Lua
+Client:setDataHandler	/home/mike/code/hirveserv/include/client.lua	/^function Client:setDataHandler( handler )$/;"	f	language:Lua
+Client:xmsg	/home/mike/code/hirveserv/include/client.lua	/^function Client:xmsg( form, ... )$/;"	f	language:Lua
+MMClient:chat	/home/mike/code/hirveserv/protocols/mm.lua	/^function MMClient:chat( message )$/;"	f	language:Lua
+MMClient:msg	/home/mike/code/hirveserv/protocols/mm.lua	/^function MMClient:msg( form, ... )$/;"	f	language:Lua
+MMClient:ping	/home/mike/code/hirveserv/protocols/mm.lua	/^function MMClient:ping( now )$/;"	f	language:Lua
+MMClient:send	/home/mike/code/hirveserv/protocols/mm.lua	/^function MMClient:send( command, data )$/;"	f	language:Lua
+ZMudClient:chat	/home/mike/code/hirveserv/protocols/zmud.lua	/^function ZMudClient:chat( message )$/;"	f	language:Lua
+ZMudClient:msg	/home/mike/code/hirveserv/protocols/zmud.lua	/^function ZMudClient:msg( form, ... )$/;"	f	language:Lua
+ZMudClient:ping	/home/mike/code/hirveserv/protocols/zmud.lua	/^function ZMudClient:ping( now )$/;"	f	language:Lua
+ZMudClient:send	/home/mike/code/hirveserv/protocols/zmud.lua	/^function ZMudClient:send( command, data )$/;"	f	language:Lua
+[ "^$" ] 	/home/mike/code/hirveserv/commands/log.lua	/^	[ "^$" ] = function( client )$/;"	f	language:Lua
+[ "^$" ] 	/home/mike/code/hirveserv/include/command.lua	/^	[ "^$" ] = function( client )$/;"	f	language:Lua
+[ "^(%D.*)$" ] 	/home/mike/code/hirveserv/commands/log.lua	/^	[ "^(%D.*)$" ] = function( client, needle )$/;"	f	language:Lua
+[ "^(%d+)$" ] 	/home/mike/code/hirveserv/commands/log.lua	/^	[ "^(%d+)$" ] = function( client, messages )$/;"	f	language:Lua
+[ "^(%d+)%s+(.+)$" ] 	/home/mike/code/hirveserv/commands/log.lua	/^	[ "^(%d+)%s+(.+)$" ] = function( client, messages, needle )$/;"	f	language:Lua
+[ "^(.+)$" ] 	/home/mike/code/hirveserv/commands/auth.lua	/^	[ "^(.+)$" ] = function( client, name )$/;"	f	language:Lua
+[ "^(.+)$" ] 	/home/mike/code/hirveserv/include/command.lua	/^	[ "^(.+)$" ] = function( client, name )$/;"	f	language:Lua
+[ "^(.-)%s+(.-)$" ] 	/home/mike/code/hirveserv/commands/auth.lua	/^	[ "^(.-)%s+(.-)$" ] = function( client, name, privStr )$/;"	f	language:Lua
+__index 	/home/mike/code/hirveserv/include/schema.lua	/^	__index = function( self, key )$/;"	f	language:Lua
+addLog	/home/mike/code/hirveserv/commands/log.lua	/^local function addLog( message )$/;"	f	language:Lua
+addMsg	/home/mike/code/hirveserv/commands/log.lua	/^local function addMsg( message )$/;"	f	language:Lua
+authHandler	/home/mike/code/hirveserv/include/handlers.lua	/^local function authHandler( client )$/;"	f	language:Lua
+chat.clientFromName	/home/mike/code/hirveserv/include/client.lua	/^function chat.clientFromName( name, registered )$/;"	f	language:Lua
+chat.command	/home/mike/code/hirveserv/include/command.lua	/^function chat.command( name, priv, handler, ... )$/;"	f	language:Lua
+chat.event	/home/mike/code/hirveserv/include/event.lua	/^function chat.event( name, ... )$/;"	f	language:Lua
+chat.listen	/home/mike/code/hirveserv/include/event.lua	/^function chat.listen( name, callback )$/;"	f	language:Lua
+chat.msg	/home/mike/code/hirveserv/include/client.lua	/^function chat.msg( form, ... )$/;"	f	language:Lua
+chat.parseColours	/home/mike/code/hirveserv/include/utils.lua	/^function chat.parseColours( message )$/;"	f	language:Lua
+chatHandler	/home/mike/code/hirveserv/include/handlers.lua	/^local function chatHandler( client )$/;"	f	language:Lua
+checkRegistrationHandler	/home/mike/code/hirveserv/include/handlers.lua	/^local function checkRegistrationHandler( client, code )$/;"	f	language:Lua
+connectHandler	/home/mike/code/hirveserv/include/handlers.lua	/^local function connectHandler( client )$/;"	f	language:Lua
+connectHandler	/home/mike/code/hirveserv/main.lua	/^local function connectHandler()$/;"	f	language:Lua
+dataHandler	/home/mike/code/hirveserv/main.lua	/^local function dataHandler( client, loop, watcher )$/;"	f	language:Lua
+dataHandler	/home/mike/code/hirveserv/protocols/mm.lua	/^local function dataHandler( client )$/;"	f	language:Lua
+dataHandler	/home/mike/code/hirveserv/protocols/zmud.lua	/^local function dataHandler( client )$/;"	f	language:Lua
+doCommand	/home/mike/code/hirveserv/include/command.lua	/^local function doCommand( client, message )$/;"	f	language:Lua
+enforce	/home/mike/code/hirveserv/include/utils.lua	/^function enforce( var, name, ... )$/;"	f	language:Lua
+findAliasPattern	/home/mike/code/hirveserv/include/handlers.lua	/^local function findAliasPattern( message, needle )$/;"	f	language:Lua
+getmetatable( "" ).__mod 	/home/mike/code/hirveserv/include/utils.lua	/^getmetatable( "" ).__mod = function( self, form )$/;"	f	language:Lua
+getmetatable( db ).__call 	/home/mike/code/hirveserv/include/sqlite.lua	/^	getmetatable( db ).__call = function( self, query, ... )$/;"	f	language:Lua
+if type( query ) 	/home/mike/code/hirveserv/include/sqlite.lua	/^		if type( query ) == "function" then$/;"	f	language:Lua
+io.contents	/home/mike/code/hirveserv/include/utils.lua	/^function io.contents( path )$/;"	f	language:Lua
+io.readable	/home/mike/code/hirveserv/include/utils.lua	/^function io.readable( path )$/;"	f	language:Lua
+loadAddons	/home/mike/code/hirveserv/include/addons.lua	/^local function loadAddons()$/;"	f	language:Lua
+local _, subs 	/home/mike/code/hirveserv/include/command.lua	/^			local _, subs = args:gsub( callback.pattern, function( ... )$/;"	f	language:Lua
+local command 	/home/mike/code/hirveserv/include/command.lua	/^	local command = type( handler ) == "function"$/;"	f	language:Lua
+math.avg	/home/mike/code/hirveserv/include/utils.lua	/^function math.avg( a, b )$/;"	f	language:Lua
+math.round	/home/mike/code/hirveserv/include/utils.lua	/^function math.round( num )$/;"	f	language:Lua
+mt.__index 	/home/mike/code/hirveserv/picky.lua	/^mt.__index = function( self, key )$/;"	f	language:Lua
+mt.__newindex 	/home/mike/code/hirveserv/picky.lua	/^mt.__newindex = function( self, key, value )$/;"	f	language:Lua
+newDB	/home/mike/code/hirveserv/include/sqlite.lua	/^local function newDB( file )$/;"	f	language:Lua
+oldregistrationHandler	/home/mike/code/hirveserv/include/handlers.lua	/^local function oldregistrationHandler( client )$/;"	f	language:Lua
+patternCommand	/home/mike/code/hirveserv/include/command.lua	/^local function patternCommand( priv, callbacks, syntax, help, longHelp )$/;"	f	language:Lua
+randomWord	/home/mike/code/hirveserv/include/words.lua	/^local function randomWord()$/;"	f	language:Lua
+registrationHandler	/home/mike/code/hirveserv/include/handlers.lua	/^local function registrationHandler( client )$/;"	f	language:Lua
+sendLogs	/home/mike/code/hirveserv/commands/log.lua	/^local function sendLogs( client, messages, needle )$/;"	f	language:Lua
+sendPings	/home/mike/code/hirveserv/main.lua	/^local function sendPings()$/;"	f	language:Lua
+simpleCommand	/home/mike/code/hirveserv/include/command.lua	/^local function simpleCommand( priv, callback, help, longHelp )$/;"	f	language:Lua
+string.commas	/home/mike/code/hirveserv/include/utils.lua	/^function string.commas( num )$/;"	f	language:Lua
+string.patternEscape	/home/mike/code/hirveserv/include/utils.lua	/^function string.patternEscape( self )$/;"	f	language:Lua
+string.plural	/home/mike/code/hirveserv/include/utils.lua	/^function string.plural( count, plur, sing )$/;"	f	language:Lua
+string.startsWith	/home/mike/code/hirveserv/include/utils.lua	/^function string.startsWith( self, needle )$/;"	f	language:Lua
+string.stripVT102	/home/mike/code/hirveserv/include/utils.lua	/^function string.stripVT102( self )$/;"	f	language:Lua
+string.trim	/home/mike/code/hirveserv/include/utils.lua	/^function string.trim( self )$/;"	f	language:Lua
+string.uint	/home/mike/code/hirveserv/include/utils.lua	/^function string.uint( n )$/;"	f	language:Lua
+string.ushort	/home/mike/code/hirveserv/include/utils.lua	/^function string.ushort( n )$/;"	f	language:Lua
+string.yn	/home/mike/code/hirveserv/include/utils.lua	/^function string.yn( self )$/;"	f	language:Lua
+table.insertBy	/home/mike/code/hirveserv/include/utils.lua	/^function table.insertBy( self, value, cmp )$/;"	f	language:Lua
+table.removeValue	/home/mike/code/hirveserv/include/utils.lua	/^function table.removeValue( self, value )$/;"	f	language:Lua
+uconv	/home/mike/code/hirveserv/include/utils.lua	/^local function uconv( bytes, n )$/;"	f	language:Lua
+who	/home/mike/code/hirveserv/commands/who.lua	/^local function who( client )$/;"	f	language:Lua
