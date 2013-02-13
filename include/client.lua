@@ -161,10 +161,10 @@ function chat.msg( form, ... )
 	end
 end
 
-function chat.clientFromName( name, registered )
+function chat.clientFromName( name, includeOffline )
 	name = name:lower()
 
-	if registered then
+	if includeOffline then
 		for _, client in ipairs( chat.clients ) do
 			if client.name:lower() == name then
 				return client
@@ -182,16 +182,12 @@ function chat.clientFromName( name, registered )
 			userID = userID,
 		}
 	else
-		local match
-
 		for _, client in ipairs( chat.clients ) do
-			if client.name:lower():startsWith( name ) then
-				if match then
-					return nil
-				else
-					match = client
-				end
+			if client.name:lower() == name and client.state == "chatting" then
+				return client
 			end
 		end
+
+		return nil
 	end
 end
