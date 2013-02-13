@@ -136,6 +136,8 @@ require( "commands.auth" )
 require( "commands.roll" )
 require( "commands.who" )
 require( "commands.log" )
+require( "commands.pmsg" )
+require( "commands.kick" )
 
 return {
 	doCommand = doCommand,
