@@ -120,18 +120,18 @@ function Client:setDataHandler( handler )
 	assert( coroutine.resume( self.dataHandler, self ) )
 end
 
-function Client:pushHandler( handler, name )
+function Client:pushHandler( handler, ... )
 	local coro = coroutine.create( handler )
 
 	table.insert( self.commandHandlers, coro )
 
-	assert( coroutine.resume( coro, self, name ) )
+	assert( coroutine.resume( coro, self, ... ) )
 end
 
-function Client:replaceHandler( handler, name )
+function Client:replaceHandler( handler, ... )
 	table.remove( self.commandHandlers )
 
-	self:pushHandler( handler, name )
+	self:pushHandler( handler, ... )
 end
 
 function Client:command( command, args )
