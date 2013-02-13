@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS users (
 	userid INTEGER PRIMARY KEY,
-	name STRING UNIQUE,
+	name STRING UNIQUE NOT NULL,
 	password STRING
 );
 
@@ -11,18 +11,23 @@ CREATE TABLE IF NOT EXISTS pending (
 
 CREATE TABLE IF NOT EXISTS privs (
 	userid INTEGER,
-	priv STRING
+	priv STRING,
+	FOREIGN KEY( userid ) REFERENCES users( userid ),
+	UNIQUE( userid, priv )
 );
 
 CREATE TABLE IF NOT EXISTS settings (
 	userid INTEGER,
-	setting STRING,
-	value STRING
+	setting STRING NOT NULL,
+	value STRING,
+	FOREIGN KEY( userid ) REFERENCES users( userid ),
+	UNIQUE( userid, setting )
 );
 
 CREATE TABLE IF NOT EXISTS ipauths (
 	userid INTEGER,
-	ip STRING
+	ip STRING NOT NULL,
+	FOREIGN KEY( userid ) REFERENCES users( userid )
 );
 
 CREATE INDEX IF NOT EXISTS idx_privs ON privs ( userid );
