@@ -21,15 +21,10 @@ require( "include.utils" )
 require( "include.event" )
 require( "include.sqlite" )
 
-local schema = require( "include.schema" )
-
 chat.db = {
-	users = sqlite.new( "data/users.sq3" ),
-	logs = sqlite.new( "data/logs.sq3" ),
+	users = sqlite.new( "users" ),
+	logs = sqlite.new( "logs" ),
 }
-
-schema.users( chat.db.users )
-schema.logs( chat.db.logs )
 
 require( "include.client" )
 
