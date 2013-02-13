@@ -1,26 +1,24 @@
 local words = require( "include.words" )
 
 chat.command( "adduser", "adduser", {
-	[ "^(.+)$" ] = function( client, name )
+	[ "^(%S+)$" ] = function( client, name )
 		local lower = name:lower()
 
-		local exists = chat.db.users( "SELECT 1 FROM users WHERE name = ?", lower )()
+		local userid, isPending = chat.db.users( "SELECT userid, isPending FROM users WHERE name = ?", lower )()
 
-		if exists then
-			client:msg( "#lw%s#d already has an account.", name )
+		local password = words.random()
 
-			return
+		local salt = bcrypt.salt( chat.config.bcryptRounds )
+		local digest = bcrypt.digest( password, salt )
+
+		if isPending then
+			chat.db.users( "UPDATE users SET password = ? WHERE userid = ?", digest, userid )()
+		else
+			chat.db.users( "INSERT INTO users ( name, password ) VALUES ( ?, ? )", lower, digest )()
 		end
 
-		local code = chat.db.users( "SELECT code FROM pending WHERE name = ?", lower )()
-
-		if not code then
-			code = words.random()
-
-			chat.db.users( "INSERT INTO pending ( name, code ) VALUES ( ?, ? )", lower, code )()
-		end
-
-		client:msg( "Ok! Tell #lw%s#d their password is #lw%s#d.", name, code )
+		client:msg( "Ok! Tell #ly%s#d their password is #ly%s#d.", name, password )
+		chat.msg( "#ly%s#d added user #ly%s#d.", client.name, name )
 	end,
 }, "<name>", "Create a new user account" )
 

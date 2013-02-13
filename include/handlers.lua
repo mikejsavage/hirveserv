@@ -1,5 +1,3 @@
-require( "bcrypt" )
-
 local Protocols = {
 	mm = require( "protocols.mm" ),
 	zmud = require( "protocols.zmud" ),
@@ -243,24 +241,10 @@ local function registrationHandler( client )
 	end
 
 	if createAccount then
-		local lower = client.name:lower()
 		local salt = bcrypt.salt( chat.config.bcryptRounds )
 		local digest = bcrypt.digest( password, salt )
-		local userID
 
-		chat.db.users( function()
-			chat.db.users( "INSERT INTO users ( name, password ) VALUES ( ?, ? )", lower, digest )()
-			
-			userID = chat.db.users( "SELECT last_insert_rowid()" )()
-
-			if client.privs.all then
-				chat.db.users( "INSERT INTO privs ( userid, priv ) VALUES ( ?, ? )", userID, "all" )()
-			end
-
-			chat.db.users( "DELETE FROM pending WHERE name = ?", lower )()
-		end )
-
-		client.userID = userID
+		chat.db.users( "UPDATE users SET password = ?, isPending = 0 WHERE userID = ?", digest, client.userID )()
 
 		client:msg( "You're all set - #lw%s#d me #lwhelp#d for exciting things.", client.pmSyntax )
 		client:replaceHandler( chatHandler )
@@ -269,7 +253,7 @@ local function registrationHandler( client )
 	end
 end
 
-local function checkRegistrationHandler( client, code )
+local function checkRegistrationHandler( client, password )
 	client:msg( "Hey, #lw%s#d, you should have been given an #lwextremely secret#d password. #lw%s#d me that!", client.name, client.pmSyntax )
 
 	while true do
@@ -280,7 +264,7 @@ local function checkRegistrationHandler( client, code )
 		end
 
 		if command == "pm" then
-			if args == code then
+			if bcrypt.verify( args, password ) then
 				client:replaceHandler( registrationHandler )
 			else
 				client:msg( "Nope." )
@@ -300,10 +284,13 @@ local function checkRegistrationHandler( client, code )
 end
 
 local function authHandler( client )
-	local code = chat.db.users( "SELECT code FROM pending WHERE name = ?", client.name:lower() )()
+	local lower = client.name:lower()
 
-	if code then
-		client:replaceHandler( checkRegistrationHandler, code )
+	local isPending, userID, password = chat.db.users( "SELECT isPending, userID, password FROM users WHERE name = ?", lower )()
+
+	if isPending == 1 then
+		client.userID = userID
+		client:replaceHandler( checkRegistrationHandler, password )
 
 		return
 	end
@@ -317,13 +304,19 @@ local function authHandler( client )
 			if userCount == 0 and args == adminCode then
 				client.privs.all = true
 
+				chat.db.users( function( db )
+					db( "INSERT INTO users ( name ) VALUES ( ? )", client.name:lower() )()
+
+					client.userID = db( "SELECT last_insert_rowid()" )()
+
+					db( "INSERT INTO privs ( userid, priv ) VALUES ( ?, 'all' )", client.userID )()
+				end )
+
 				client:msg( "Setting up admin account..." )
 				client:replaceHandler( registrationHandler )
 
 				break
 			end
-
-			local userID, password = chat.db.users( "SELECT userid, password FROM users WHERE name = ?", client.name:lower() )()
 
 			if not userID or not bcrypt.verify( args, password ) then
 				client:msg( "Nope." )

@@ -2,6 +2,8 @@
 
 chat = { }
 
+require( "bcrypt" )
+
 local lfs = require( "lfs" )
 
 local serverDir = arg[ 0 ]:match( "^(.-)/[^/]*$" )
