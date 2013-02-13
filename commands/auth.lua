@@ -22,13 +22,22 @@ chat.command( "adduser", "adduser", {
 	end,
 }, "<name>", "Create a new user account" )
 
-chat.command( "rempending", "adduser", {
-	[ "^(.+)$" ] = function( client, name )
-		local lower = name:lower()
+chat.command( "deluser", "deluser", {
+	[ "^(%S+)$" ] = function( client, name )
+		local target = chat.clientFromName( name, true )
 
-		chat.db.users( "DELETE FROM pending WHERE name = ?", lower )()
+		if target then
+			chat.db.users( function( db )
+				db( "DELETE FROM users WHERE userID = ?", target.userID )()
+				db( "DELETE FROM settings WHERE userID = ?", target.userID )()
+				db( "DELETE FROM privs WHERE userID = ?", target.userID )()
+				db( "DELETE FROM ipauths WHERE userID = ?", target.userID )()
+			end )
 
-		client:msg( "Ok." )
+			chat.msg( "#ly%s#d deleted account #ly%s#d.", client.name, target.name )
+		else
+			client:msg( "There's nobody called #ly%s#d.", name )
+		end
 	end
 }, "<name>", "Remove a pending account" )
 
