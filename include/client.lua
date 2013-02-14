@@ -165,16 +165,16 @@ function chat.clientFromName( name, includeOffline )
 	name = name:lower()
 
 	if includeOffline then
-		for _, client in ipairs( chat.clients ) do
-			if client.name:lower() == name then
-				return client
-			end
-		end
-
 		local userID = chat.db.users( "SELECT userid FROM users WHERE name = ?", name )()
 
 		if not userID then
-			return nil, "not found"
+			return nil
+		end
+
+		for _, client in ipairs( chat.clients ) do
+			if client.state == "chatting" and client.userID == userID then
+				return client
+			end
 		end
 
 		return {
