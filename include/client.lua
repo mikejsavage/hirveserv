@@ -28,12 +28,6 @@ end
 function Client:kill()
 	self.socket:shutdown()
 
-	if self.state == "chatting" then
-		chat.event( "disconnect", self )
-
-		self:xmsg( "#lw%s#d left chat.", self.name )
-	end
-
 	table.removeValue( chat.clients, self )
 end
 

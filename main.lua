@@ -49,6 +49,12 @@ local function dataHandler( client, loop, watcher )
 		watcher:stop( loop )
 		client:kill()
 
+		if client.state == "chatting" then
+			chat.event( "disconnect", client )
+
+			chat.msg( "#lw%s#d left chat.", client.name )
+		end
+
 		return
 	end
 
