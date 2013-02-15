@@ -138,6 +138,7 @@ require( "commands.who" )
 require( "commands.log" )
 require( "commands.pmsg" )
 require( "commands.kick" )
+require( "commands.ipauth" )
 
 return {
 	doCommand = doCommand,

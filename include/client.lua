@@ -16,6 +16,8 @@ function Client:new( socket )
 		commandHandlers = { },
 		privs = { },
 		settings = { },
+		ips = { },
+		ip = socket:getpeername(),
 	}
 
 	assert( coroutine.resume( client.dataHandler, client ) )
@@ -65,6 +67,16 @@ function Client:hasPriv( priv )
 	end
 
 	return not priv or self.privs.all or self.privs[ priv ]
+end
+
+function Client:ipIndex( needle )
+	for i, ip in ipairs( self.ips ) do
+		if ip == needle then
+			return i
+		end
+	end
+
+	return nil
 end
 
 function Client:xmsg( form, ... )

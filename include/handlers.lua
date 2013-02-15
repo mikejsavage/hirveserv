@@ -283,6 +283,16 @@ local function checkRegistrationHandler( client, password )
 	end
 end
 
+local function initClientSettings( client )
+	for setting, value in chat.db.users( "SELECT setting, value FROM settings WHERE userid = ?", client.userID ) do
+		client.settings[ setting ] = value
+	end
+
+	for priv in chat.db.users( "SELECT priv FROM privs WHERE userid = ?", client.userID ) do
+		client.privs[ priv ] = true
+	end
+end
+
 local function authHandler( client )
 	local lower = client.name:lower()
 
@@ -293,6 +303,29 @@ local function authHandler( client )
 		client:replaceHandler( checkRegistrationHandler, password )
 
 		return
+	end
+
+	if userID then
+		client.userID = userID
+
+		local ok = false
+
+		for ip in chat.db.users( "SELECT ip FROM ipauths WHERE userid = ?", client.userID ) do
+			table.insert( client.ips, ip )
+
+			if ip == client.ip then
+				ok = true
+			end
+		end
+		
+		if ok then
+			initClientSettings( client )
+
+			client:msg( "Authed for #ly%s#ld...", client.ip )
+			client:replaceHandler( chatHandler )
+
+			return
+		end
 	end
 
 	client:msg( "Hey, #lw%s#d! #lw%s#d me your password.", client.name, client.pmSyntax )
@@ -322,15 +355,7 @@ local function authHandler( client )
 				client:msg( "Nope." )
 				client:kill()
 			else
-				client.userID = userID
-
-				for setting, value in chat.db.users( "SELECT setting, value FROM settings WHERE userid = ?", client.userID ) do
-					client.settings[ setting ] = value
-				end
-
-				for priv in chat.db.users( "SELECT priv FROM privs WHERE userid = ?", client.userID ) do
-					client.privs[ priv ] = true
-				end
+				initClientSettings( client )
 
 				client:replaceHandler( chatHandler )
 			end
