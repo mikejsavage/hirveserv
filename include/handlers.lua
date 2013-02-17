@@ -369,6 +369,22 @@ local function authHandler( client )
 	end
 end
 
+local function checkTempAuth( client )
+	local now = os.time()
+	local lower = client.name:lower()
+
+	for name, time in pairs( chat.tempAuths ) do
+		if now > time then
+			chat.tempAuths[ name ] = nil
+		end
+	end
+
+	local ok = chat.tempAuths[ lower ] ~= nil
+	chat.tempAuths[ lower ] = nil
+
+	return ok
+end
+
 local function connectHandler( client )
 	local data = coroutine.yield()
 	local zchat, name = data:match( "^(Z?)CHAT:([%w%p]+)\t?%d*\n" )
@@ -399,7 +415,7 @@ local function connectHandler( client )
 		return a.name:lower() < b.name:lower()
 	end )
 
-	if chat.config.auth then
+	if chat.config.auth and not checkTempAuth( client ) then
 		client:pushHandler( authHandler )
 	else
 		client:pushHandler( chatHandler )

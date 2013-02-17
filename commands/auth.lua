@@ -1,5 +1,7 @@
 local words = require( "include.words" )
 
+chat.tempAuths = { }
+
 chat.command( "adduser", "adduser", {
 	[ "^(%S+)$" ] = function( client, name )
 		local lower = name:lower()
@@ -121,3 +123,13 @@ chat.command( "remprivs", "privs", {
 		client:msg( "Ok." )
 	end,
 }, "<name> <privs>", "Remove privs from an account" )
+
+chat.command( "auth", "adduser", {
+	[ "^(%S+)$" ] = function( client, name )
+		name = name:lower()
+
+		chat.tempAuths[ name ] = os.time() + chat.tempAuthDuration
+
+		chat.msg( "#ly%s#d is authing #ly%s#d for #lw%d#d seconds.", client.name, name, chat.tempAuthDuration )
+	end,
+}, "<name>", "Allow someone to connect without authenticating" )
