@@ -15,7 +15,7 @@ end
 lfs.mkdir( "data" )
 
 require( "picky" )
-require( "config.default" )
+require( "config_default" )
 
 local config = loadfile( "config.lua" )
 if config then
