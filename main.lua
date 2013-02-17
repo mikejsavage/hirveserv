@@ -15,7 +15,12 @@ end
 lfs.mkdir( "data" )
 
 require( "picky" )
-require( "config" )
+require( "config.default" )
+
+local config = loadfile( "config.lua" )
+if config then
+	config()
+end
 
 math.randomseed( os.time() )
 
