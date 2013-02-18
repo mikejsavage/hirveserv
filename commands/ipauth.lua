@@ -35,8 +35,12 @@ chat.command( "addip", "user", {
 chat.command( "lsip", "user", function( client )
 	local output = "Authed IPs:"
 
-	for i, ip in ipairs( client.ips ) do
-		output = output .. "\n#ly%d#d: #lw%s #dmask %s" % { i, ip.ip, ip.mask }
+	if #client.ips == 0 then
+		output = output .. " #lwnone!"
+	else
+		for i, ip in ipairs( client.ips ) do
+			output = output .. "\n#ly%d#d: #lw%s #dmask %s" % { i, ip.ip, ip.mask }
+		end
 	end
 
 	client:msg( output )
