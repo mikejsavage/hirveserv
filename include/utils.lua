@@ -72,6 +72,38 @@ function math.avg( a, b )
 	return ( a + b ) / 2
 end
 
+function math.ipmask( ip, mask )
+	local isplit = { ip:match( "^(%d+)%.(%d+)%.(%d+)%.(%d+)$" ) }
+	local msplit = { mask:match( "^(%d+)%.(%d+)%.(%d+)%.(%d+)$" ) }
+	local zeroing = false
+
+	for i = 1, 4 do
+		if zeroing then
+			isplit[ i ] = 0
+		elseif msplit[ i ] ~= "255" then
+			local m = tonumber( msplit[ i ] )
+			local n = 0
+
+			if m == 0 then
+				n = 8
+			else
+				-- count trailing 0 bits in m
+				while m % 2 == 0 and m > 0 do
+					m = math.floor( m / 2 )
+					n = n + 1
+				end
+			end
+
+			local e = 2 ^ n
+			isplit[ i ] = math.floor( isplit[ i ] / e ) * e
+
+			zeroing = true
+		end
+	end
+
+	return table.concat( isplit, "." )
+end
+
 function io.readable( path )
 	local file, err = io.open( path, "r" )
 

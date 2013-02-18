@@ -23,8 +23,9 @@ CREATE TABLE IF NOT EXISTS settings (
 CREATE TABLE IF NOT EXISTS ipauths (
 	userid INTEGER,
 	ip STRING NOT NULL,
+	mask STRING DEFAULT "255.255.255.255",
 	FOREIGN KEY( userid ) REFERENCES users( userid ),
-	UNIQUE( userid, ip )
+	UNIQUE( userid, ip, mask ) ON CONFLICT IGNORE
 );
 
 CREATE INDEX IF NOT EXISTS idx_privs ON privs ( userid );

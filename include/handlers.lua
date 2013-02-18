@@ -310,10 +310,13 @@ local function authHandler( client )
 
 		local ok = false
 
-		for ip in chat.db.users( "SELECT ip FROM ipauths WHERE userid = ?", client.userID ) do
-			table.insert( client.ips, ip )
+		for ip, mask in chat.db.users( "SELECT ip, mask FROM ipauths WHERE userid = ?", client.userID ) do
+			table.insert( client.ips, {
+				ip = ip,
+				mask = mask,
+			} )
 
-			if ip == client.ip then
+			if math.ipmask( ip, mask ) == math.ipmask( client.ip, mask ) then
 				ok = true
 			end
 		end
