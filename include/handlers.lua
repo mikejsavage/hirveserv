@@ -31,7 +31,7 @@ local function chatHandler( client )
 				local message = trimmed:match( client.settings.alias )
 
 				if message then
-					pm = message:match( "^/(.*)$" )
+					pm = message:match( "^!([^!].*)$" )
 
 					if pm then
 						client:pm( pm )
