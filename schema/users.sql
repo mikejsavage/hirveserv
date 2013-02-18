@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS privs (
 	userid INTEGER,
 	priv STRING,
 	FOREIGN KEY( userid ) REFERENCES users( userid ),
-	UNIQUE( userid, priv )
+	UNIQUE( userid, priv ) ON CONFLICT IGNORE
 );
 
 CREATE TABLE IF NOT EXISTS settings (
@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS settings (
 	setting STRING NOT NULL,
 	value STRING,
 	FOREIGN KEY( userid ) REFERENCES users( userid ),
-	UNIQUE( userid, setting )
+	UNIQUE( userid, setting ) ON CONFLICT REPLACE
 );
 
 CREATE TABLE IF NOT EXISTS ipauths (
