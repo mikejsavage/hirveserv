@@ -33,8 +33,10 @@ local function chatHandler( client )
 				if message then
 					pm = message:match( "^!([^!].*)$" )
 
-					if pm then
+					if pm and client:canCall( pm ) then
 						client:pm( pm )
+					else
+						pm = nil
 					end
 				end
 			end

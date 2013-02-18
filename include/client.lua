@@ -101,6 +101,10 @@ function Client:chatAll( message )
 	end
 end
 
+function Client:canCall( message )
+	return command.canCall( self, message )
+end
+
 function Client:pm( message )
 	command.doCommand( self, message )
 end

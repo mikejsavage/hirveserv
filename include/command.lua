@@ -1,6 +1,13 @@
 local Commands = { }
 local CommandNames = { }
 
+local function canCall( client, message )
+	local name, args = message:match( "^%s*(%S+)%s*(.*)$" )
+	local command = Commands[ name ]
+
+	return command and client:hasPriv( command.priv )
+end
+
 local function doCommand( client, message )
 	message = message or ""
 
@@ -140,7 +147,9 @@ require( "commands.pmsg" )
 require( "commands.kick" )
 require( "commands.ipauth" )
 require( "commands.motd" )
+require( "commands.alias" )
 
 return {
+	canCall = canCall,
 	doCommand = doCommand,
 }
