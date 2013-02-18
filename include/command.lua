@@ -139,6 +139,7 @@ require( "commands.log" )
 require( "commands.pmsg" )
 require( "commands.kick" )
 require( "commands.ipauth" )
+require( "commands.motd" )
 
 return {
 	doCommand = doCommand,
