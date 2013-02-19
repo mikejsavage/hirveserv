@@ -14,7 +14,13 @@ chat.command( "adduser", "adduser", {
 		local digest = bcrypt.digest( password, salt )
 
 		if isPending then
-			chat.db.users( "UPDATE users SET password = ? WHERE userid = ?", digest, userid )()
+			if isPending == 1 then
+				chat.db.users( "UPDATE users SET password = ? WHERE userid = ?", digest, userid )()
+			else
+				client:msg( "#ly%s#d already has an account!", name )
+
+				return
+			end
 		else
 			chat.db.users( "INSERT INTO users ( name, password ) VALUES ( ?, ? )", lower, digest )()
 		end
