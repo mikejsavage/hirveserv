@@ -1,4 +1,4 @@
-chat.command( "pmsg", "", {
+chat.command( "pmsg", nil, {
 	[ "^(%S+)%s+(.+)$" ] = function( client, name, message )
 		local target = chat.clientFromName( name )
 

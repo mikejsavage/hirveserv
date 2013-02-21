@@ -1,6 +1,6 @@
 local motd = ""
 
-chat.command( "motd", "", function( client )
+chat.command( "motd", nil, function( client )
 	client:msg( motd )
 end, "Show message of the day" )
 
