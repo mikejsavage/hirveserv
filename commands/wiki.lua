@@ -108,6 +108,7 @@ end
 
 chat.command( "rebuildwiki", "all", function( client )
 	categories = { }
+	categoriesList = { }
 	pages = { }
 
 	local ok, err = pcall( buildWiki )
