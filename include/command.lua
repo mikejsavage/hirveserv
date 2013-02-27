@@ -148,6 +148,7 @@ require( "commands.kick" )
 require( "commands.ipauth" )
 require( "commands.motd" )
 require( "commands.alias" )
+require( "commands.wiki" )
 
 return {
 	canCall = canCall,

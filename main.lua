@@ -13,6 +13,7 @@ if serverDir then
 end
 
 lfs.mkdir( "data" )
+lfs.mkdir( "wiki" )
 
 require( "picky" )
 require( "config_default" )

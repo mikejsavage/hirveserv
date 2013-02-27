@@ -150,6 +150,12 @@ function table.removeValue( self, value )
 	end
 end
 
+function table.sortByKey( self, key )
+	table.sort( self, function( a, b )
+		return a[ key ] < b[ key ]
+	end )
+end
+
 function enforce( var, name, ... )
 	local acceptable = { ... }
 	local ok = false
