@@ -134,8 +134,8 @@ chat.command( "auth", "adduser", {
 	[ "^(%S+)$" ] = function( client, name )
 		name = name:lower()
 
-		chat.tempAuths[ name ] = os.time() + chat.tempAuthDuration
+		chat.tempAuths[ name ] = os.time() + chat.config.tempAuthDuration
 
-		chat.msg( "#ly%s#d is authing #ly%s#d for #lw%d#d seconds.", client.name, name, chat.tempAuthDuration )
+		chat.msg( "#ly%s#d is authing #ly%s#d for #lw%d#d seconds.", client.name, name, chat.config.tempAuthDuration )
 	end,
 }, "<name>", "Allow someone to connect without authenticating" )
