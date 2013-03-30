@@ -11,7 +11,7 @@ end
 
 local function loadPage( path )
 	local page = assert( io.contents( path ) )
-	local title, body = page:match( "^([^\n]+)%s+(.+)$" )
+	local title, body = page:match( "^([^\n]+)\n+(.+)$" )
 
 	return {
 		title = title,
@@ -75,7 +75,7 @@ local function addCategory( path, name )
 		end
 	end
 
-	table.sortByKey( category, "title" )
+	table.sortByKey( category, "name" )
 
 	categories[ name ] = category
 	table.insert( categoriesList, category )
