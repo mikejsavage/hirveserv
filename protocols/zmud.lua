@@ -50,7 +50,7 @@ function ZMudClient:send( command, data )
 	self:raw( byte .. string.ushort( data:len() ) .. data )
 end
 
-function ZMudClient:msg( message )
+function ZMudClient:msg( form, ... )
 	enforce( form, "form", "string", "table" )
 
 	if type( form ) == "table" then

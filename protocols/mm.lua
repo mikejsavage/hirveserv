@@ -45,7 +45,7 @@ function MMClient:send( command, data )
 	self:raw( byte .. data .. "\255" )
 end
 
-function MMClient:msg( message )
+function MMClient:msg( form, ... )
 	enforce( form, "form", "string", "table" )
 
 	if type( form ) == "table" then
