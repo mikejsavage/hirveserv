@@ -12,6 +12,6 @@ end, "Update motd" )
 
 chat.listen( "connect", function( client )
 	if motd ~= "" then
-		client:msg( motd )
+		client:msg( "%s", motd )
 	end
 end )
