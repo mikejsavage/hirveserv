@@ -45,14 +45,10 @@ function MMClient:send( command, data )
 	self:raw( byte .. data .. "\255" )
 end
 
-function MMClient:msg( form, ... )
-	enforce( form, "form", "string", "table" )
+function MMClient:msg( message )
+	enforce( form, "string" )
 
-	if type( form ) == "table" then
-		form = table.concat( form, "\n" )
-	end
-
-	self:send( "message", chat.parseColours( "<%s>#d %s" % { chat.config.name, form:format( ... ) } ) )
+	self:send( "message", chat.parseColours( "<%s>#d %s" % { chat.config.name, message } ) )
 end
 
 function MMClient:chat( message )
