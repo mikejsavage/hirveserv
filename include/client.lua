@@ -86,7 +86,7 @@ function Client:xmsg( form, ... )
 
 	for _, client in ipairs( chat.clients ) do
 		if client ~= self and client.state == "chatting" then
-			client:msg( message )
+			client:msg( "%s", message )
 		end
 	end
 end
@@ -166,7 +166,7 @@ function chat.msg( form, ... )
 
 	for _, client in ipairs( chat.clients ) do
 		if  client.state == "chatting" then
-			client:msg( message )
+			client:msg( "%s", message )
 		end
 	end
 end
