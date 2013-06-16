@@ -51,9 +51,13 @@ function ZMudClient:send( command, data )
 end
 
 function ZMudClient:msg( message )
-	enforce( form, "string" )
+	enforce( form, "form", "string", "table" )
 
-	self:send( "message", chat.parseColours( "%s<%s>#d %s" % { self.stamp, chat.config.name, message } ) )
+	if type( form ) == "table" then
+		form = table.concat( form, "\n" )
+	end
+
+	self:send( "message", chat.parseColours( "%s<%s>#d %s" % { self.stamp, chat.config.name, form:format( ... ) } ) )
 end
 
 function ZMudClient:chat( message )
