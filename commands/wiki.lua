@@ -20,6 +20,10 @@ local function loadPage( path )
 end
 
 local function addPage( path, name )
+	if not name then
+		return
+	end
+
 	checkClash( name )
 
 	pages[ name ] = loadPage( path, name )
