@@ -58,6 +58,18 @@ function string.stripVT102( self )
 	return self:gsub( "\27%[[%d;]*%a", "" )
 end
 
+function string.trimVT102( self )
+	while self:match( "^\27%[[%d;]*%a" ) do
+		self = self:gsub( "^\27%[[%d;]*%a", "" )
+	end
+
+	while self:match( "\27%[[%d;]*%a$" ) do
+		self = self:gsub( "\27%[[%d;]*%a$", "" )
+	end
+
+	return self
+end
+
 function string.yn( self )
 	local firstLetter = self:sub( 1, 1 )
 
