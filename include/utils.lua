@@ -58,16 +58,14 @@ function string.stripVT102( self )
 	return self:gsub( "\27%[[%d;]*%a", "" )
 end
 
-function string.trimVT102( self )
-	while self:match( "^\27%[[%d;]*%a" ) do
-		self = self:gsub( "^\27%[[%d;]*%a", "" )
+function string.stripLeadingVT102( self )
+	local trimmed = self:gsub( "^\27%[[\27%[%d;%a]-%a([^\27].*)", "%1" )
+
+	if trimmmed == self then
+		return ""
 	end
 
-	while self:match( "\27%[[%d;]*%a$" ) do
-		self = self:gsub( "\27%[[%d;]*%a$", "" )
-	end
-
-	return self
+	return trimmed
 end
 
 function string.yn( self )

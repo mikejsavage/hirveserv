@@ -22,7 +22,7 @@ local function dataHandler( client )
 		local command = Commands[ commandByte ]
 
 		if command == "pm" then
-			client:command( "pm", args:match( "chats to you, '(.*)'\n$" ):trimVT102() )
+			client:command( "pm", args:match( "chats to you, '(.*)'\n$" ):stripLeadingVT102() )
 		elseif command == "pingRequest" then
 			client:send( "pingResponse", args )
 		elseif command == "version" then
