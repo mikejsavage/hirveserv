@@ -61,7 +61,7 @@ end
 function string.stripLeadingVT102( self )
 	local trimmed = self:gsub( "^\27%[[\27%[%d;%a]-%a([^\27].*)", "%1" )
 
-	if trimmmed == self then
+	if trimmed == self then
 		return ""
 	end
 
