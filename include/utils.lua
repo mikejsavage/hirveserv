@@ -8,7 +8,7 @@ getmetatable( "" ).__mod = function( self, form )
 			for _, f in ipairs( form ) do
 				print( "> " .. tostring( f ) )
 			end
-			assert( ok, err )
+			error( err, 2 )
 		end
 
 		return self:format( unpack( form ) )
