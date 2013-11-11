@@ -86,6 +86,10 @@ local function addCategory( path, name )
 end
 
 local function buildWiki()
+	if not io.readable( "data/wiki" ) then
+		return
+	end
+
 	for file in lfs.dir( "data/wiki" ) do
 		if file ~= "." and file ~= ".." then
 			local fullPath = "data/wiki/" .. file
