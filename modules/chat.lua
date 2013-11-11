@@ -85,7 +85,7 @@ chat.handler( "chat", { "all", "pm", "nameChange" }, function( client )
 		if command == "all" then
 			local wasPM = false
 
-			if client.user.settings.alias then
+			if client.user and client.user.settings.alias then
 				local stripped = args:stripVT102()
 
 				local trimmed = stripped:match( "^\n?" .. client.name .. "%s*(.-)\n?$" ) or stripped
