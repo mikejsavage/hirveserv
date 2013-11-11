@@ -75,8 +75,8 @@ function Client:processData()
 		if protocol.accept( self ) then
 			setmetatable( self, { __index = protocol.client } )
 
-			table.insertBy( chat.clients, client, function( other )
-				return client.lower < other.lower
+			table.insertBy( chat.clients, self, function( other )
+				return self.lower < other.lower
 			end )
 
 			self.state = "connected"
