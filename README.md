@@ -1,7 +1,7 @@
 Current limitations
 -------------------
 
-We don't have IP auth yet and zMud is totally broken.
+zMud is totally broken.
 
 It would be nice to make it chroot/setuid unnecessary privilidges away
 on startup.

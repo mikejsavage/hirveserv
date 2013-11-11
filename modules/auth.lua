@@ -83,27 +83,6 @@ for file in lfs.dir( "data/users" ) do
 	end
 end
 
-local function iptoint( ip )
-	local a, b, c, d = ip:match( "^(%d+)%.(%d+)%.(%d+)%.(%d+)$" )
-	return d + 256 * ( c + 256 * ( b + 256 * a ) )
-end
-
-local function ipauth( client )
-	local addr = client.socket:getpeername()
-	local n = iptoint( addr )
-
-	for _, ip in ipairs( client.user.ips ) do
-		local m = iptoint( ip.ip )
-		local div = 2 ^ ( 32 - ip.prefix )
-
-		if math.floor( m / div ) == math.floor( n / div ) then
-			return true
-		end
-	end
-
-	return false
-end
-
 chat.command( "auth", "adduser", function( client, name )
 	tempAuths[ name:lower() ] = os.time() + chat.config.tempAuthDuration
 
@@ -264,6 +243,114 @@ chat.command( "remprivs", "accounts", {
 	end,
 }, "<account> <priv1> [priv2 ...]", "Revoke a user's privs" )
 
+chat.command( "lsip", "user", function( client )
+	if #client.user.ips == 0 then
+		client:msg( "You have no authed IPs." )
+
+		return
+	end
+
+	local lines = { "Authed IPs:" }
+
+	for _, ip in ipairs( client.user.ips ) do
+		table.insert( lines, "#ly%s#lw: %s%s" % {
+			ip.name,
+			ip.ip,
+			ip.prefix ~= 32 and ( "#lm/%d" % ip.prefix ) or ""
+		} )
+	end
+
+	client:msg( lines )
+end, "List authenticated IPs" )
+
+local function iptoint( ip )
+	local a, b, c, d = ip:match( "^(%d+)%.(%d+)%.(%d+)%.(%d+)$" )
+	return d + 256 * ( c + 256 * ( b + 256 * a ) )
+end
+
+local function currentIPIndex( client )
+	local addr = client.socket:getpeername()
+	local n = iptoint( addr )
+
+	for i, ip in ipairs( client.user.ips ) do
+		local m = iptoint( ip.ip )
+		local div = 2 ^ ( 32 - ip.prefix )
+
+		if math.floor( m / div ) == math.floor( n / div ) then
+			return i
+		end
+	end
+
+	return nil
+end
+
+local function ipIndexFromName( client, name )
+	for i, ip in ipairs( client.user.ips ) do
+		if ip.name == name then
+			return i
+		end
+	end
+
+	return nil
+end
+
+local function addIP( client, name, prefix )
+	local idx = ipIndexFromName( client, name )
+
+	if idx then
+		client:msg( "You are already authed from #ly%s#lw.", name )
+
+		return
+	end
+
+	local ip = client.socket:getpeername()
+
+	table.insert( client.user.ips, {
+		name = name,
+		ip = ip,
+		prefix = prefix,
+	} )
+	client.user:save()
+
+	client:msg( "Added #ly%s#lw (#ly%s#lm/%d#lw) as an authenticated IP.", name, ip, prefix )
+end
+
+chat.command( "addip", "user", {
+	[ "^(%S+)$" ] = function( client, name )
+		addIP( client, name, 32 )
+	end,
+
+	[ "^(%S+)%s+(%d+)$" ] = addIP,
+}, "<where you are connecting from> [network prefix]", "Add an authenticated IP" )
+
+chat.command( "delip", "user", function( client, args )
+	local idx
+
+	if args == "" then
+		idx = currentIPIndex( client )
+
+		if not idx then
+			client:msg( "You aren't authenticated from this IP. Use #lylsip#lw for a list." )
+
+			return
+		end
+	else
+		idx = ipIndexFromName( client, args )
+
+		if not idx then
+			client:msg( "You aren't authenticated from #lm%s#lw. Use #lylsip#lw for a list.", args )
+			
+			return
+		end
+	end
+
+	client:msg( "Removed #ly%s#lw from authenticated IPs.", client.user.ips[ idx ].name )
+
+	table.remove( client.user.ips, idx )
+	client.user:save()
+end, "[name]", "Remove an authenticated IP" )
+		
+
 chat.handler( "register", { "pm" }, function( client )
 	client:msg( "Hey, #ly%s#lw, you should have been given an #lmextremely secret#lw password. #ly/chat#lw me that!", client.name )
 
@@ -329,7 +416,7 @@ chat.handler( "auth", { "pm" }, function( client )
 		return
 	end
 
-	if ipauth( client ) then
+	if currentIPIndex( client ) then
 		client:replaceHandler( "chat" )
 
 		return
