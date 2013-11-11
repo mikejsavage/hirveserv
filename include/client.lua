@@ -142,8 +142,12 @@ function Client:replaceHandler( name, ... )
 end
 
 function Client:hasPriv( priv )
+	if not priv then
+		return true
+	end
+
 	if not self.user then
-		return priv == nil
+		return false
 	end
 
 	return priv == "user" or self.user.privs.all or self.user.privs[ priv ]
