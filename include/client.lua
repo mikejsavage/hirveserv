@@ -24,7 +24,7 @@ end
 local function connectionTimeout( client )
 	return function( loop, timer )
 		client.socket:shutdown()
-		loop:stop( timer )
+		timer:stop( loop )
 	end
 end
 
