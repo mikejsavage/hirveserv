@@ -7,7 +7,7 @@ local function who( client )
 		end
 	end
 
-	client:msg( output )
+	client:msg( "%s", output )
 end
 
 chat.command( "who", nil, who, "Shows who is online" )
