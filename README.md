@@ -6,6 +6,10 @@ zMud is totally broken.
 It would be nice to make it chroot/setuid unnecessary privilidges away
 on startup.
 
+I am using flatfiles instead of a real database and don't make any
+effort to ensure consistency in the event of a write failing amongst
+probably multiple other awful flaws.
+
 
 Security
 --------
