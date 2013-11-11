@@ -2,6 +2,7 @@ local ev = require( "ev" )
 local socket = require( "socket" )
 
 local Client = require( "include.client" )
+local modules = require( "include.modules" )
 
 local _M = { }
 
@@ -14,6 +15,10 @@ local function onData( client )
 		local _, err, data = client.socket:receive( "*a" )
 
 		if err == "closed" then
+			if client.state == "chatting" then
+				modules.fireEvent( "disconnect", client )
+			end
+
 			watcher:stop( loop )
 			client:kill()
 
