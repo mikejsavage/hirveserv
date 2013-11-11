@@ -101,8 +101,9 @@ chat.command( "adduser", "adduser", function( client, name )
 
 	local lower = name:lower()
 
-	if users[ lower ] then
+	if users[ lower ] and not users[ lower ].pending then
 		client:msg( "#ly%s#lw already has an account!", name )
+
 		return
 	end
 
