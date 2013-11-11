@@ -50,7 +50,7 @@ for userid, name, password, pending in db( "SELECT userid, name, password, isPen
 	users[ userid ] = {
 		name = name:lower(),
 		password = password,
-		pending = pending or nil,
+		pending = pending == 1 or nil,
 		privs = { },
 		settings = { },
 		ips = { },
