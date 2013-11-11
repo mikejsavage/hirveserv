@@ -1,3 +1,4 @@
+-- TODO: this is awful
 getmetatable( "" ).__mod = function( self, form )
 	if type( form ) == "table" then
 		local ok, err = pcall( string.format, self, unpack( form ) )
@@ -28,10 +29,6 @@ function string.plural( count, plur, sing )
 	return count == 1 and ( sing or "" ) or ( plur or "s" )
 end
 
-function string.startsWith( self, needle )
-	return self:sub( 1, needle:len() ) == needle
-end
-
 function string.commas( num )
 	num = tonumber( num )
 
@@ -58,6 +55,7 @@ function string.stripVT102( self )
 	return self:gsub( "\27%[[%d;]*%a", "" )
 end
 
+-- TODO: sucks
 function string.trimVT102( self )
 	while self:match( "^\27%[[%d;]*%a" ) do
 		self = self:gsub( "^\27%[[%d;]*%a", "" )
@@ -68,52 +66,10 @@ function string.trimVT102( self )
 	end
 
 	return self
-end 
-
-function string.yn( self )
-	local firstLetter = self:sub( 1, 1 )
-
-	return firstLetter == "y" and "y" or ( firstLetter == "n" and "n" or nil )
 end
 
 function math.round( num )
 	return math.floor( num + 0.5 )
-end
-
-function math.avg( a, b )
-	return ( a + b ) / 2
-end
-
-function math.ipmask( ip, mask )
-	local isplit = { ip:match( "^(%d+)%.(%d+)%.(%d+)%.(%d+)$" ) }
-	local msplit = { mask:match( "^(%d+)%.(%d+)%.(%d+)%.(%d+)$" ) }
-	local zeroing = false
-
-	for i = 1, 4 do
-		if zeroing then
-			isplit[ i ] = 0
-		elseif msplit[ i ] ~= "255" then
-			local m = tonumber( msplit[ i ] )
-			local n = 0
-
-			if m == 0 then
-				n = 8
-			else
-				-- count trailing 0 bits in m
-				while m % 2 == 0 and m > 0 do
-					m = math.floor( m / 2 )
-					n = n + 1
-				end
-			end
-
-			local e = 2 ^ n
-			isplit[ i ] = math.floor( isplit[ i ] / e ) * e
-
-			zeroing = true
-		end
-	end
-
-	return table.concat( isplit, "." )
 end
 
 function io.readable( path )
@@ -145,7 +101,7 @@ end
 function table.insertBy( self, value, cmp )
 	local idx = 1
 
-	while idx <= #self and not cmp( value, self[ idx ] ) do
+	while idx <= #self and not cmp( self[ idx ] ) do
 		idx = idx + 1
 	end
 
@@ -156,7 +112,7 @@ function table.removeValue( self, value )
 	for i, elem in ipairs( self ) do
 		if elem == value then
 			table.remove( self, i )
-			
+
 			break
 		end
 	end
@@ -181,10 +137,11 @@ function enforce( var, name, ... )
 	end
 
 	if not ok then
-		error( "argument `%s' to %s should be of type %s (got %s)" % { name, debug.getinfo( 2, "n" ).name, table.concat( acceptable, " or " ), type( var ) }, 2 )
+		error( "argument `%s' to %s should be of type %s (got %s)" % { name, debug.getinfo( 2, "n" ).name, table.concat( acceptable, " or " ), type( var ) }, 3 )
 	end
 end
 
+-- TODO: sucks
 local ColourSequences = {
 	d = 0,
 	r = 31,
@@ -212,6 +169,7 @@ function chat.parseColours( message )
 	end ):gsub( "##", "#" ) )
 end
 
+-- TODO: sucks
 local function uconv( bytes, n )
 	assert( n >= 0 and n < 2 ^ ( bytes * 8 ), "value out of range: " .. n )
 

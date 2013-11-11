@@ -1,5 +1,5 @@
 local function who( client )
-	local output = "Cool people: #lwyou"
+	local output = "Cool people: #lyyou"
 
 	for _, other in ipairs( chat.clients ) do
 		if other ~= client and other.state == "chatting" then

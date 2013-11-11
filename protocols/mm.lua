@@ -3,7 +3,6 @@ local CommandBytes = {
 	all = "\4",
 	pm = "\5",
 	message = "\7",
-	version = "\19",
 	pingRequest = "\26",
 	pingResponse = "\27",
 }
@@ -14,60 +13,54 @@ for name, byte in pairs( CommandBytes ) do
 	Commands[ byte ] = name
 end
 
-local function dataHandler( client )
-	while true do
-		local data = coroutine.yield()
+local MMClient = {
+	protocol = "mm",
+	pmSyntax = "/chat",
+}
 
-		local commandByte, args = data:match( "^(.)(.*)\255$" )
-		local command = Commands[ commandByte ]
+function MMClient:processData()
+	local byte, args, len = self.dataBuffer:match( "^(.)(.*)\255()" )
+
+	if byte then
+		local command = Commands[ byte ]
 
 		if command == "pm" then
-			client:command( "pm", args:match( "chats to you, '(.*)'\n$" ):trimVT102() )
-		elseif command == "pingRequest" then
-			client:send( "pingResponse", args )
-		elseif command == "version" then
-			if args:find( "TinTin" ) then
-				client.pmSyntax = "##chat m"
-			end
-		elseif command and command ~= "pingResponse" then
-			client:command( command, args )
+			self:onCommand( "pm", args:match( "chats to you, '(.*)'\n$" ):trimVT102() )
+		elseif command then
+			self:onCommand( command, args )
 		end
+
+		self.dataBuffer = self.dataBuffer:sub( len )
 	end
 end
 
-local MMClient = setmetatable( { protocol = "mm" }, { __index = Client } )
+function MMClient:send( command, args )
+	enforce( command, "command", "string" )
+	enforce( args, "args", "string" )
 
-function MMClient:send( command, data )
 	local byte = CommandBytes[ command ]
 
 	assert( byte, "bad command: " .. command )
 
-	self:raw( byte .. data .. "\255" )
+	self:raw( byte .. args .. "\255" )
 end
 
-function MMClient:msg( form, ... )
-	enforce( form, "form", "string", "table" )
+local _M = { client = MMClient }
 
-	if type( form ) == "table" then
-		form = table.concat( form, "\n" )
+function _M.accept( client )
+	local name, len = client.dataBuffer:match( "^CHAT:(.-)\n[%d. ]+()" )
+
+	if not name then
+		return false
 	end
 
-	self:send( "message", chat.parseColours( "<%s>#d %s" % { chat.config.name, form:format( ... ) } ) )
+	client.name = name
+	client.lower = name:lower()
+	client.dataBuffer = client.dataBuffer:sub( len )
+
+	client:raw( "YES:" .. chat.config.name .. "\n" )
+
+	return true
 end
 
-function MMClient:chat( message )
-	enforce( message, "message", "string" )
-
-	self:send( "all", message )
-end
-
-function MMClient:ping( now )
-	self:send( "pingRequest", now )
-end
-
-MMClient.pmSyntax = "/chat"
-
-return {
-	client = MMClient,
-	handler = dataHandler,
-}
+return _M

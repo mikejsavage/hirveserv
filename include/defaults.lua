@@ -1,7 +1,7 @@
-chat.config = {
+return {
 	name = "hirveserv",
 	port = 4050,
 	auth = false,
-	tempAuthDuration = 60,
 	bcryptRounds = 5,
+	tempAuthDuration = 60,
 }

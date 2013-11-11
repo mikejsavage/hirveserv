@@ -28,7 +28,7 @@ local function dataHandler( client )
 		elseif command == "pingRequest" then
 			client:send( "pingResponse", args )
 		elseif command == "stamp" then
-			self.stamp = arg:sub( 1, -2 ) .. string.char( ( arg:byte( -1 ) +  1 ) % 256 )
+			self.stamp = arg:sub( 1, -2 ) .. string.char( ( arg:byte( -1 ) + 1 ) % 256 )
 		elseif command and command ~= "pingResponse" then
 			client:command( command, args )
 		end

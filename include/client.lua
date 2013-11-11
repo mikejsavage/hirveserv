@@ -1,203 +1,235 @@
-Client = { }
+local ev = require( "ev" )
+local loop = ev.Loop.default
 
-local handlers = require( "include.handlers" )
-local command = require( "include.command" )
+local lfs = require( "lfs" )
+local json = require( "cjson.safe" )
+
+local modules = require( "include.modules" )
+
+local ConnectionTimeoutLength = 10
+
+local _M = { }
+local Client = { }
 
 chat.clients = { }
 
-function Client:new( socket )
+chat.protocols = {
+	require( "protocols.mm" )
+}
+
+for _, protocol in ipairs( chat.protocols ) do
+	setmetatable( protocol.client, { __index = Client } )
+end
+
+local function connectionTimeout( client )
+	return function( loop, timer )
+		client.socket:shutdown()
+		loop:stop( timer )
+	end
+end
+
+function _M.new( socket )
 	socket:settimeout( 0 )
 	socket:setoption( "keepalive", true )
 
 	local client = {
+		dataBuffer = "",
+
 		socket = socket,
 		state = "connecting",
-		dataHandler = coroutine.create( handlers.connect ),
-		commandHandlers = { },
-		privs = { },
-		settings = { },
-		ips = { },
-		ip = socket:getpeername(),
+
+		handlers = { },
 	}
 
-	assert( coroutine.resume( client.dataHandler, client ) )
+	client.timerConnection = ev.Timer.new( connectionTimeout( client ), ConnectionTimeoutLength, 0 )
+	client.timerConnection:start( loop )
 
 	setmetatable( client, { __index = Client } )
+
+	table.insert( chat.clients, client )
 
 	return client
 end
 
-function Client:kill()
+function Client:kill( msg )
+	if msg then
+		self:msg( msg )
+	end
+
+	self.state = "killed"
 	self.socket:shutdown()
 
 	table.removeValue( chat.clients, self )
+
+	if self.user then
+		table.removeValue( self.user.clients, self )
+	end
+end
+
+function Client:onData( data )
+	self.dataBuffer = self.dataBuffer .. data
+
+	self:processData()
+end
+
+function Client:processData()
+	for _, protocol in ipairs( chat.protocols ) do
+		if protocol.accept( self ) then
+			setmetatable( self, { __index = protocol.client } )
+
+			self.state = "connected"
+
+			self.timerConnection:stop( loop )
+			self.timerConnection = nil
+
+			if chat.config.auth then
+				self:pushHandler( "auth" )
+			else
+				self:pushHandler( "chat" )
+			end
+		end
+	end
 end
 
 function Client:raw( data )
 	self.socket:send( data )
 end
 
-function Client:send()
-	error( "Client:send not implemented for protocol `%s'" % self.protocol )
+function Client:handler( command )
+	for i = #self.handlers, 1, -1 do
+		local handler = self.handlers[ i ]
+
+		if handler.implements[ command ] then
+			return handler.coro, handler.name
+		end
+	end
+
+	error( "%s has no no handler for %s" % { self.name, command } )
 end
 
-function Client:msg()
-	error( "Client:msg not implemented for protocol `%s'" % self.protocol )
+function Client:removeDeadHandlers()
+	if self.state == "killed" then
+		return
+	end
+
+	for i = #self.handlers, 1, -1 do
+		if coroutine.status( self.handlers[ i ].coro ) == "dead" then
+			table.remove( self.handlers, i )
+		end
+	end
 end
 
-function Client:chat()
-	error( "Client:chat not implemented for protocol `%s'" % self.protocol )
+function Client:pushHandler( name, ... )
+	local handler = modules.getHandler( name )
+	local coro = coroutine.create( handler.coro )
+
+	table.insert( self.handlers, {
+		name = name,
+		coro = coro,
+		implements = handler.implements,
+	} )
+
+	local ok, err = coroutine.resume( coro, self, ... )
+	if not ok then
+		error( "failed coro(%s) initialisation: %s" % { name, err } )
+	end
 end
 
-function Client:handleCommand()
-	error( "Client:handleCommand not implemented for protocol `%s'" % self.protocol )
-end
+function Client:replaceHandler( name, ... )
+	table.remove( self.handlers )
 
-function Client:ping()
-	error( "Client:ping not implemented for protocol `%s'" % self.protocol )
-end
-
-function Client:pmSyntax()
-	error( "Client:pmSyntax not implemented for protocol `%s'" % self.protocol )
+	self:pushHandler( name, ... )
 end
 
 function Client:hasPriv( priv )
-	if priv == "user" then
-		return self.userID ~= nil
+	if not self.user then
+		return priv == nil
 	end
 
-	return not priv or self.privs.all or self.privs[ priv ]
+	return priv == "user" or self.user.privs.all or self.user.privs[ priv ]
 end
 
-function Client:ipIndex( needle )
-	for i, ip in ipairs( self.ips ) do
-		if ip == needle then
-			return i
+function Client:onCommand( command, args )
+	if command == "pingRequest" then
+		self:send( "pingResponse", args )
+	elseif command ~= "pingResponse" then
+		local coro, name = self:handler( command )
+		local ok, err = coroutine.resume( coro, command, args )
+
+		if not ok then
+			error( "client coro(%s) failed: %s" % { name, err } )
+		end
+
+		self:removeDeadHandlers()
+	end
+end
+
+function Client:msg( form, ... )
+	enforce( form, "form", "string", "table" )
+
+	if type( form ) == "table" then
+		form = table.concat( form, "\n" )
+	end
+
+	self:send( "message", chat.parseColours(
+		"<%s>#lw %s" % { chat.config.name, form:format( ... ) }
+	) )
+end
+
+function Client:xmsg( form, ... )
+	local str = form:format( ... )
+
+	modules.fireEvent( "msg", message )
+
+	for _, client in ipairs( chat.clients ) do
+		if ( ( client.user and client.user ~= self.user ) or client ~= self ) and client.state == "chatting" then
+			client:msg( "%s", str )
+		end
+	end
+end
+
+function chat.msg( form, ... )
+	local str = form:format( ... )
+
+	modules.fireEvent( "msg", message )
+
+	for _, client in ipairs( chat.clients ) do
+		if client.state == "chatting" then
+			client:msg( "%s", str )
+		end
+	end
+end
+
+-- TODO: not happy with this
+function Client:hop()
+	local oldCoros = self.coros
+	self.coros = { }
+
+	if self.state == "chatting" then
+		local ok, err = pcall( Client.pushHandler, self, "chat" )
+
+		if not ok then
+			log.error( "hop failed for %s (state %s): %s", self.name, self.state, err )
+
+			self.coros = oldCoros
+
+			return false
+		end
+	end
+
+	return true
+end
+
+function chat.clientFromName( name )
+	name = name:lower()
+
+	for _, client in ipairs( chat.clients ) do
+		if client.state == "chatting" and client.name:lower() == name then
+			return client
 		end
 	end
 
 	return nil
 end
 
-function Client:xmsg( form, ... )
-	local message = form:format( ... )
-
-	chat.event( "xmsg", self, message )
-
-	for _, client in ipairs( chat.clients ) do
-		if client ~= self and client.state == "chatting" then
-			client:msg( "%s", message )
-		end
-	end
-end
-
-function Client:chatAll( message )
-	chat.event( "chatAll", self, message )
-
-	for _, client in ipairs( chat.clients ) do
-		if client ~= self and client.state == "chatting" then
-			client:chat( message )
-		end
-	end
-end
-
-function Client:canCall( message )
-	return command.canCall( self, message )
-end
-
-function Client:pm( message )
-	command.doCommand( self, message )
-end
-
-function Client:nameChange( newName )
-	if self.state == "chatting" then
-		chat.event( "nameChange", self, newName )
-
-		self:xmsg( "#lw%s#d changed their name to #lw%s#d.", self.name, newName )
-	end
-
-	self.name = newName
-
-	table.removeValue( chat.clients, self )
-	table.insertBy( chat.clients, self, function( a, b )
-		return a.name:lower() < b.name:lower()
-	end )
-end
-
-function Client:setDataHandler( handler )
-	self.dataHandler = coroutine.create( handler )
-
-	assert( coroutine.resume( self.dataHandler, self ) )
-end
-
-function Client:pushHandler( handler, ... )
-	local coro = coroutine.create( handler )
-
-	table.insert( self.commandHandlers, coro )
-
-	assert( coroutine.resume( coro, self, ... ) )
-end
-
-function Client:replaceHandler( handler, ... )
-	table.remove( self.commandHandlers )
-
-	self:pushHandler( handler, ... )
-end
-
-function Client:command( command, args )
-	local coro = self.commandHandlers[ #self.commandHandlers ]
-
-	assert( coroutine.resume( coro, command, args ) )
-
-	-- can't test coro incase it calls Client:replaceHandler
-	if coroutine.status( self.commandHandlers[ #self.commandHandlers ] ) == "dead" then
-		table.remove( self.commandHandlers )
-	end
-end
-
-function Client:data( data )
-	assert( coroutine.resume( self.dataHandler, data ) )
-end
-
-function chat.msg( form, ... )
-	local message = form:format( ... )
-
-	chat.event( "msg", message )
-
-	for _, client in ipairs( chat.clients ) do
-		if  client.state == "chatting" then
-			client:msg( "%s", message )
-		end
-	end
-end
-
-function chat.clientFromName( name, includeOffline )
-	name = name:lower()
-
-	if includeOffline then
-		local userID = chat.db.users( "SELECT userid FROM users WHERE name = ?", name )()
-
-		if not userID then
-			return nil
-		end
-
-		for _, client in ipairs( chat.clients ) do
-			if client.state == "chatting" and client.userID == userID then
-				return client
-			end
-		end
-
-		return {
-			name = name,
-			userID = userID,
-		}
-	else
-		for _, client in ipairs( chat.clients ) do
-			if client.name:lower() == name and client.state == "chatting" then
-				return client
-			end
-		end
-
-		return nil
-	end
-end
+return _M

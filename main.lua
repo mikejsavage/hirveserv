@@ -1,98 +1,61 @@
 #! /usr/bin/lua
 
-chat = { }
+require( "picky" )
 
-require( "bcrypt" )
+local ev = require( "ev" )
+local loop = ev.Loop.default
 
+-- cd into binary dir for convenience
 local lfs = require( "lfs" )
 
 local serverDir = arg[ 0 ]:match( "^(.-)/[^/]*$" )
-
 if serverDir then
 	lfs.chdir( serverDir )
 end
 
 lfs.mkdir( "data" )
-lfs.mkdir( "wiki" )
-
-require( "picky" )
-require( "config_default" )
-
-local config = loadfile( "config.lua" )
-if config then
-	config()
-end
-
 math.randomseed( os.time() )
 
+-- init
+chat = { }
+
+require( "include.sigint" )
 require( "include.utils" )
-require( "include.event" )
-require( "include.sqlite" )
+log = require( "include.log" )
 
-chat.db = {
-	users = sqlite.new( "users" ),
-	logs = sqlite.new( "logs" ),
-}
+chat.config = require( "include.defaults" )
 
-require( "include.client" )
+local configFn, errLoad = loadfile( "config.lua" )
+if configFn then
+	local env = setmetatable( { }, {
+		__newindex = function( self, key, value )
+			if chat.config[ key ] == nil then
+				log.warn( "invalid setting: %s", key )
+			end
 
-local addons = require( "include.addons" )
-
-local socket = require( "socket" )
-local ev = require( "ev" )
-
-local loop = ev.Loop.default
-local server = assert( socket.bind( "*", chat.config.port ) )
-
-server:settimeout( 0 )
-server:setoption( "keepalive", true )
-
-local function dataHandler( client, loop, watcher )
-	-- this makes perfect sense
-	local _, err, data = client.socket:receive( "*a" )
-
-	if err == "closed" then
-		watcher:stop( loop )
-		client:kill()
-
-		if client.state == "chatting" then
-			chat.event( "disconnect", client )
-
-			chat.msg( "#lw%s#d left chat.", client.name )
-		end
-
-		return
-	end
-
-	client:data( data )
-end
-
-local function connectHandler()
-	local client = Client:new( server:accept() )
-
-	ev.IO.new(
-		function( loop, watcher )
-			dataHandler( client, loop, watcher )
+			chat.config[ key ] = value
 		end,
 
-		client.socket:getfd(),
-		ev.READ
-	):start( loop )
-end
+		__index = { },
+	} )
 
-local function sendPings()
-	local now = loop:update_now()
+	setfenv( configFn, env )
 
-	for _, client in ipairs( chat.clients ) do
-		if client.state ~= "connecting" then
-			client:ping( now )
-		end
+	local ok, errRun = pcall( configFn )
+
+	if not ok then
+		log.error( "reading config.lua failed: %s", err )
+
+		os.exit( 1 )
 	end
+else
+	log.warn( "couldn't read config: %s", errLoad )
 end
 
-addons.load()
+local server = require( "include.server" )
+local modules = require( "include.modules" )
 
-ev.IO.new( connectHandler, server:getfd(), ev.READ ):start( loop )
-ev.Timer.new( sendPings, 30, 30 ):start( loop )
+server.init()
+modules.load()
 
 loop:loop()

@@ -1,4 +1,6 @@
-local Words = {
+local _M = { }
+
+local words = {
 	"able",
 	"also",
 	"area",
@@ -195,10 +197,8 @@ local Words = {
 	"your",
 }
 
-local function randomWord()
-	return Words[ math.random( #Words ) ]
+function _M.random()
+	return words[ math.random( #words ) ]
 end
 
-return {
-	random = randomWord,
-}
+return _M

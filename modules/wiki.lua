@@ -79,16 +79,16 @@ local function addCategory( path, name )
 		end
 	end
 
-	table.sortByKey( category, "name" )
+	table.sortByKey( category.pages, "name" )
 
 	categories[ name ] = category
 	table.insert( categoriesList, category )
 end
 
 local function buildWiki()
-	for file in lfs.dir( "wiki" ) do
+	for file in lfs.dir( "data/wiki" ) do
 		if file ~= "." and file ~= ".." then
-			local fullPath = "wiki/" .. file
+			local fullPath = "data/wiki/" .. file
 			local attr = lfs.attributes( fullPath )
 
 			file = file:lower()
@@ -107,22 +107,8 @@ local function buildWiki()
 		end
 	end
 
-	table.sortByKey( categories, "name" )
+	table.sortByKey( categoriesList, "name" )
 end
-
-chat.command( "rebuildwiki", "all", function( client )
-	categories = { }
-	categoriesList = { }
-	pages = { }
-
-	local ok, err = pcall( buildWiki )
-
-	if not ok then
-		client:msg( "Rebuild failed! %s", err )
-	else
-		client:msg( "Rebuilt." )
-	end
-end, "Rebuild the wiki" )
 
 chat.command( "wiki", "user", {
 	[ "^$" ] = function( client )
@@ -156,70 +142,64 @@ chat.command( "wiki", "user", {
 			return
 		end
 
-		if pages[ name ] then
-			if pages[ name ].pages then
-				local output = "#ly%s#lw is split into #ly%d#lw pages:" % {
-					name,
-					#pages[ name ].pages,
-				}
-
-				for i, page in ipairs( pages[ name ].pages ) do
-					output = output .. "\n    #ly%d #d- %s" % {
-						i,
-						page.title,
-					}
-				end
-
-				client:msg( "%s", output )
-			else
-				client:msg( "#lwShowing #ly%s#lw:\n#d%s", name, pages[ name ].body )
-			end
-
+		if not pages[ name ] then
+			client:msg( "No wiki entry for #ly%s#d.", name )
 			return
 		end
 
-		client:msg( "No wiki entry for #ly%s#d.", name )
+		if not pages[ name ].pages then
+			client:msg( "#lwShowing #ly%s#lw:\n#d%s", name, pages[ name ].body )
+			return
+		end
+
+		local output = "#ly%s#lw is split into #ly%d#lw pages:" % {
+			name,
+			#pages[ name ].pages,
+		}
+
+		for i, page in ipairs( pages[ name ].pages ) do
+			output = output .. "\n    #ly%d #d- %s" % {
+				i,
+				page.title,
+			}
+		end
+
+		client:msg( "%s", output )
 	end,
 
 	[ "^(%S+)%s+(%d+)$" ] = function( client, name, page )
 		name = name:lower()
 		page = tonumber( page )
-
-		--if categories[ name ] then
-		--	local output = "#lwPages in #ly%s#lw:" % name
-
-		--	for _, page in ipairs( categories[ name ] ) do
-		--		output = output .. "\n    #ly%s #d- %s" % {
-		--			page.name,
-		--			page.title or "FIX",
-		--		}
-		--	end
-
-		--	client:msg( "%s", output )
-
-		--	return
-		--end
-
-		if pages[ name ] then
-			if pages[ name ].pages then
-				if pages[ name ].pages[ page ] then
-					client:msg( "#lwShowing #ly%s#lw: #d(page #lw%d#d of #lw%d#d)\n%s",
-						name,
-						page, #pages[ name ].pages,
-						pages[ name ].pages[ page ].body
-					)
-				else
-					client:msg( "#lwBad page number." )
-				end
-			else
-				client:msg( "#lwShowing #ly%s#lw:\n#d%s", name, pages[ name ].body )
-			end
-
+		
+		if not pages[ name ] then
+			client:msg( "No wiki entry for #ly%s#d.", name )
 			return
 		end
 
-		client:msg( "No wiki entry for #ly%s#d.", name )
+		if not pages[ name ].pages or not pages[ name ].pages[ page ] then
+			client:msg( "#lwBad page number." )
+		end
+
+		client:msg( "#lwShowing #ly%s#lw: #d(page #lw%d#d of #lw%d#d)\n%s",
+			name,
+			page, #pages[ name ].pages,
+			pages[ name ].pages[ page ].body
+		)
 	end,
 }, "<category/page> [page] [search]", "Super duper wiki" )
+
+chat.command( "rebuildwiki", "all", function( client )
+	categories = { }
+	categoriesList = { }
+	pages = { }
+
+	local ok, err = pcall( buildWiki )
+
+	if not ok then
+		client:msg( "Rebuild failed! %s", err )
+	else
+		client:msg( "Rebuilt." )
+	end
+end, "Rebuild the wiki" )
 
 buildWiki()
