@@ -344,10 +344,12 @@ chat.command( "delip", "user", function( client, args )
 		end
 	end
 
-	client:msg( "Removed #ly%s#lw from authenticated IPs.", client.user.ips[ idx ].name )
+	local name = client.user.ips[ idx ].name
 
 	table.remove( client.user.ips, idx )
 	client.user:save()
+
+	client:msg( "Removed #ly%s#lw from authenticated IPs.", name )
 end, "[name]", "Remove an authenticated IP" )
 		
 
