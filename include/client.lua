@@ -183,7 +183,7 @@ end
 function Client:xmsg( form, ... )
 	local str = form:format( ... )
 
-	modules.fireEvent( "msg", message )
+	modules.fireEvent( "msg", str )
 
 	for _, client in ipairs( chat.clients ) do
 		if ( ( client.user and client.user ~= self.user ) or client ~= self ) and client.state == "chatting" then
@@ -195,7 +195,7 @@ end
 function chat.msg( form, ... )
 	local str = form:format( ... )
 
-	modules.fireEvent( "msg", message )
+	modules.fireEvent( "msg", str )
 
 	for _, client in ipairs( chat.clients ) do
 		if client.state == "chatting" then
