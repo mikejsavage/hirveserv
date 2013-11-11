@@ -47,3 +47,9 @@ See `include/defaults.lua` for a list of settings.
 On first run it will prompt you to create an admin account and give you
 a password for it, which you should be able to connect normally with.
 You can then `/chat 1 help` to get a list of commands.
+
+If you are running a version of hirveserv from before the total rewrite
+(`data/users.sq3` exists) then you will need to run the latest old
+version of hirveserv to update the database to its most recent format (commit
+`df9fad72aa`) then run the supplied `sq3-to-json.lua` to convert it to the new
+flatfile format.
