@@ -106,7 +106,7 @@ function Client:handler( command )
 		end
 	end
 
-	error( "%s has no no handler for %s" % { self.name, command } )
+	error( "%s has no handler for %s" % { self.name, command } )
 end
 
 function Client:removeDeadHandlers()
