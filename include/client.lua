@@ -162,10 +162,13 @@ function Client:onCommand( command, args )
 		self:send( "pingResponse", args )
 	elseif command ~= "pingResponse" then
 		local coro, name = self:handler( command )
-		local ok, err = coroutine.resume( coro, command, args )
 
-		if not ok then
-			error( "client coro(%s) failed: %s" % { name, err } )
+		if coro then
+			local ok, err = coroutine.resume( coro, command, args )
+
+			if not ok then
+				error( "client coro(%s) failed: %s" % { name, err } )
+			end
 		end
 
 		self:removeDeadHandlers()
