@@ -1,7 +1,5 @@
 #! /usr/bin/lua
 
-require( "picky" )
-
 local ev = require( "ev" )
 local loop = ev.Loop.default
 
