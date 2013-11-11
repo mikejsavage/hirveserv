@@ -46,7 +46,9 @@ function _M.new( socket )
 
 	setmetatable( client, { __index = Client } )
 
-	table.insert( chat.clients, client )
+	table.insertBy( chat.clients, client, function( other )
+		return client.name:lower() < other.name:lower()
+	end )
 
 	return client
 end
