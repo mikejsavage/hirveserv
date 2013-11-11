@@ -105,8 +105,6 @@ function Client:handler( command )
 			return handler.coro, handler.name
 		end
 	end
-
-	error( "%s has no handler for %s" % { self.name, command } )
 end
 
 function Client:removeDeadHandlers()
@@ -118,6 +116,10 @@ function Client:removeDeadHandlers()
 		if coroutine.status( self.handlers[ i ].coro ) == "dead" then
 			table.remove( self.handlers, i )
 		end
+	end
+
+	if #self.handlers == 0 then
+		error( "%s ran out of coroutines" % self.name )
 	end
 end
 
