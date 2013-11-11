@@ -46,10 +46,6 @@ function _M.new( socket )
 
 	setmetatable( client, { __index = Client } )
 
-	table.insertBy( chat.clients, client, function( other )
-		return client.name:lower() < other.name:lower()
-	end )
-
 	return client
 end
 
@@ -78,6 +74,10 @@ function Client:processData()
 	for _, protocol in ipairs( chat.protocols ) do
 		if protocol.accept( self ) then
 			setmetatable( self, { __index = protocol.client } )
+
+			table.insertBy( chat.clients, client, function( other )
+				return client.lower < other.lower
+			end )
 
 			self.state = "connected"
 

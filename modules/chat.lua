@@ -22,10 +22,11 @@ local function handleNameChange( client, newName )
 	chat.event( "nameChange", client, newName )
 
 	client.name = newName
+	client.lower = newName:lower()
 
 	table.removeValue( chat.clients, client )
 	table.insertBy( chat.clients, client, function( other )
-		return client.name:lower() < other.name:lower()
+		return client.lower < other.lower
 	end )
 end
 
