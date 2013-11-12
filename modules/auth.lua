@@ -113,7 +113,7 @@ chat.command( "adduser", "adduser", {
 		}
 
 		checkUser( name, users[ name ] )
-		saveUser( users[ name ] )
+		users[ name ]:save()
 
 		client:msg( "Ok! Tell #ly%s#lw their password is #lm%s#lw.", name, password )
 		chat.msg( "#ly%s#lw added user #ly%s#lw.", client.name, name )
@@ -493,7 +493,7 @@ if makeFirstAccount then
 	}
 
 	checkUser( name, users[ name ] )
-	saveUser( users[ name ] )
+	users[ name ]:save()
 
 	print( "Ok! %s's password is %s." % { name, password } )
 end
