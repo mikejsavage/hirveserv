@@ -148,11 +148,13 @@ chat.command( "wiki", "user", {
 
 		if not pages[ name ] then
 			client:msg( "No wiki entry for #ly%s#d.", name )
+
 			return
 		end
 
 		if not pages[ name ].pages then
 			client:msg( "#lwShowing #ly%s#lw:\n#d%s", name, pages[ name ].body )
+
 			return
 		end
 
@@ -177,6 +179,7 @@ chat.command( "wiki", "user", {
 		
 		if not pages[ name ] then
 			client:msg( "No wiki entry for #ly%s#d.", name )
+
 			return
 		end
 
