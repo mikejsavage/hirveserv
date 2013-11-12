@@ -140,6 +140,27 @@ chat.command( "deluser", "accounts", function( client, name )
 	chat.msg( "#ly%s#lw deleted account #ly%s#lw.", client.name, lower )
 end, "<account>", "Remove an account" )
 
+chat.command( "reset", "accounts", function( client, name )
+	local lower = name:lower()
+
+	if not users[ lower ] then
+		client:msg( "#ly%s#lw doesn't have an account.", name )
+
+		return
+	end
+
+	local password = words.random()
+
+	local salt = bcrypt.salt( chat.config.bcryptRounds )
+	local digest = bcrypt.digest( password, salt )
+
+	users[ lower ].password = digest
+	users[ lower ].pending = true
+	users[ lower ]:save()
+
+	client:msg( "Ok! Tell #ly%s#lw their password is #lm%s#lw.", name, password )
+end, "<account>", "Reset someone's password" )
+
 chat.command( "setpw", "user", function( client, password )
 	if password == "" then
 		client:msg( "No empty passwords." )
