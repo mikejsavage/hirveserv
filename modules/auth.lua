@@ -209,7 +209,7 @@ chat.command( "whois", nil, function( client, name )
 		end
 	end
 
-	client:msg( "Whois #ly%s#lw: %s %s", lower, privs, clients )
+	client:msg( "Whois #ly%s#lw: %s %s", other.name, privs, clients )
 end, "<account>", "Displays account info" )
 
 chat.command( "addprivs", "accounts", {
