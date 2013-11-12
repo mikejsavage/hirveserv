@@ -92,43 +92,40 @@ end, "<name>", "Authenticate someone for %d second%s" % {
 	string.plural( chat.config.tempAuthDuration )
 } )
 
-chat.command( "adduser", "adduser", function( client, name )
-	-- it makes addprivs annoying
-	if name:match( "%s" ) then
-		client:msg( "Usernames can't contain spaces!" )
-		return
-	end
+chat.command( "adduser", "adduser", {
+	[ "^(%S+)$" ] = function( client, name )
+		local lower = name:lower()
 
-	local lower = name:lower()
+		if users[ lower ] and not users[ lower ].pending then
+			client:msg( "#ly%s#lw already has an account!", name )
 
-	if users[ lower ] and not users[ lower ].pending then
-		client:msg( "#ly%s#lw already has an account!", name )
+			return
+		end
 
-		return
-	end
+		local password = words.random()
 
-	local password = words.random()
+		local salt = bcrypt.salt( chat.config.bcryptRounds )
+		local digest = bcrypt.digest( password, salt )
 
-	local salt = bcrypt.salt( chat.config.bcryptRounds )
-	local digest = bcrypt.digest( password, salt )
+		users[ lower ] = {
+			password = digest,
+			pending = true,
+		}
 
-	users[ lower ] = {
-		password = digest,
-		pending = true,
-	}
+		checkUser( name, users[ name ] )
+		saveUser( users[ name ] )
 
-	checkUser( name, users[ name ] )
-	saveUser( users[ name ] )
-
-	client:msg( "Ok! Tell #ly%s#lw their password is #lm%s#lw.", name, password )
-	chat.msg( "#ly%s#lw added user #ly%s#lw.", client.name, name )
-end, "<account>", "Create a new user account" )
+		client:msg( "Ok! Tell #ly%s#lw their password is #lm%s#lw.", name, password )
+		chat.msg( "#ly%s#lw added user #ly%s#lw.", client.name, name )
+	end,
+}, "<account>", "Create a new user account" )
 
 chat.command( "deluser", "accounts", function( client, name )
 	local lower = name:lower()
 
 	if not users[ lower ] then
 		client:msg( "#ly%s#lw doesn't have an account.", name )
+
 		return
 	end
 
@@ -146,6 +143,7 @@ end, "<account>", "Remove an account" )
 chat.command( "setpw", "user", function( client, password )
 	if password == "" then
 		client:msg( "No empty passwords." )
+		
 		return
 	end
 
