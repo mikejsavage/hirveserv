@@ -5,7 +5,7 @@ chat.command( "kick", "kick", {
 		if target then
 			target:kill()
 
-			chat.msg( "#ly%s#d was kicked by #ly%s#d.", target.name, client.name )
+			chat.msg( "#ly%s#lw was kicked by #ly%s#d.", target.name, client.name )
 		else
 			client:msg( "There's nobody called #ly%s#d.", name )
 		end
