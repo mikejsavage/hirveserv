@@ -182,6 +182,8 @@ chat.command( "wiki", "user", {
 
 		if not pages[ name ].pages or not pages[ name ].pages[ page ] then
 			client:msg( "#lwBad page number." )
+
+			return
 		end
 
 		client:msg( "#lwShowing #ly%s#lw: #d(page #lw%d#d of #lw%d#d)\n%s",
