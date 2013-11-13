@@ -4,4 +4,6 @@ return {
 	auth = false,
 	bcryptRounds = 5,
 	tempAuthDuration = 60,
+	chroot = false,
+	runas = false,
 }

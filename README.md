@@ -26,6 +26,11 @@ Modules/configs are not sanity checked before loading them so obviously
 it is on you to check for malicious code in things you didn't write
 yourself.
 
+If started as root, hirveserv will inspect the `chroot`/`runas`
+configuration settings and chroot into its own directory or drop
+privilidges to the given user as appropriate. Note that chrooting means
+you will be unable to load any new Lua modules on the fly.
+
 
 Upgrading
 ---------
@@ -40,7 +45,7 @@ flatfile format.
 Dependencies
 ------------
 
-lua 5.1, libev, lua-ev, lua-cjson, lua-bcrypt
+lua 5.1, libev, lua-ev, lua-cjson, lua-bcrypt, lua-setuid
 
 
 Running
@@ -51,6 +56,8 @@ Create config.lua, for example:
 	name = "winnerserv"
 	port = 4055
 	auth = false
+	chroot = true
+	runas = "chat"
 
 See `include/defaults.lua` for a list of settings.
 
