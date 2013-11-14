@@ -3,6 +3,10 @@ chat.command( "pmsg", nil, {
 		local target = chat.clientFromName( name )
 
 		if target then
+			if target.user then
+				target = target.user
+			end
+
 			target:msg( "PM from #ly%s#lw:#d %s", client.name, message )
 			client:msg( "PM to #ly%s#lw:#d %s", target.name, message )
 		else
