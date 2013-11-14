@@ -94,8 +94,13 @@ chat.handler( "chat", { "all", "pm", "nameChange" }, function( client )
 
 				if message then
 					local pm = message:match( "^!(.*)$" )
+					local top = client:handler( "pm" )
 
-					if handlePM( client, pm, true ) then
+					if coroutine.running() ~= top then
+						client:onCommand( "pm", pm )
+
+						wasPM = true
+					elseif handlePM( client, pm, true ) then
 						wasPM = true
 					end
 				end
