@@ -1,7 +1,7 @@
 Current limitations
 -------------------
 
-zMud is totally broken.
+zMud might work but is 100% untested.
 
 It would be nice to make it chroot/setuid unnecessary privilidges away
 on startup.

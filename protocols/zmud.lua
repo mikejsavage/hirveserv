@@ -14,65 +14,70 @@ for name, byte in pairs( CommandBytes ) do
 	Commands[ byte ] = name
 end
 
-local function dataHandler( client )
-	while true do
-		local data = coroutine.yield()
+local ZMudClient = {
+	protocol = "zmud",
+	pmSyntax = "##chat",
+	stamp = string.uint( 0 ),
+}
 
-		local commandByte, args = data:match( "^(..)..(.*)$" )
-		local command = Commands[ commandByte ]
+function ZMud:processData()
+	local bytes, len1, len2 = self.dataBuffer:match( "^(..)(.)(.)" )
 
-		if command == "all" then
-			client:command( "all", args:match( "^....(.*)$" ) )
-		elseif command == "pm" then
-			client:command( "pm", args:match( "chats to you[:,] '(.*)'\n$" ) )
-		elseif command == "pingRequest" then
-			client:send( "pingResponse", args )
-		elseif command == "stamp" then
-			self.stamp = arg:sub( 1, -2 ) .. string.char( ( arg:byte( -1 ) + 1 ) % 256 )
-		elseif command and command ~= "pingResponse" then
-			client:command( command, args )
+	if bytes then
+		local len = string.byte( len1 ) + string.byte( len2 ) * 256
+
+		if self.dataBuffer:len() >= len + 4 then
+			local command = Commands[ bytes ]
+			local args = self.dataBuffer:sub( 5, len + 4 )
+
+			if command == "all" then
+				self:onCommand( "all", args:sub( 5 ) )
+			elseif command == "pm" then
+				self:onCommand( "pm", args:match( "chats to you[:,] '(.*)'\n$" ):trimVT102() )
+			elseif command == "stamp" then
+				self.stamp = arg:sub( 1, -2 ) .. string.char( ( arg:byte( -1 ) + 1 ) % 256 )
+			elseif command then
+				self:onCommand( command, args )
+			end
+
+			self.dataBuffer = self.dataBuffer:sub( len + 5 )
 		end
 	end
 end
 
-local ZMudClient = setmetatable( {
-	protocol = "zmud",
-	stamp = string.uint( 0 ),
-}, { __index = Client } )
-
 function ZMudClient:send( command, data )
-	data = tostring( data )
+	enforce( command, "command", "string" )
+	enforce( args, "args", "string" )
 
-	local byte = CommandBytes[ command ]
+	local bytes = CommandBytes[ command ]
 
 	assert( byte, "bad command: " .. command )
 
-	self:raw( byte .. string.ushort( data:len() ) .. data )
-end
-
-function ZMudClient:msg( form, ... )
-	enforce( form, "form", "string", "table" )
-
-	if type( form ) == "table" then
-		form = table.concat( form, "\n" )
+	if command == "all" or command == "message" then
+		data = self.stamp .. data
 	end
 
-	self:send( "message", chat.parseColours( "%s<%s>#d %s" % { self.stamp, chat.config.name, form:format( ... ) } ) )
+	self:raw( bytes .. string.ushort( data:len() ) .. data )
 end
 
-function ZMudClient:chat( message )
-	enforce( message, "message", "string" )
+local _M = { client = ZMudClient }
 
-	self:send( "all", self.stamp .. message )
+function _M.accept( client )
+	-- if SecurityInfo splits across multiple packets or "optional data"
+	-- gets sent we are fucked...
+	local name, len = client.dataBuffer:match( "ZCHAT:(.-)\t[^\n]*\n[^\n]*\n.+()" )
+
+	if not name then
+		return false
+	end
+
+	client.name = name
+	client.lower = name:lower()
+	client.dataBuffer = client.dataBuffer:sub( len )
+
+	client:raw( "YES:" .. chat.config.name .. "\n" )
+
+	return true
 end
 
-function ZMudClient:ping( now )
-	self:send( "pingRequest", now )
-end
-
-ZMudClient.pmSyntax = "##chat"
-
-return {
-	client = ZMudClient,
-	handler = dataHandler,
-}
+return _M
