@@ -46,6 +46,7 @@ Dependencies
 ------------
 
 lua 5.1, libev, lua-ev, lua-cjson, lua-bcrypt, lua-setuid
+tokyocabinet and tokyocabinet-lua for the bulletin board
 
 
 Running
