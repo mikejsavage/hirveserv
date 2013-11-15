@@ -121,7 +121,7 @@ chat.command( "post", "user", function( client, args )
 	local title, tagsStr = args:match( "^([^#]+)(.*)$" )
 
 	if not title then
-		client:msg( "Syntax: post <title> [#tag1 #tag2 ...]" )
+		client:msg( "Syntax: post <title> [##tag1 ##tag2 ...]" )
 
 		return
 	end
