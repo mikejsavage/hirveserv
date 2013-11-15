@@ -1,6 +1,8 @@
 local modules = require( "include.modules" )
 
 chat.command( "reload", "all", function( client )
+	chat.event( "reload" )
+
 	local ok, err = pcall( modules.load )
 
 	if not ok then
