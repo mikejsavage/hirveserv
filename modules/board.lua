@@ -51,8 +51,6 @@ chat.handler( "post", { "editor" }, function( client, title, tags )
 	local _, body = coroutine.yield()
 
 	if not body then
-		client:msg( "Nevermind." )
-
 		return
 	end
 

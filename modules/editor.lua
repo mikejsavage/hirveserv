@@ -89,6 +89,7 @@ chat.handler( "editor", { "pm" }, function( client, initial )
 
 				client:msg( "Wiped." )
 			elseif real == "exit" then
+				client:msg( "Nevermind." )
 				client:onCommand( "editor" )
 
 				break
