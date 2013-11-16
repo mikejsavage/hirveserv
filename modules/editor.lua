@@ -22,7 +22,7 @@ local shortCommands = {
 
 local validCommands = { }
 
-for _, command in ipairs( shortCommands ) do
+for _, command in pairs( shortCommands ) do
 	validCommands[ command ] = true
 end
 
