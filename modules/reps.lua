@@ -48,6 +48,9 @@ local reps = { }
 
 local silence = {
 	"reports .- is FAERIED !",
+	"watches .- get FAERIE FIRED!",
+	"notices .- get FAERIED!",
+	"[.- has been faerie fired]",
 }
 
 for _, spell in ipairs( patterns ) do
