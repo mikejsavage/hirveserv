@@ -330,6 +330,7 @@ local function addIP( client, name, prefix )
 		ip = ip,
 		prefix = prefix,
 	} )
+	table.sortByKey( client.user.ips, "name" )
 	client.user:save()
 
 	client:msg( "Added #ly%s#lw (#ly%s#lm/%d#lw) as an authenticated IP.", name, ip, prefix )
