@@ -5,45 +5,45 @@ local GagFor = 2
 
 local patterns = {
 	{
-		"reports (.+) is PLAGUED !",
-		"reports: (.+) is PLAGUED",
-		"%[(.+)%] has been Plagued",
-		"%[(.+) has been plagued%]",
-		"watches (.+) get PLAGUED!",
-		"notices (.+) get PLAGUED!",
+		"reports (.-) is PLAGUED !",
+		"reports: (.-) is PLAGUED",
+		"%[(.-)%] has been Plagued",
+		"%[(.-) has been plagued%]",
+		"watches (.-) get PLAGUED!",
+		"notices (.-) get PLAGUED!",
 	},
 	{
-		"reports (.+) is DISPELLED !",
-		"reports: (.+) SANCTUARY has faded!",
-		"%[(.+)%] has lost Sanctury",
-		"%[(.+) has been dispelled%] %[Sanctuary%]",
-		"watches as (.+) loses SANCTUARY!",
-		"notices (.+) is DISPELLED!",
+		"reports (.-) is DISPELLED !",
+		"reports: (.-) SANCTUARY has faded!",
+		"%[(.-)%] has lost Sanctury",
+		"%[(.-) has been dispelled%] %[Sanctuary%]",
+		"watches as (.-) loses SANCTUARY!",
+		"notices (.-) is DISPELLED!",
 	},
 	{
-		"reports (.+) just TELEPORTED !",
-		"reports: (.+) has just TELEPORTED",
-		"watches as (.+) TELEPORTS away!",
+		"reports (.-) just TELEPORTED !",
+		"reports: (.-) has just TELEPORTED",
+		"watches as (.-) TELEPORTS away!",
 	},
 	{
-		"reports (.+) is BLINDED !",
-		"reports: (.+) is BLIND!",
-		"%[(.+) has been blinded%]",
-		"watches (.+) get BLINDED!",
-		"notices (.+) get BLINDED!",
+		"reports (.-) is BLINDED !",
+		"reports: (.-) is BLIND!",
+		"%[(.-) has been blinded%]",
+		"watches (.-) get BLINDED!",
+		"notices (.-) get BLINDED!",
 	},
 	{
-		"reports (.+) is CURSED !",
-		"reports: (.+) is CURSED!",
-		"%[(.+) has been cursed%]",
-		"watches (.+) get CURSED!",
+		"reports (.-) is CURSED !",
+		"reports: (.-) is CURSED!",
+		"%[(.-) has been cursed%]",
+		"watches (.-) get CURSED!",
 	},
 }
 
 local reps = { }
 
 local silence = {
-	"reports .+ is FAERIED !",
+	"reports .- is FAERIED !",
 }
 
 for _, spell in ipairs( patterns ) do
