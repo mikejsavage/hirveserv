@@ -38,6 +38,10 @@ local patterns = {
 		"%[([^[]-) has been cursed%]",
 		"watches (.-) get CURSED!",
 	},
+	{
+		"reports (.-) just %-RESURRECTED%- .- !",
+		"reports (.-) just %+%+RESSED%+%+ .- !",
+	},
 }
 
 local reps = { }
