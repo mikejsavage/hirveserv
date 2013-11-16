@@ -78,8 +78,6 @@ local function isRepeatRep( message, now )
 
 		if target then
 			if spell.last.target == target and spell.last.gagUntil >= now then
-				spell.last.gagUntil = now + GagFor
-
 				return true
 			end
 
