@@ -7,16 +7,16 @@ local patterns = {
 	{
 		"reports (.-) is PLAGUED !",
 		"reports: (.-) is PLAGUED",
-		"%[(.-)%] has been Plagued",
-		"%[(.-) has been plagued%]",
+		"%[([^[]-)%] has been Plagued",
+		"%[([^[]-) has been plagued%]",
 		"watches (.-) get PLAGUED!",
 		"notices (.-) get PLAGUED!",
 	},
 	{
 		"reports (.-) is DISPELLED !",
 		"reports: (.-) SANCTUARY has faded!",
-		"%[(.-)%] has lost Sanctury",
-		"%[(.-) has been dispelled%] %[Sanctuary%]",
+		"%[([^[]-)%] has lost Sanctury",
+		"%[([^[]-) has been dispelled%] %[Sanctuary%]",
 		"watches as (.-) loses SANCTUARY!",
 		"notices (.-) is DISPELLED!",
 	},
@@ -28,14 +28,14 @@ local patterns = {
 	{
 		"reports (.-) is BLINDED !",
 		"reports: (.-) is BLIND!",
-		"%[(.-) has been blinded%]",
+		"%[([^[]-) has been blinded%]",
 		"watches (.-) get BLINDED!",
 		"notices (.-) get BLINDED!",
 	},
 	{
 		"reports (.-) is CURSED !",
 		"reports: (.-) is CURSED!",
-		"%[(.-) has been cursed%]",
+		"%[([^[]-) has been cursed%]",
 		"watches (.-) get CURSED!",
 	},
 }
