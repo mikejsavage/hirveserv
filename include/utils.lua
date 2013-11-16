@@ -124,6 +124,12 @@ function table.sortByKey( self, key )
 	end )
 end
 
+function table.clear( self )
+	for k in pairs( self ) do
+		self[ k ] = nil
+	end
+end
+
 function enforce( var, name, ... )
 	local acceptable = { ... }
 	local ok = false
