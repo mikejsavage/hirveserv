@@ -316,9 +316,18 @@ end
 
 local function addIP( client, name, prefix )
 	local idx = ipIndexFromName( client, name )
-
 	if idx then
 		client:msg( "You are already authed from #ly%s#lw.", name )
+
+		return
+	end
+
+	local currIdx = currentIPIndex( client )
+	if currIdx then
+		local authed = client.user.ips[ currIdx ]
+
+		client:msg( "IP #ly%s#lw (#ly%s#lm/%d#lw) already covers your current address.",
+			authed.name, authed.ip, authed.prefix )
 
 		return
 	end
