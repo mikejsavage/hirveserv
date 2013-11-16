@@ -39,7 +39,7 @@ end
 local function getHeader( post, id )
 	return "#ly%4d #lc%s #lg%12s #lw%s" % {
 		id,
-		os.date( "%e %b", post.time ),
+		os.date( "%e %b", post.date ),
 		post.author,
 		getNiceTitle( post.title, post.tags ),
 	}
