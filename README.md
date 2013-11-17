@@ -44,9 +44,8 @@ Overview
 
 ### Open source
 
-* When I get bored of working on it, the project isn't dead and
-  worthless
-* People can verify that I'm not doing anything malicious
+When I get bored of working on it, the project isn't dead and worthless
+and people can verify that I'm not doing anything malicious.
 
 ### Modular/extensible/easily scriptable/whatever you want to call it
 
