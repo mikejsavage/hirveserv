@@ -84,6 +84,10 @@ An incomplete list of features:
   * #hashtags
 * wiki
   * store walkthroughs/holders of important items/calendars/etc
+* reps silencing
+  * if everyone reports the same event, gag all but the first one
+  * currently only setup for Medievia but easy enough to modify
+  * big spam reduction for PvP
 
 And if you don't want any of this you can just delete/rename the modules
 as appropriate.
