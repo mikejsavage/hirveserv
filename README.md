@@ -42,8 +42,8 @@ version of hirveserv to update the database to its most recent format
 it to the new flatfile format.
 
 
-Highlights
-----------
+Overview
+--------
 
 ### Open source
 
