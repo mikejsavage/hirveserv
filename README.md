@@ -37,9 +37,56 @@ Upgrading
 
 If you are running a version of hirveserv from before the total rewrite
 (`data/users.sq3` exists) then you will need to run the latest old
-version of hirveserv to update the database to its most recent format (commit
-`df9fad72aa`) then run the supplied `sq3-to-json.lua` to convert it to the new
-flatfile format.
+version of hirveserv to update the database to its most recent format
+(commit `df9fad72aa`) then run the supplied `sq3-to-json.lua` to convert
+it to the new flatfile format.
+
+
+Highlights
+----------
+
+### Open source
+
+* When I get bored of working on it, the project isn't dead and
+  worthless
+* People can verify that I'm not doing anything malicious
+
+### Modular/extensible/easily scriptable/whatever you want to call it
+
+hirveserv was designed to make it easy to add features. Most of the out
+of the box functionality is implemented in exactly the same way as any
+extensions should be written.
+
+### Lightweight
+
+Both in terms of code and runtime usage. Lua is a reasonably terse
+language and renowned for being very light itself, so I kind of get this
+for free.
+
+### Powerful out of the box
+
+An incomplete list of features:
+
+* authentication
+  * fine-grained access control.
+  * password and IP authentication
+  * temporary authentication
+* on the fly reloading
+  * reload modules and hop clients onto new code without having to kick
+    everyone off
+* alias recognition
+  * `ch !cmd` instead of `/chat 1 cmd`. Is more useful than it sounds
+* built in text editor
+  * isn't horrific to use (see above)
+  * isn't tied to any specific feature
+  * can be summoned in a few lines of code
+* bulletin board
+  * #hashtags
+* wiki
+  * store walkthroughs/holders of important items/calendars/etc
+
+And if you don't want any of this you can just delete/rename the modules
+as appropriate.
 
 
 Dependencies
