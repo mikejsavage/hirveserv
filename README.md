@@ -1,10 +1,7 @@
 Current limitations
 -------------------
 
-zMud might work but is 100% untested.
-
-It would be nice to make it chroot/setuid unnecessary privilidges away
-on startup.
+zChat might work but is 100% untested.
 
 I am using flatfiles instead of a real database and don't make any
 effort to ensure consistency in the event of a write failing amongst
