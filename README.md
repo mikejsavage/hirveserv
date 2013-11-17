@@ -103,7 +103,7 @@ tokyocabinet and tokyocabinet-lua for the bulletin board
 Running
 -------
 
-Create config.lua, for example:
+Create a `config.lua`, for example:
 
 	name = "winnerserv"
 	port = 4055
