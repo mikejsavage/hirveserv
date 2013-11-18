@@ -13,7 +13,7 @@ Security
 
 MM2k/zMud chat is unencrypted so a sysadmin/agency will be able to read
 your password and chats in plaintext and insert/modify messages. That
-said, this is literally a chat server for MUD clients so it is extremly
+said, this is literally a chat server for MUD clients so it is extremely
 unlikely anyone will actually care to do this.
 
 Once server side, passwords are bcrypted and salted and etc so
