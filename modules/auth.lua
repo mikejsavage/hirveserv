@@ -1,3 +1,5 @@
+local lfs = require( "lfs" )
+
 local ev = require( "ev" )
 local loop = ev.Loop.default
 
