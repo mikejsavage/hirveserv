@@ -16,7 +16,7 @@ local patterns = {
 		"reports (.-) is DISPELLED !",
 		"reports: (.-) SANCTUARY has faded!",
 		"%[([^[]-)%] has lost Sanctury",
-		"%[([^[]-) has been dispelled%] %[Sanctuary%]",
+		"%[([^[]-) has been dispelled%] %[sanctuary%]",
 		"watches as (.-) loses SANCTUARY!",
 		"notices (.-) is DISPELLED!",
 	},
