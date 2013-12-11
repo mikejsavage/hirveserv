@@ -52,7 +52,7 @@ local function checkUser( name, decoded, err )
 		return nil
 	end
 
-	decoded.name = user
+	decoded.name = name
 	decoded.settings = decoded.settings or { }
 	decoded.privs = decoded.privs or { }
 	decoded.ips = decoded.ips or { }
