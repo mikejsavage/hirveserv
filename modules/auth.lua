@@ -41,7 +41,7 @@ local function saveUser( user )
 	file:close()
 end
 
-local function checkUser( user, decoded, err )
+local function checkUser( name, decoded, err )
 	if not decoded then
 		log.warn( "Couldn't decode %s: %s", user, err )
 		return nil
@@ -114,7 +114,7 @@ chat.command( "adduser", "adduser", {
 			pending = true,
 		}
 
-		checkUser( name, users[ lower ] )
+		checkUser( lower, users[ lower ] )
 		users[ lower ]:save()
 
 		client:msg( "Ok! Tell #ly%s#lw their password is #lm%s#lw.", name, password )
