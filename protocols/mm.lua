@@ -25,7 +25,11 @@ function MMClient:processData()
 		local command = Commands[ byte ]
 
 		if command == "pm" then
-			self:onCommand( "pm", args:match( "chats to you, '(.*)'\n$" ):trimVT102() )
+			local pm = args:match( "chats to you, '(.*)'\n$" )
+			
+			if pm then
+				self:onCommand( "pm", pm:trimVT102() )
+			end
 		elseif command then
 			self:onCommand( command, args )
 		end
