@@ -118,7 +118,7 @@ chat.command( "adduser", "adduser", {
 		users[ lower ]:save()
 
 		client:msg( "Ok! Tell #ly%s#lw their password is #lm%s#lw.", name, password )
-		chat.msg( "#ly%s#lw added user #ly%s#lw.", client.name, name )
+		chat.msg( "#ly%s#lw added user #ly%s#lw.", client.name, lower )
 	end,
 }, "<account>", "Create a new user account" )
 
