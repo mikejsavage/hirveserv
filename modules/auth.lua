@@ -114,8 +114,8 @@ chat.command( "adduser", "adduser", {
 			pending = true,
 		}
 
-		checkUser( name, users[ name ] )
-		users[ name ]:save()
+		checkUser( name, users[ lower ] )
+		users[ lower ]:save()
 
 		client:msg( "Ok! Tell #ly%s#lw their password is #lm%s#lw.", name, password )
 		chat.msg( "#ly%s#lw added user #ly%s#lw.", client.name, name )
