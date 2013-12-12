@@ -140,7 +140,7 @@ local function findAliasPattern( message, needle )
 end
 
 chat.handler( "needle", { "all", "pm" }, function( client, needle )
-	client:msg( "Use your chat script (#lwch#d, #lwcx#d etc) to send #ly%s#d!", needle )
+	client:msg( "Use your chat script (#lwch#d, #lmcx#lw etc) to send #ly%s#d!", needle )
 
 	while true do
 		local command, args = coroutine.yield()
