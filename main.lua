@@ -5,7 +5,6 @@ local loop = ev.Loop.default
 
 -- cd into binary dir for convenience
 local lfs = require( "lfs" )
-local setuid = require( "setuid" )
 
 local serverDir = arg[ 0 ]:match( "^(.-)/[^/]*$" )
 if serverDir then
@@ -57,21 +56,25 @@ local modules = require( "include.modules" )
 server.init()
 modules.load()
 
-if chat.config.chroot then
-	local ok, err = setuid.chroot( ".", chat.config.runas or nil )
+if chat.config.chroot or chat.config.runas then
+	local setuid = require( "setuid" )
 
-	if not ok then
-		log.error( "Failed chroot: %s", err )
+	if chat.config.chroot then
+		local ok, err = setuid.chroot( ".", chat.config.runas or nil )
 
-		return
-	end
-elseif chat.config.runas then
-	local ok, err = setuid.setuser( chat.config.runas )
+		if not ok then
+			log.error( "Failed chroot: %s", err )
 
-	if not ok then
-		log.error( "Failed setuser: %s", err )
+			return
+		end
+	elseif chat.config.runas then
+		local ok, err = setuid.setuser( chat.config.runas )
 
-		return
+		if not ok then
+			log.error( "Failed setuser: %s", err )
+
+			return
+		end
 	end
 end
 
