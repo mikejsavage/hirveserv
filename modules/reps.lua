@@ -42,6 +42,9 @@ local patterns = {
 		"reports (.-) just %-RESURRECTED%- .- !",
 		"reports (.-) just %+%+RESSED%+%+ .- !",
 	},
+	{
+		"reports (.+) just HANDSED .- !",
+	},
 }
 
 local reps = { }
