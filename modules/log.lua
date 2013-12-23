@@ -68,7 +68,7 @@ chat.command( "log", nil, {
 	end,
 }, "<number/needle> [needle]", "Show recent messages" )
 
-chat.listen( "chatAll", function( client, message )
+chat.listen( "chatAll", function( from, message )
 	addLog( message:trim() )
 end )
 
