@@ -5,14 +5,14 @@ local function handleChat( from, message )
 
 	for _, client in ipairs( chat.clients ) do
 		if client ~= from and client.state == "chatting" then
-			recipients[ client ] = true
+			recipients[ client ] = message
 		end
 	end
 
 	chat.event( "chatAll", from, message, recipients )
 
-	for client in pairs( recipients ) do
-		client:send( "all", message )
+	for client, newMessage in pairs( recipients ) do
+		client:send( "all", newMessage )
 	end
 end
 
