@@ -1,6 +1,6 @@
 local CommandBytes = {
 	nameChange = "\1",
-	all = "\4",
+	chat = "\4",
 	pm = "\5",
 	message = "\7",
 	pingRequest = "\26",

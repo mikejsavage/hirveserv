@@ -1,4 +1,4 @@
-chat.listen( "chatAll", function( from, message, recipients )
+chat.listen( "chat", function( from, message, recipients )
 	for client, message in pairs( recipients ) do
 		if client.user and client.user.settings.compact then
 			recipients[ client ] = "\n" .. message:trim()

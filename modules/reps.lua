@@ -107,7 +107,7 @@ local function isSilenced( message )
 	return false
 end
 			
-chat.listen( "chatAll", function( from, message, recipients )
+chat.listen( "chat", function( from, message, recipients )
 	message = message:stripVT102()
 
 	local now = loop:update_now()

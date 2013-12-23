@@ -9,10 +9,10 @@ local function handleChat( from, message )
 		end
 	end
 
-	chat.event( "chatAll", from, message, recipients )
+	chat.event( "chat", from, message, recipients )
 
 	for client, newMessage in pairs( recipients ) do
-		client:send( "all", newMessage )
+		client:send( "chat", newMessage )
 	end
 end
 
@@ -73,7 +73,7 @@ local function handlePM( client, message, silent )
 	return true
 end
 
-chat.handler( "chat", { "all", "pm", "nameChange" }, function( client )
+chat.handler( "chat", { "chat", "pm", "nameChange" }, function( client )
 	client.state = "chatting"
 
 	chat.event( "connect", client )
@@ -83,7 +83,7 @@ chat.handler( "chat", { "all", "pm", "nameChange" }, function( client )
 	while true do
 		local command, args = coroutine.yield()
 
-		if command == "all" then
+		if command == "chat" then
 			local wasPM = false
 
 			if client.user and client.user.settings.alias then
@@ -142,7 +142,7 @@ local function findAliasPattern( message, needle )
 	return pattern, outline
 end
 
-chat.handler( "needle", { "all", "pm" }, function( client, needle )
+chat.handler( "needle", { "chat", "pm" }, function( client, needle )
 	client:msg( "Use your chat script (#lwch#d, #lmcx#lw etc) to send #ly%s#d!", needle )
 
 	while true do
@@ -152,7 +152,7 @@ chat.handler( "needle", { "all", "pm" }, function( client, needle )
 			client:msg( "Say #ly%s#d to #lweveryone#d and not just me.", needle )
 		end
 
-		if command == "all" then
+		if command == "chat" then
 			args = args:match( "^\n?" .. client.name .. "%s*(.-)\n?$" ) or args
 			args = args:stripVT102()
 

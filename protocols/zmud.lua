@@ -1,6 +1,6 @@
 local CommandBytes = {
 	nameChange = string.ushort( 1 ),
-	all = string.ushort( 4 ),
+	chat = string.ushort( 4 ),
 	pm = string.ushort( 5 ),
 	message = string.ushort( 7 ),
 	pingRequest = string.ushort( 26 ),
@@ -30,8 +30,8 @@ function ZMud:processData()
 			local command = Commands[ bytes ]
 			local args = self.dataBuffer:sub( 5, len + 4 )
 
-			if command == "all" then
-				self:onCommand( "all", args:sub( 5 ) )
+			if command == "chat" then
+				self:onCommand( "chat", args:sub( 5 ) )
 			elseif command == "pm" then
 				self:onCommand( "pm", args:match( "chats to you[:,] '(.*)'\n$" ):trimVT102() )
 			elseif command == "stamp" then
@@ -53,7 +53,7 @@ function ZMudClient:send( command, data )
 
 	assert( byte, "bad command: " .. command )
 
-	if command == "all" or command == "message" then
+	if command == "chat" or command == "message" then
 		data = self.stamp .. data
 	end
 
