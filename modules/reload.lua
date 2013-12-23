@@ -10,7 +10,7 @@ chat.command( "reload", "all", function( client )
 	else
 		client:msg( "Reloaded." )
 	end
-end, "Try to reload modules, Hirve only" )
+end, "Reload modules, Hirve only" )
 
 chat.command( "hop", "all", function( client )
 	client:msg( "Hopping..." )
