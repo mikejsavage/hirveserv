@@ -32,6 +32,7 @@ local patterns = {
 		"reports (.-) is BLINDED !",
 		"reports: (.-) is BLIND!",
 		"%[([^[]-) has been blinded%]",
+		"%[([^[]-)%] has been Blinded%]",
 		"watches (.-) get BLINDED!",
 		"notices (.-) get BLINDED!",
 	},
