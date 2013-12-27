@@ -26,6 +26,7 @@ local patterns = {
 		"reports (.-) just TELEPORTED !",
 		"reports: (.-) has just TELEPORTED",
 		"watches as (.-) TELEPORTS away!",
+		"REPORTS %-> %[(.-)%] %[TELEPORTED%]",
 	},
 	{
 		"reports (.-) is BLINDED !",
