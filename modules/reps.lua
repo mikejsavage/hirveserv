@@ -53,6 +53,7 @@ local reps = { }
 
 local silence = {
 	"reports .- is FAERIED !",
+	"reports: .- is FAERIE FIRED!",
 	"watches .- get FAERIE FIRED!",
 	"notices .- get FAERIED!",
 	"%[.- has been faerie fired%]",
