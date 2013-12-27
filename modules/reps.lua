@@ -57,6 +57,7 @@ local silence = {
 	"watches .- get FAERIE FIRED!",
 	"notices .- get FAERIED!",
 	"%[.- has been faerie fired%]",
+	"REPORTS %-> %[.-%] is %[FAERIED%]",
 }
 
 for _, spell in ipairs( patterns ) do
