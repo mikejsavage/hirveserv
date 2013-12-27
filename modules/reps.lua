@@ -11,6 +11,7 @@ local patterns = {
 		"%[([^[]-) has been plagued%]",
 		"watches (.-) get PLAGUED!",
 		"notices (.-) get PLAGUED!",
+		"REPORTS %-> %[(.-)%] is %[PLAGUED%]",
 	},
 	{
 		"reports (.-) is DISPELLED !",
