@@ -43,6 +43,13 @@ local patterns = {
 		"watches (.-) get CURSED!",
 	},
 	{
+		"reports (.-) is CHILLED !",
+	},
+	{
+		"reports (.-) is POISONED !",
+		"reports: (.-) is POISONED!",
+	},
+	{
 		"reports (.-) just %-RESURRECTED%- .- !",
 		"reports (.-) just %+%+RESSED%+%+ .- !",
 		"REPORTS %-> %[(.-)%] %[RESSED%] by",
