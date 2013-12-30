@@ -50,6 +50,10 @@ local patterns = {
 		"reports: (.-) is POISONED!",
 	},
 	{
+		"reports (.-) is WEAKENED !",
+		"reports: (.-) is WEAKENED!",
+	},
+	{
 		"reports (.-) just %-RESURRECTED%- .- !",
 		"reports (.-) just %+%+RESSED%+%+ .- !",
 		"REPORTS %-> %[(.-)%] %[RESSED%] by",
