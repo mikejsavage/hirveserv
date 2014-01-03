@@ -42,7 +42,7 @@ local function addMsg( message )
 
 	table.insert( logs, {
 		normal = os.date( "#lr[#lw%H:%M#lr] " ) .. message,
-		lower = message:lower(),
+		lower = message:lower():stripVT102(),
 	} )
 
 	if #logs > maxLogs then
