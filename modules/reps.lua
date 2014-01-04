@@ -62,7 +62,7 @@ local patterns = {
 		"reports (.+) just HANDSED .- !",
 	},
 	{
-		"just %-RESCUED%- (.-) !,
+		"just %-RESCUED%- (.-) !",
 	},
 }
 
