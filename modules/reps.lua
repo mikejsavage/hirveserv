@@ -7,6 +7,7 @@ local patterns = {
 	{
 		"reports (.-) is PLAGUED !",
 		"reports: (.-) is PLAGUED",
+		"reports: (.-) has been PLAGUED!",
 		"%[([^[]-)%] has been Plagued",
 		"%[([^[]-) has been plagued%]",
 		"watches (.-) get PLAGUED!",
@@ -31,6 +32,7 @@ local patterns = {
 	{
 		"reports (.-) is BLINDED !",
 		"reports: (.-) is BLIND!",
+		"reports: (.-) has been BLINDED!",
 		"%[([^[]-) has been blinded%]",
 		"%[([^[]-)%] has been Blinded%]",
 		"watches (.-) get BLINDED!",
