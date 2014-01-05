@@ -204,10 +204,12 @@ chat.command( "whois", nil, function( client, name )
 		privs = privs .. " " .. priv
 	end
 
-	local clients = "#lwclients:#ly"
+	local clients = "#lwclients:"
+	local alt = true
 	for _, c in ipairs( other.clients ) do
 		if c.state == "chatting" then
-			clients = clients .. " " .. c.name
+			clients = clients .. " " .. ( alt and "#ly" or "#lm" ) .. c.name
+			alt = not alt
 		end
 	end
 
