@@ -475,10 +475,7 @@ chat.handler( "auth", { "pm" }, function( client )
 	end
 end )
 
-local makeFirstAccount = true
-for k in pairs( users ) do
-	makeFirstAccount = false
-end
+local makeFirstAccount = chat.config.auth and pairs( users ) ~= nil
 
 if makeFirstAccount then
 	io.stdout:write( "Let's make an account! What do you want the username to be? " )
