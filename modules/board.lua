@@ -8,6 +8,8 @@ posts:setxmsiz( 8 * 1024 )
 posts:open( "data/posts.tct", posts.OWRITER + posts.OCREAT )
 posts:setindex( "date", posts.ITDECIMAL + posts.ITKEEP )
 
+local prompts = { }
+
 local tagColours = { "r", "g", "b", "y", "c", "m" }
 
 local function tagColour( tag )
@@ -65,6 +67,7 @@ chat.handler( "post", { "editor" }, function( client, title, tags )
 	posts:sync()
 
 	chat.msg( "#ly%s#lw added a new post: #lm%s", client.user.name, getNiceTitle( title, tags ) )
+	table.clear( prompts )
 end )
 
 local function showBoard( client, page )
@@ -87,6 +90,11 @@ local function showBoard( client, page )
 	end
 
 	client:msg( "%s", table.concat( output, "\n" ) )
+
+	client.user.settings.lastRead = os.time()
+	client.user:save()
+
+	prompts[ client.user ] = nil
 end
 
 local function showPost( client, id )
@@ -142,4 +150,20 @@ end, "Post a message to the bulletin board" )
 
 chat.listen( "reload", function()
 	posts:close()
+end )
+
+chat.prompt( function( client )
+	if client.user and not prompts[ client.user ] then
+		local query = tokyocabinet.tdbqrynew( posts )
+
+		if client.user.settings.lastRead then
+			query:addcond( "date", query.QCNUMGT, client.user.settings.lastRead )
+		end
+
+		local result = query:search()
+
+		prompts[ client.user ] = #result > 0 and "#ly[READ]" or ""
+	end
+
+	return prompts[ client.user ]
 end )
