@@ -182,8 +182,10 @@ function Client:msg( form, ... )
 		form = table.concat( form, "\n" )
 	end
 
+	local prompt = self.state == "chatting" and modules.prompt( self ) or ""
+
 	self:send( "message", chat.parseColours(
-		"<%s>#lw %s" % { chat.config.name, form:format( ... ) }
+		"#lr<%s%s#lr>#lw %s" % { chat.config.name, prompt, form:format( ... ) }
 	) )
 end
 

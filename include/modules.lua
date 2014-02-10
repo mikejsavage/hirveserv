@@ -6,6 +6,7 @@ local commands = { }
 local commandNames = { }
 local handlers = { }
 local events = { }
+local prompts = { }
 
 local function meta( t )
 	return {
@@ -83,7 +84,13 @@ local function addListener( newEvents, name, callback )
 	table.insert( newEvents[ name ], callback )
 end
 
-local function loadModule( path, newCommands, newCommandNames, newHandlers, newEvents )
+local function addPrompt( newPrompts, callback )
+	enforce( callback, "callback", "function" )
+
+	table.insert( newPrompts, callback )
+end
+
+local function loadModule( path, newCommands, newCommandNames, newHandlers, newEvents, newPrompts )
 	local fn = assert( loadfile( path ) )
 
 	local envchat = {
@@ -97,6 +104,10 @@ local function loadModule( path, newCommands, newCommandNames, newHandlers, newE
 
 		listen = function( name, callback )
 			addListener( newEvents, name, callback )
+		end,
+
+		prompt = function( callback )
+			addPrompt( newPrompts, callback )
 		end,
 
 		event = _M.fireEvent,
@@ -142,6 +153,7 @@ function _M.load()
 	local newCommandNames = { }
 	local newHandlers = { }
 	local newEvents = { }
+	local newPrompts = { }
 
 	log.info( "Loading modules..." )
 
@@ -149,7 +161,7 @@ function _M.load()
 		if module:match( "%.lua$" ) then
 			log.info( "modules/%s", module )
 
-			loadModule( "modules/" .. module, newCommands, newCommandNames, newHandlers, newEvents )
+			loadModule( "modules/" .. module, newCommands, newCommandNames, newHandlers, newEvents, newPrompts )
 		end
 	end
 
@@ -159,6 +171,7 @@ function _M.load()
 	commandNames = newCommandNames
 	handlers = newHandlers
 	events = newEvents
+	prompts = newPrompts
 
 	log.info( "Done." )
 end
@@ -169,6 +182,16 @@ end
 
 function _M.getHandler( name )
 	return handlers[ name ]
+end
+
+function _M.prompt( client )
+	local prompt = ""
+
+	for _, callback in ipairs( prompts ) do
+		prompt = prompt .. ( callback( client ) or "" )
+	end
+
+	return prompt
 end
 
 function _M.fireEvent( name, ... )
