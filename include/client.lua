@@ -97,9 +97,9 @@ function Client:raw( data )
 	self.socket:send( data )
 end
 
-function Client:handler( command )
-	for i = #self.handlers, 1, -1 do
-		local handler = self.handlers[ i ]
+local function getHandler( client, command )
+	for i = #client.handlers, 1, -1 do
+		local handler = client.handlers[ i ]
 
 		if handler.implements[ command ] then
 			return handler.coro, handler.name
@@ -107,19 +107,19 @@ function Client:handler( command )
 	end
 end
 
-function Client:removeDeadHandlers()
-	if self.state == "killed" then
+local function removeDeadHandlers( client )
+	if client.state == "killed" then
 		return
 	end
 
-	for i = #self.handlers, 1, -1 do
-		if coroutine.status( self.handlers[ i ].coro ) == "dead" then
-			table.remove( self.handlers, i )
+	for i = #client.handlers, 1, -1 do
+		if coroutine.status( client.handlers[ i ].coro ) == "dead" then
+			table.remove( client.handlers, i )
 		end
 	end
 
-	if #self.handlers == 0 then
-		error( "%s ran out of coroutines" % self.name )
+	if #client.handlers == 0 then
+		error( "%s ran out of coroutines" % client.name )
 	end
 end
 
@@ -169,7 +169,7 @@ function Client:onCommand( command, args )
 	if command == "pingRequest" then
 		self:send( "pingResponse", args )
 	elseif command ~= "pingResponse" then
-		local coro, name = self:handler( command )
+		local coro, name = getHandler( self, command )
 
 		if coro then
 			local ok, err = coroutine.resume( coro, command, args )
@@ -179,7 +179,7 @@ function Client:onCommand( command, args )
 			end
 		end
 
-		self:removeDeadHandlers()
+		removeDeadHandlers( self )
 	end
 end
 
