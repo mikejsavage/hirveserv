@@ -140,7 +140,15 @@ function Client:pushHandler( name, ... )
 end
 
 function Client:replaceHandler( name, ... )
-	table.remove( self.handlers )
+	local coro = coroutine.running()
+
+	for i = #self.handlers, 1, -1 do
+		if self.handlers[ i ].coro == coro then
+			table.remove( self.handlers, i )
+
+			break
+		end
+	end
 
 	self:pushHandler( name, ... )
 end
