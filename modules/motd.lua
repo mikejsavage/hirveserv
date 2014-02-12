@@ -30,24 +30,18 @@ chat.command( "setmotd", "user", function( client, args )
 	updateMotd( client, newMotd )
 end, "Update MOTD" )
 
-chat.handler( "editmotd", { "editor" }, function( client )
-	client:pushHandler( "editor", motd )
+chat.command( "editmotd", "user", function( client )
+	client:pushHandler( "editor", motd, function( newMotd )
+		if not newMotd or newMotd == "" then
+			if newMotd == "" then
+				client:msg( "Blank MOTD = boring." )
+			end
 
-	local _, newMotd = coroutine.yield()
-
-	if not newMotd or newMotd == "" then
-		if newMotd == "" then
-			client:msg( "Blank MOTD = boring." )
+			return
 		end
 
-		return
-	end
-
-	updateMotd( client, newMotd )
-end )
-
-chat.command( "editmotd", "user", function( client )
-	client:pushHandler( "editmotd" )
+		updateMotd( client, newMotd )
+	end )
 end, "Update MOTD using the editor" )
 
 

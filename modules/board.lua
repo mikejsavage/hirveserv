@@ -47,30 +47,6 @@ local function getHeader( post, id )
 	}
 end
 
-chat.handler( "post", { "editor" }, function( client, title, tags )
-	client:pushHandler( "editor" )
-
-	local _, body = coroutine.yield()
-
-	if not body then
-		return
-	end
-
-	local id = posts:genuid()
-	posts[ id ] = {
-		author = client.user.name,
-		date = os.time(),
-		tags = table.concat( tags, " " ),
-		title = title,
-		body = body,
-	}
-	posts:sync()
-
-	table.clear( prompts )
-
-	chat.msg( "#ly%s#lw added a new post: #lm%s", client.user.name, getNiceTitle( title, tags ) )
-end )
-
 local function showBoard( client, page )
 	local query = tokyocabinet.tdbqrynew( posts )
 
@@ -133,20 +109,38 @@ chat.command( "post", "user", function( client, args )
 		return
 	end
 
-	local tagsMap = { }
-	local tags = { }
+	client:pushHandler( "editor", function( body )
+		if not body then
+			return
+		end
 
-	for tag in tagsStr:gmatch( "#(%S+)" ) do
-		tagsMap[ tag ] = true
-	end
+		local tagsMap = { }
+		local tags = { }
 
-	for tag in pairs( tagsMap ) do
-		table.insert( tags, tag )
-	end
+		for tag in tagsStr:gmatch( "#(%S+)" ) do
+			tagsMap[ tag ] = true
+		end
 
-	table.sort( tags )
+		for tag in pairs( tagsMap ) do
+			table.insert( tags, tag )
+		end
 
-	client:pushHandler( "post", title:trim(), tags )
+		table.sort( tags )
+
+		local id = posts:genuid()
+		posts[ id ] = {
+			author = client.user.name,
+			date = os.time(),
+			tags = table.concat( tags, " " ),
+			title = title:trim(),
+			body = body,
+		}
+		posts:sync()
+
+		table.clear( prompts )
+
+		chat.msg( "#ly%s#lw added a new post: #lm%s", client.user.name, getNiceTitle( title, tags ) )
+	end )
 end, "Post a message to the bulletin board" )
 
 chat.listen( "reload", function()

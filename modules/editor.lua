@@ -38,14 +38,16 @@ local function expandCommand( command )
 	return command
 end
 
-chat.handler( "editor", { "pm" }, function( client, initial )
+chat.handler( "editor", { "pm" }, function( client, initorcb, callback )
 	local lines = { }
 	local first = true
 
-	if initial then
-		for line in ( initial .. "\n" ):gmatch( "([^\n]*)\n" ) do
+	if callback then
+		for line in ( initorcb .. "\n" ):gmatch( "([^\n]*)\n" ) do
 			table.insert( lines, line )
 		end
+	else
+		callback = initorcb
 	end
 
 	client:msg( "Editing...\n"
@@ -69,7 +71,7 @@ chat.handler( "editor", { "pm" }, function( client, initial )
 			client:msg( "Huh?" )
 		else
 			if real == "save" then
-				client:onCommand( "editor", table.concat( lines, "\n" ) )
+				callback( table.concat( lines, "\n" ) )
 
 				break
 			elseif real == "preview" then
@@ -90,7 +92,7 @@ chat.handler( "editor", { "pm" }, function( client, initial )
 				client:msg( "Wiped." )
 			elseif real == "exit" then
 				client:msg( "Nevermind." )
-				client:onCommand( "editor" )
+				callback()
 
 				break
 			elseif real == "add" then
