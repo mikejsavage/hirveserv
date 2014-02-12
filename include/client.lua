@@ -97,7 +97,7 @@ function Client:raw( data )
 	self.socket:send( data )
 end
 
-local function getHandler( client, command )
+function Client:handler( client, command )
 	for i = #client.handlers, 1, -1 do
 		local handler = client.handlers[ i ]
 
@@ -169,7 +169,7 @@ function Client:onCommand( command, args )
 	if command == "pingRequest" then
 		self:send( "pingResponse", args )
 	elseif command ~= "pingResponse" then
-		local coro, name = getHandler( self, command )
+		local coro, name = self:handler( command )
 
 		if coro then
 			local ok, err = coroutine.resume( coro, command, args )
