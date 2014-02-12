@@ -175,7 +175,7 @@ function Client:onCommand( command, args )
 			local ok, err = coroutine.resume( coro, command, args )
 
 			if not ok then
-				error( "client coro(%s) failed: %s" % { name, err } )
+				error( "client(%s) coro(%s) failed: %s" % { self.name, name, err } )
 			end
 		end
 
