@@ -398,9 +398,7 @@ chat.handler( "register", { "pm" }, function( client )
 				break
 			end
 
-			client:kill( "Nope." )
-
-			return
+			return client:kill( "Nope." )
 		end
 	end
 
@@ -436,26 +434,20 @@ chat.handler( "auth", { "pm" }, function( client )
 	if not client.user then
 		if tempAuths[ lower ] and os.time() < tempAuths[ lower ] then
 			tempAuths[ lower ] = nil
-			client:replaceHandler( "chat" )
-		else
-			client:kill( "You don't have an account." )
+			return client:replaceHandler( "chat" )
 		end
 
-		return
+		return client:kill( "You don't have an account." )
 	end
 
 	table.insert( client.user.clients, client )
 
 	if client.user.pending then
-		client:replaceHandler( "register" )
-
-		return
+		return client:replaceHandler( "register" )
 	end
 
 	if currentIPIndex( client ) then
-		client:replaceHandler( "chat" )
-
-		return
+		return client:replaceHandler( "chat" )
 	end
 
 	client:msg( "Hey, #ly%s#lw! #lm/chat#lw me your password.", client.name )
@@ -465,12 +457,10 @@ chat.handler( "auth", { "pm" }, function( client )
 
 		if command == "pm" then
 			if bcrypt.verify( args, client.user.password ) then
-				client:replaceHandler( "chat" )
-			else
-				client:kill( "Nope." )
+				return client:replaceHandler( "chat" )
 			end
 
-			break
+			return client:kill( "Nope." )
 		end
 	end
 end )
