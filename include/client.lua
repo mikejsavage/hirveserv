@@ -97,9 +97,9 @@ function Client:raw( data )
 	self.socket:send( data )
 end
 
-function Client:handler( client, command )
-	for i = #client.handlers, 1, -1 do
-		local handler = client.handlers[ i ]
+function Client:handler( command )
+	for i = #self.handlers, 1, -1 do
+		local handler = self.handlers[ i ]
 
 		if handler.implements[ command ] then
 			return handler.coro, handler.name
