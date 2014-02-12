@@ -66,8 +66,9 @@ chat.handler( "post", { "editor" }, function( client, title, tags )
 	}
 	posts:sync()
 
-	chat.msg( "#ly%s#lw added a new post: #lm%s", client.user.name, getNiceTitle( title, tags ) )
 	table.clear( prompts )
+
+	chat.msg( "#ly%s#lw added a new post: #lm%s", client.user.name, getNiceTitle( title, tags ) )
 end )
 
 local function showBoard( client, page )
@@ -89,12 +90,12 @@ local function showBoard( client, page )
 		table.insert( output, "#lyread p%d#lw for more" % ( page + 1 ) )
 	end
 
-	client:msg( "%s", table.concat( output, "\n" ) )
-
 	client.user.settings.lastRead = os.time()
 	client.user:save()
 
 	prompts[ client.user ] = nil
+
+	client:msg( "%s", table.concat( output, "\n" ) )
 end
 
 local function showPost( client, id )
