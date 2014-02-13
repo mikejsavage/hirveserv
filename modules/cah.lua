@@ -149,6 +149,7 @@ local function cmdAnswer( client, args )
 
 	local name = client.user.name
 	local ids = { }
+	local used = { }
 
 	giveClientCards( name )
 
@@ -161,7 +162,14 @@ local function cmdAnswer( client, args )
 			return
 		end
 
+		if used[ id ] then
+			client:msg( "You can't use cards twice!" )
+
+			return
+		end
+
 		table.insert( ids, id )
+		used[ id ] = true
 	end
 
 	if #ids ~= black[ game.questions[ 1 ] ].blanks then
