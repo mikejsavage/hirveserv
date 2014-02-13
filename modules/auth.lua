@@ -86,6 +86,14 @@ for file in lfs.dir( "data/users" ) do
 end
 
 chat.command( "auth", "adduser", function( client, name )
+	name = name:trim()
+
+	if name == "" then
+		client:msg( "Syntax: auth <name>" )
+
+		return
+	end
+
 	tempAuths[ name:lower() ] = os.time() + chat.config.tempAuthDuration
 
 	chat.msg( "#ly%s#lw is authing #ly%s#lw temporarily.", client.name, name )
