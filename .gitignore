@@ -1,4 +1,11 @@
 TODO
 config.lua
-data
 .tags
+
+data/users
+data/wiki
+data/motd.txt
+data/cah/state.json
+
+*.tct
+*.dec

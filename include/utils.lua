@@ -98,6 +98,12 @@ function io.contents( path )
 	return contents
 end
 
+function io.writeFile( path, contents )
+	local file = assert( io.open( path, "w" ) )
+	assert( file:write( contents ) )
+	assert( file:close() )
+end
+
 function table.insertBy( self, value, cmp )
 	local idx = 1
 
@@ -118,16 +124,56 @@ function table.removeValue( self, value )
 	end
 end
 
-function table.sortByKey( self, key )
-	table.sort( self, function( a, b )
-		return a[ key ] < b[ key ]
-	end )
+function table.sortByKey( self, key, desc )
+	if desc then
+		table.sort( self, function( a, b )
+			return a[ key ] > b[ key ]
+		end )
+	else
+		table.sort( self, function( a, b )
+			return a[ key ] < b[ key ]
+		end )
+	end
 end
 
 function table.clear( self )
 	for k in pairs( self ) do
 		self[ k ] = nil
 	end
+end
+
+function table.random( n )
+	local shuffled = { }
+
+	for i = 1, n do
+		shuffled[ i ] = i
+	end
+
+	for i = n, 2, -1 do
+		local rand = math.random( i )
+		shuffled[ i ], shuffled[ rand ] = shuffled[ rand ], shuffled[ i ]
+	end
+
+	return shuffled
+end
+
+function table.shuffle( self, n )
+	n = n or #self
+
+	for i = n, 2, -1 do
+		local rand = math.random( i )
+		self[ i ], self[ rand ] = self[ rand ], self[ i ]
+	end
+end
+
+function table.keys( self )
+	local keys = { }
+
+	for k in pairs( self ) do
+		table.insert( keys, k )
+	end
+
+	return keys
 end
 
 function enforce( var, name, ... )
