@@ -22,6 +22,7 @@ local patterns = {
 		"watches as (.-) loses SANCTUARY!",
 		"notices (.-) is DISPELLED!",
 		"REPORTS %-> %[(.-)%] is %[DISPELLED%]",
+		"chats to everybody, '(.-)'s has just been DISPELLED!",
 	},
 	{
 		"reports (.-) just TELEPORTED !",
