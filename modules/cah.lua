@@ -223,7 +223,6 @@ chat.command( "cards", "user", {
 
 local function advanceGame()
 	if os.time() - game.start < ( 60 * 15 ) or #table.keys( game[ game.state ] ) < MINPLAYERS then
-		print( "too few" )
 		return
 	end
 
