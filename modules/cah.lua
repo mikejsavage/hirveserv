@@ -216,6 +216,12 @@ local function cmdVote( client, args )
 	game.votes[ name ] = game.answersList[ id ].name
 
 	client:msg( "Voted for: %s", getNiceQuestion( game.votes[ name ] ) )
+
+	if #table.keys( game.votes ) == MINPLAYERS then
+		game.start = os.time()
+
+		chat.msg( "#lmCards Against Humanity: #lwvoting finishes in #lg15 minutes#lw!" )
+	end
 end
 
 local function cmdTop( client )
