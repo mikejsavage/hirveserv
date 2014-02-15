@@ -220,7 +220,7 @@ local function cmdVote( client, args )
 	if #table.keys( game.votes ) == MINPLAYERS then
 		game.start = os.time()
 
-		chat.msg( "#lmCards Against Humanity: #lwvoting finishes in #lg15 minutes#lw!" )
+		chat.msg( "#lmCards Against Humanity: #lwvoting ends in #lg15 minutes#lw!" )
 	end
 end
 
