@@ -279,6 +279,9 @@ local function advanceGame()
 
 		local winner = game.answersList[ math.random( winners ) ]
 		game.scores[ winner.name ] = ( game.scores[ winner.name ] or 0 ) + 1
+
+		chat.msg( "#lmCards Against Humanity: #lwtime's up, #ly%s#lw wins!\n%s", winner.name, getNiceQuestion( winner.name ) )
+
 		for _, answer in ipairs( game.answersList ) do
 			local name = answer.name
 
@@ -289,8 +292,6 @@ local function advanceGame()
 
 			drawCards( name )
 		end
-
-		chat.msg( "#lmCards Against Humanity: #lwtime's up, #ly%s#lw wins!\n%s", winner.name, getNiceQuestion( winner.name ) )
 
 		game.answers = { }
 		game.answersList = nil
