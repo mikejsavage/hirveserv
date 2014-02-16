@@ -186,15 +186,17 @@ end
 function Client:msg( form, ... )
 	enforce( form, "form", "string", "table" )
 
-	if type( form ) == "table" then
-		form = table.concat( form, "\n" )
-	end
-
 	local prompt = self.state == "chatting" and modules.prompt( self ) or ""
 
-	self:send( "message", chat.parseColours(
-		"#lr<%s%s#lr>#lw %s" % { chat.config.name, prompt, form:format( ... ) }
-	) )
+	if type( form ) == "table" then
+		self:send( "message", chat.parseColours(
+			"#lr<%s%s#lr>#lw %s" % { chat.config.name, prompt, table.concat( form, "\n" ) }
+		) )
+	else
+		self:send( "message", chat.parseColours(
+			"#lr<%s%s#lr>#lw %s" % { chat.config.name, prompt, form:format( ... ) }
+		) )
+	end
 end
 
 function Client:xmsg( form, ... )
