@@ -302,7 +302,6 @@ chat.prompt( function( client )
 	if user and not prompts[ user ] and user.settings.scripts then
 		for name, time in pairs( user.settings.scripts ) do
 			local script = scriptsMap[ name ]
-			print( name, time, script.updated > time )
 
 			if not script or script.updated > time then
 				prompts[ user ] = "#lg[SCRIPTS]"
