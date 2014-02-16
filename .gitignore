@@ -3,6 +3,7 @@ config.lua
 .tags
 
 data/users
+data/scripts
 data/wiki
 data/motd.txt
 data/cah/state.json
