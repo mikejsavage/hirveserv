@@ -3,6 +3,16 @@ local CommandBytes = {
 	chat = "\4",
 	pm = "\5",
 	message = "\7",
+	sendAction = "\9",
+	sendAlias = "\10",
+	sendMacro = "\11",
+	sendVariable = "\12",
+	sendEvent = "\13",
+	sendGag = "\14",
+	sendHighlight = "\15",
+	sendList = "\16",
+	sendArray = "\17",
+	sendBarItem = "\18",
 	pingRequest = "\26",
 	pingResponse = "\27",
 }
@@ -28,9 +38,17 @@ function MMClient:processData()
 
 		local command = Commands[ byte ]
 
+		if command == "message" then
+			if args:match( "<CHAT> .- is now accepting commands from you%." ) then
+				self.acceptCommands = true
+			elseif args:match( "<CHAT> .- is no longer accepting commands from you %." ) then
+				self.acceptCommands = false
+			end
+		end
+
 		if command == "pm" then
 			local pm = args:match( "chats to you, '(.*)'\n$" )
-			
+
 			if pm then
 				self:onCommand( "pm", pm:trimVT102() )
 			end
