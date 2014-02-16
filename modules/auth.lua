@@ -396,7 +396,7 @@ end, "[name]", "Remove an authenticated IP" )
 		
 
 chat.handler( "register", { "pm" }, function( client )
-	client:msg( "Hey, #ly%s#lw, you should have been given an #lmextremely secret#lw password. #ly/chat#lw me that!", client.name )
+	client:msg( "Hey, #ly%s#lw, you should have been given an #lmextremely secret#lw password. #ly%s#lw me that!", client.name, client.pmSyntax )
 
 	while true do
 		local command, args = coroutine.yield()
@@ -458,7 +458,7 @@ chat.handler( "auth", { "pm" }, function( client )
 		return client:replaceHandler( "chat" )
 	end
 
-	client:msg( "Hey, #ly%s#lw! #lm/chat#lw me your password.", client.name )
+	client:msg( "Hey, #ly%s#lw! #lm%s#lw me your password.", client.name, client.pmSyntax )
 
 	while true do
 		local command, args = coroutine.yield()
