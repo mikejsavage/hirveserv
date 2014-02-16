@@ -84,6 +84,7 @@ An incomplete list of features:
   * if everyone reports the same event, gag all but the first one
   * currently only setup for Medievia but easy enough to modify
   * big spam reduction for PvP
+* [Cards Against Humanity](http://cardsagainsthumanity.com/)
 
 And if you don't want any of this you can just delete/rename the modules
 as appropriate.
