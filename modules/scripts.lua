@@ -16,7 +16,7 @@ local sends = {
 local sendsPM = { "pm" }
 
 for _, send in ipairs( sends ) do
-	table.insert( sendsPM, sends )
+	table.insert( sendsPM, send )
 end
 
 local scripts = { }
