@@ -242,7 +242,7 @@ local function deleteScript( client, name )
 	table.removeValue( scripts, scriptsMap[ lower ] )
 	scriptsMap[ lower ] = nil
 
-	chat.msg( "#ly%s#lw deleted script #lm%s#lw." % client.name, name )
+	chat.msg( "#ly%s#lw deleted script #lm%s#lw.", client.name, name )
 end
 
 local function installScript( client, name )
