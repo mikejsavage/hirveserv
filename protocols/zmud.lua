@@ -21,9 +21,13 @@ local ZMudClient = {
 }
 
 function ZMud:processData()
-	local bytes, len1, len2 = self.dataBuffer:match( "^(..)(.)(.)" )
+	while true do
+		local bytes, len1, len2 = self.dataBuffer:match( "^(..)(.)(.)" )
 
-	if bytes then
+		if not bytes then
+			break
+		end
+
 		local len = string.byte( len1 ) + string.byte( len2 ) * 256
 
 		if self.dataBuffer:len() >= len + 4 then

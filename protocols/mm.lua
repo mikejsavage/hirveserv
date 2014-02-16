@@ -19,9 +19,13 @@ local MMClient = {
 }
 
 function MMClient:processData()
-	local byte, args, len = self.dataBuffer:match( "^(.)(.-)\255()" )
+	while true do
+		local byte, args, len = self.dataBuffer:match( "^(.)(.-)\255()" )
 
-	if byte then
+		if not byte then
+			break
+		end
+
 		local command = Commands[ byte ]
 
 		if command == "pm" then
