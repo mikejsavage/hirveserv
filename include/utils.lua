@@ -176,6 +176,14 @@ function table.keys( self )
 	return keys
 end
 
+function table.find( self, elem )
+	for i = 1, #self do
+		if self[ i ] == elem then
+			return i
+		end
+	end
+end
+
 function enforce( var, name, ... )
 	local acceptable = { ... }
 	local ok = false
