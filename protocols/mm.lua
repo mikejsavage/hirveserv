@@ -3,6 +3,10 @@ local CommandBytes = {
 	chat = "\4",
 	pm = "\5",
 	message = "\7",
+	version = "\19",
+	pingRequest = "\26",
+	pingResponse = "\27",
+
 	sendAction = "\9",
 	sendAlias = "\10",
 	sendMacro = "\11",
@@ -14,8 +18,6 @@ local CommandBytes = {
 	sendArray = "\17",
 	sendBarItem = "\18",
 	sendSubstitute = "\33",
-	pingRequest = "\26",
-	pingResponse = "\27",
 }
 
 local Commands = { }

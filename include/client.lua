@@ -168,6 +168,8 @@ end
 function Client:onCommand( command, args )
 	if command == "pingRequest" then
 		self:send( "pingResponse", args )
+	elseif command == "version" then
+		self.version = args
 	elseif command ~= "pingResponse" then
 		local coro, name = self:handler( command )
 
