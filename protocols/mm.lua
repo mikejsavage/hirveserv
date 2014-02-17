@@ -13,6 +13,7 @@ local CommandBytes = {
 	sendList = "\16",
 	sendArray = "\17",
 	sendBarItem = "\18",
+	sendSubstitute = "\33",
 	pingRequest = "\26",
 	pingResponse = "\27",
 }

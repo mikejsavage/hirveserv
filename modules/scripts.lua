@@ -124,9 +124,7 @@ chat.handler( "addScript", sendsPM, function( client, name, description, callbac
 		"You need to send me your script. You can do it with #lm/send*#lw commands."
 		.. "\nIf your script is all in a group, use #lm/sendgroup {%s} {<group>}"
 		.. "\n#lm/chat#lw me #lgdone#lw or #lgcancel#lw when you are done."
-		.. "\n#lrNote that to work around some MM2k bugs:"
-		.. "\n #ly- #lwyou will need to send events and substitutes individually"
-		.. "\n #ly- #lwbefore you can send events you will need to #lm/chat#lw me #lgevents"
+		.. "\n#lrNote that to work around a MM bug you will need to #lm/chat#lw me #lgevents#lw before sending me events."
 		, chat.config.name
 	)
 
