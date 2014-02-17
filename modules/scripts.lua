@@ -130,7 +130,7 @@ chat.handler( "addScript", sendsPM, function( client, name, description, callbac
 		, chat.config.name
 	)
 
-	local lastOk
+	local lastAnything
 	local lastEvent
 
 	local acceptEvents = false
@@ -164,14 +164,14 @@ chat.handler( "addScript", sendsPM, function( client, name, description, callbac
 			local now = loop:now()
 
 			if command == "sendEvent" and not acceptEvents then
-				if not lastEvent or now - lastEvent >= 1 then
-					lastEvent = now
-
+				if not lastEvent or now - lastEvent >= 0.4 then
 					client:msg(
 						"If you want to send events, you need to #lm/chatt#lw me #lgevents#lw."
 						.. "\nThis is to work around a MM bug."
 					)
 				end
+
+				lastEvent = now
 			else
 				table.insert( lines, {
 					type = command,
@@ -179,11 +179,11 @@ chat.handler( "addScript", sendsPM, function( client, name, description, callbac
 				} )
 			end
 
-			if not lastOk or now - lastOk >= 1 then
-				lastOk = now
-
+			if not lastAnything or now - lastAnything >= 0.4 then
 				client:msg( "Ok..." )
 			end
+
+			lastAnything = now
 		end
 	end
 end )
