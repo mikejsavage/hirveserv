@@ -1,3 +1,6 @@
+local ev = require( "ev" )
+local loop = ev.Loop.default
+
 local json = require( "cjson.safe" )
 
 local sends = {
@@ -120,11 +123,17 @@ chat.handler( "addScript", sendsPM, function( client, name, description, callbac
 	client:msg(
 		"You need to send me your script. You can do it with #lm/send*#lw commands."
 		.. "\nIf your script is all in a group, use #lm/sendgroup {%s} {<group>}"
-		.. "\n#lm%s#lw me #lgdone#lw or #lgcancel#lw when you are done.",
-		chat.config.name, client.pmSyntax
+		.. "\n#lm/chat#lw me #lgdone#lw or #lgcancel#lw when you are done."
+		.. "\n#lrNote that to work around some MM2k bugs:"
+		.. "\n #ly- #lwyou will need to send events and substitutes individually"
+		.. "\n #ly- #lwbefore you can send events you will need to #lm/chat#lw me #lgevents"
+		, chat.config.name
 	)
 
 	local lastOk
+	local lastEvent
+
+	local acceptEvents = false
 
 	while true do
 		local command, args = coroutine.yield()
@@ -144,17 +153,33 @@ chat.handler( "addScript", sendsPM, function( client, name, description, callbac
 				callback( nil )
 
 				break
+			elseif args == "events" then
+				acceptEvents = not acceptEvents
+
+				client:msg( "Ok,%s accepting events." % { acceptEvents and "" or " no longer" } )
 			else
 				client:msg( "Valid commands are #lgdone#lw or #lgcancel#lw." )
 			end
 		else
-			table.insert( lines, {
-				type = command,
-				line = args,
-			} )
+			local now = loop:now()
 
-			local now = os.time()
-			if not lastOk or now - lastOk >= 2 then
+			if command == "sendEvent" and not acceptEvents then
+				if not lastEvent or now - lastEvent >= 1 then
+					lastEvent = now
+
+					client:msg(
+						"If you want to send events, you need to #lm/chatt#lw me #lgevents#lw."
+						.. "\nThis is to work around a MM bug."
+					)
+				end
+			else
+				table.insert( lines, {
+					type = command,
+					line = args,
+				} )
+			end
+
+			if not lastOk or now - lastOk >= 1 then
 				lastOk = now
 
 				client:msg( "Ok..." )
