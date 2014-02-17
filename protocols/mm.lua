@@ -74,7 +74,7 @@ end
 local _M = { client = MMClient }
 
 function _M.accept( client )
-	local name, len = client.dataBuffer:match( "^CHAT:(.-)\n.-[%d ][%d ][%d ][%d ][%d ]()" )
+	local name, len = client.dataBuffer:match( "^CHAT:(.-)\n.+[%d ][%d ][%d ][%d ][%d ]()" )
 
 	if not name then
 		return false
