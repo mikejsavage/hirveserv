@@ -85,6 +85,10 @@ An incomplete list of features:
   * currently only setup for Medievia but easy enough to modify
   * big spam reduction for PvP
 * [Cards Against Humanity](http://cardsagainsthumanity.com/)
+* scripts repository
+  * users can upload scripts to the server
+  * other users can then install scripts with one command
+  * bugs people when installed scripts are updated
 
 And if you don't want any of this you can just delete/rename the modules
 as appropriate.
