@@ -52,6 +52,7 @@ local patterns = {
 	{
 		"reports (.-) is POISONED !",
 		"reports: (.-) is POISONED!",
+		"%[([^[]-) has been poisoned%]",
 	},
 	{
 		"reports (.-) is WEAKENED !",
