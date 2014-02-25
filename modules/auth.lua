@@ -113,9 +113,7 @@ chat.command( "adduser", "adduser", {
 		end
 
 		local password = words.random()
-
-		local salt = bcrypt.salt( chat.config.bcryptRounds )
-		local digest = bcrypt.digest( password, salt )
+		local digest = bcrypt.digest( password, chat.config.bcryptRounds )
 
 		users[ lower ] = {
 			password = digest,
@@ -160,9 +158,7 @@ chat.command( "reset", "accounts", function( client, name )
 	end
 
 	local password = words.random()
-
-	local salt = bcrypt.salt( chat.config.bcryptRounds )
-	local digest = bcrypt.digest( password, salt )
+	local digest = bcrypt.digest( password, chat.config.bcryptRounds )
 
 	users[ lower ].password = digest
 	users[ lower ].pending = true
@@ -178,8 +174,7 @@ chat.command( "setpw", "user", function( client, password )
 		return
 	end
 
-	local salt = bcrypt.salt( chat.config.bcryptRounds )
-	local digest = bcrypt.digest( password, salt )
+	local digest = bcrypt.digest( password, chat.config.bcryptRounds )
 
 	client.user.password = digest
 	client.user:save()
@@ -419,8 +414,7 @@ chat.handler( "register", { "pm" }, function( client )
 			if args == "" then
 				client:msg( "No empty passwords." )
 			else
-				local salt = bcrypt.salt( chat.config.bcryptRounds )
-				local digest = bcrypt.digest( args, salt )
+				local digest = bcrypt.digest( args, chat.config.bcryptRounds )
 
 				client.user.password = digest
 				client.user.pending = nil
@@ -473,7 +467,7 @@ chat.handler( "auth", { "pm" }, function( client )
 	end
 end )
 
-local makeFirstAccount = chat.config.auth and pairs( users ) == nil
+local makeFirstAccount = chat.config.auth and #table.keys( users ) == 0
 
 if makeFirstAccount then
 	io.stdout:write( "Let's make an account! What do you want the username to be? " )
@@ -492,8 +486,7 @@ if makeFirstAccount then
 
 	local password = words.random()
 
-	local salt = bcrypt.salt( chat.config.bcryptRounds )
-	local digest = bcrypt.digest( password, salt )
+	local digest = bcrypt.digest( password, chat.config.bcryptRounds )
 
 	users[ name ] = {
 		password = digest,
