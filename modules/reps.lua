@@ -27,6 +27,7 @@ local patterns = {
 	{
 		"reports (.-) just TELEPORTED !",
 		"reports: (.-) has just TELEPORTED",
+		"notices (.-) just TELEPORTED away!",
 		"watches as (.-) TELEPORTS away!",
 		"REPORTS %-> %[(.-)%] %[TELEPORTED%]",
 	},
