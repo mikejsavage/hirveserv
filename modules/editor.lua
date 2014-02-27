@@ -29,7 +29,11 @@ end
 local function expandCommand( command )
 	if not command then
 		return nil
-	elseif shortCommands[ command ] then
+	end
+
+	command = command:lower()
+
+	if shortCommands[ command ] then
 		return shortCommands[ command ]
 	elseif not validCommands[ command ] then
 		return nil
