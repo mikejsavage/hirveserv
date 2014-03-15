@@ -20,9 +20,13 @@ local function sendLogs( client, messages, needle )
 	end
 
 	if needle == "" then
-		client:msg( "Last #lw%d#d message%s:\n%s", n, string.plural( n ), table.concat( output, "\n" ) )
+		client:msg( "Last #lw%d#d message%s:", n, string.plural( n ) )
 	else
-		client:msg( "Last #lw%d#d message%s containing #lw%s#d:\n%s", n, string.plural( n ), needle, table.concat( output, "\n" ) )
+		client:msg( "Last #lw%d#d message%s containing #lw%s#d:", n, string.plural( n ), needle )
+	end
+
+	for _, msg in ipairs( output ) do
+		client:msg( "%s", msg )
 	end
 end
 
