@@ -59,6 +59,7 @@ local patterns = {
 		"reports (.-) is WEAKENED !",
 		"reports: (.-) is WEAKENED!",
 		"REPORTS %-> %[(.-)%] is %[WEAKENED%]",
+		"%[([^[]-) has been weakened%]",
 	},
 	{
 		"reports (.-) just %-RESURRECTED%- .- !",
