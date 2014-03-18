@@ -114,6 +114,8 @@ chat.command( "post", "user", function( client, args )
 			return
 		end
 
+		title = title:trim()
+
 		local tagsMap = { }
 		local tags = { }
 
@@ -132,7 +134,7 @@ chat.command( "post", "user", function( client, args )
 			author = client.user.name,
 			date = os.time(),
 			tags = table.concat( tags, " " ),
-			title = title:trim(),
+			title = title,
 			body = body,
 		}
 		posts:sync()
