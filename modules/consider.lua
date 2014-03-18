@@ -48,34 +48,36 @@ local function addResists( consider, key, line )
 	consider[ key ] = table.concat( resists, " " )
 end
 
-for f in lfs.dir( "data/consider" ) do
-	if f:match( "%.txt$" ) then
-		local zone = assert( io.contents( "data/consider/" .. f ) )
-		local name, mobs = zone:match( "^([^\n]+)\n\n(.+)$" )
+local function buildConsiders()
+	for f in lfs.dir( "data/consider" ) do
+		if f:match( "%.txt$" ) then
+			local zone = assert( io.contents( "data/consider/" .. f ) )
+			local name, mobs = zone:match( "^([^\n]+)\n\n(.+)$" )
 
-		assert( name, "Bad zone: " .. f )
+			assert( name, "Bad zone: " .. f )
 
-		for mob in ( mobs .. "\n\n" ):gmatch( "(.-)\n\n" ) do
-			local consider = { zone = name }
+			for mob in ( mobs .. "\n\n" ):gmatch( "(.-)\n\n" ) do
+				local consider = { zone = name }
 
-			for line in mob:gmatch( "([^\n]+)" ) do
-				if not consider.name then
-					consider.name = line
-					consider.lower = line:lower()
-				else
-					if line:match( "^Strong against:" ) then
-						addResists( consider, "strong", line )
-					elseif line:match( "^Weak against:" ) then
-						addResists( consider, "weak", line )
+				for line in mob:gmatch( "([^\n]+)" ) do
+					if not consider.name then
+						consider.name = line
+						consider.lower = line:lower()
 					else
-						consider.align = line
+						if line:match( "^Strong against:" ) then
+							addResists( consider, "strong", line )
+						elseif line:match( "^Weak against:" ) then
+							addResists( consider, "weak", line )
+						else
+							consider.align = line
+						end
 					end
 				end
+
+				assert( consider.name, "No name in: " .. f )
+
+				table.insert( considers, consider )
 			end
-
-			assert( consider.name, "No name in: " .. mob )
-
-			table.insert( considers, consider )
 		end
 	end
 end
@@ -99,3 +101,17 @@ chat.command( "consider", "user", function( client, name )
 
 	client:msg( output )
 end, "Search consider database" )
+
+chat.command( "rebuildconsider", "all", function( client )
+	considers = { }
+
+	local ok, err = pcall( buildConsiders )
+
+	if not ok then
+		client:msg( "Rebuild failed! %s", err )
+	else
+		client:msg( "Rebuilt." )
+	end
+end, "Rebuild considers database" )
+
+buildConsiders()
