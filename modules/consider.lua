@@ -61,6 +61,7 @@ for f in lfs.dir( "data/consider" ) do
 			for line in mob:gmatch( "([^\n]+)" ) do
 				if not consider.name then
 					consider.name = line
+					consider.lower = line:lower()
 				else
 					if line:match( "^Strong against:" ) then
 						addResists( consider, "strong", line )
@@ -80,10 +81,12 @@ for f in lfs.dir( "data/consider" ) do
 end
 
 chat.command( "consider", "user", function( client, name )
+	name = name:lower()
+
 	local output = { "Searching considers for #lm%s#lw:" % name }
 
 	for _, consider in ipairs( considers ) do
-		if consider.name:find( name, 1, true ) then
+		if consider.lower:find( name, 1, true ) then
 			if #output >= MaxResults then
 				table.insert( output, "#lwToo many results. Try to be more specific!" )
 
