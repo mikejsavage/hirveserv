@@ -25,12 +25,12 @@ local function niceConsider( consider )
 		table.insert( output, "#d" .. consider.align )
 	end
 
-	if consider.strong then
-		table.insert( output, "#dStrong against: " .. consider.strong )
-	end
-
 	if consider.weak then
 		table.insert( output, "#dWeak against: " .. consider.weak )
+	end
+
+	if consider.strong then
+		table.insert( output, "#dStrong against: " .. consider.strong )
 	end
 
 	table.insert( output, "" )
