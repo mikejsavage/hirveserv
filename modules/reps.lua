@@ -110,13 +110,14 @@ local function isRepeatRep( message, now )
 		local target = targetFromRep( spell, message )
 
 		if target then
-			spell.last.gagUntil = now + GagFor
-
 			if spell.last.target == target and spell.last.gagUntil >= now then
+				spell.last.gagUntil = now + GagFor
+
 				return true
 			end
 
 			spell.last.target = target
+			spell.last.gagUntil = now + GagFor
 
 			return false
 		end
