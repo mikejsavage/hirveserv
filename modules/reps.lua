@@ -73,6 +73,10 @@ local patterns = {
 	{
 		"just %-RESCUED%- (.-) !",
 	},
+	{
+		"watches (.+) get MUFFLED!",
+		"reports (.+) is MUFFLED !",
+	},
 }
 
 local reps = { }
