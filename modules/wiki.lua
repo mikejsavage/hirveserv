@@ -1,12 +1,10 @@
 local EntriesPerPage = 10
 
-local categories = { }
-local categoriesList = { }
-
 local pages = { }
+local pagesList = { }
 
 local function checkClash( name )
-	assert( not categories[ name ] and not pages[ name ], "name clash: %s" % name )
+	assert( not pages[ name ], "name clash: %s" % name )
 end
 
 local function loadPage( path )
@@ -28,6 +26,7 @@ local function addPage( path, name )
 
 	pages[ name ] = loadPage( path, name )
 	pages[ name ].name = name
+	table.insert( pagesList, name )
 end
 
 local function addMultiPage( path, name )
@@ -47,42 +46,7 @@ local function addMultiPage( path, name )
 	checkClash( name )
 
 	pages[ name ] = page
-end
-
-local function addCategory( path, name )
-	checkClash( name )
-
-	local description = assert( io.contents( "%s/%s.txt" % { path, name } ) )
-
-	local category = {
-		name = name,
-		description = description:trim(),
-		pages = { },
-	}
-
-	for file in lfs.dir( path ) do
-		if file ~= "." and file ~= ".." and file ~= name .. ".txt" then
-			local fullPath = "%s/%s" % { path, file }
-			local attr = lfs.attributes( fullPath )
-
-			file = file:lower()
-
-			if attr.mode == "directory" then
-				addMultiPage( fullPath, file )
-			else
-				file = file:match( "^(.+)%.txt$" )
-
-				addPage( fullPath, file )
-			end
-
-			table.insert( category.pages, pages[ file ] )
-		end
-	end
-
-	table.sortByKey( category.pages, "name" )
-
-	categories[ name ] = category
-	table.insert( categoriesList, category )
+	table.insert( pagesList, name )
 end
 
 local function buildWiki()
@@ -98,11 +62,7 @@ local function buildWiki()
 			file = file:lower()
 
 			if attr.mode == "directory" then
-				if io.readable( fullPath .. "/pages.txt" ) then
-					addMultiPage( fullPath, file )
-				else
-					addCategory( fullPath, file )
-				end
+				addMultiPage( fullPath, file )
 			else
 				local name = file:match( "^(.+)%.txt$" )
 
@@ -111,17 +71,19 @@ local function buildWiki()
 		end
 	end
 
-	table.sortByKey( categoriesList, "name" )
+	table.sort( pagesList )
 end
 
 chat.command( "wiki", "user", {
 	[ "^$" ] = function( client )
-		local output = "#lwThe wiki is split into the following categories:"
+		local output = "#lwThe wiki has the following entries:"
 
-		for _, category in ipairs( categoriesList ) do
+		for _, name in ipairs( pagesList ) do
+			local page = pages[ name ]
+
 			output = output .. "\n    #ly%s #d- %s" % {
-				category.name,
-				category.description,
+				page.name,
+				page.title,
 			}
 		end
 
@@ -130,21 +92,6 @@ chat.command( "wiki", "user", {
 
 	[ "^(%S+)$" ] = function( client, name )
 		name = name:lower()
-
-		if categories[ name ] then
-			local output = "#lwPages in #ly%s#lw:" % name
-
-			for _, page in ipairs( categories[ name ].pages ) do
-				output = output .. "\n    #ly%s #d- %s" % {
-					page.name,
-					page.title,
-				}
-			end
-
-			client:msg( "%s", output )
-
-			return
-		end
 
 		if not pages[ name ] then
 			client:msg( "No wiki entry for #ly%s#d.", name )
@@ -198,9 +145,8 @@ chat.command( "wiki", "user", {
 }, "<category/page> [page] [search]", "Super duper wiki" )
 
 chat.command( "rebuildwiki", "all", function( client )
-	categories = { }
-	categoriesList = { }
 	pages = { }
+	pagesList = { }
 
 	local ok, err = pcall( buildWiki )
 
