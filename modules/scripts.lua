@@ -117,21 +117,33 @@ local function scriptInfo( client, name )
 	client:msg( msg )
 end
 
+local function isMMBugged( version )
+	return version ~= "MudMaster 2k6 - 4.28 Build 19"
+end
+
 chat.handler( "addScript", sendsPM, function( client, name, description, callback )
 	local lines = { }
+
+	local bugged = isMMBugged( client.version )
 
 	client:msg(
 		"You need to send me your script. You can do it with #lm/send*#lw commands."
 		.. "\nIf your script is all in a group, use #lm/sendgroup {%s} {<group>}"
 		.. "\n#lm/chat#lw me #lgdone#lw or #lgcancel#lw when you are done."
-		.. "\n#lrNote that to work around a MM bug you will need to #lm/chat#lw me #lgevents#lw before sending me events."
 		, chat.config.name
 	)
+
+	if bugged then
+		client:msg(
+			"#lrNote that to work around a MM bug you will need to #lm/chat#lw me #lgevents#lw before sending me events."
+			.. "\nYou can also download a fixed version from #lchttp://sourceforge.net/projects/mm2k6/files/mm2k6/MudMaster%202k6%20v4.2.8/"
+		)
+	end
 
 	local lastAnything
 	local lastEvent
 
-	local acceptEvents = false
+	local acceptEvents = not bugged
 
 	while true do
 		local command, args = coroutine.yield()
@@ -151,7 +163,7 @@ chat.handler( "addScript", sendsPM, function( client, name, description, callbac
 				callback( nil )
 
 				break
-			elseif args == "events" then
+			elseif args == "events" and bugged then
 				acceptEvents = not acceptEvents
 
 				client:msg( "Ok,%s accepting events." % { acceptEvents and "" or " no longer" } )
