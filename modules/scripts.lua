@@ -183,6 +183,10 @@ chat.handler( "addScript", sendsPM, function( client, name, description, callbac
 
 				lastEvent = now
 			else
+				if command == "sendVariable" then
+					args = args:gsub( "/variable{", "/variable {" )
+				end
+
 				table.insert( lines, {
 					type = command,
 					line = args,
