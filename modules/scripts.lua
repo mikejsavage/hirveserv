@@ -129,14 +129,15 @@ chat.handler( "addScript", sendsPM, function( client, name, description, callbac
 	client:msg(
 		"You need to send me your script. You can do it with #lm/send*#lw commands."
 		.. "\nIf your script is all in a group, use #lm/sendgroup {%s} {<group>}"
-		.. "\n#lm/chat#lw me #lgdone#lw or #lgcancel#lw when you are done."
-		, chat.config.name
+		.. "\n#lm/chat {%s} done/cancel#lw when you are done."
+		, chat.config.name, chat.config.name
 	)
 
 	if bugged then
 		client:msg(
-			"#lrNote that to work around a MM bug you will need to #lm/chat#lw me #lgevents#lw before sending me events."
+			"#lrNote that to work around a MM bug you will need to #lm/chat {%s} events#lw before sending events."
 			.. "\nYou can also download a fixed version from #lchttp://sourceforge.net/projects/mm2k6/files/mm2k6/MudMaster%%202k6%%20v4.2.8/"
+			% chat.config.name
 		)
 	end
 
