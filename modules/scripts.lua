@@ -114,6 +114,10 @@ local function scriptInfo( client, name )
 		table.insert( msg, "\n#lw%s" % script.long )
 	end
 
+	table.insert( msg, "\n#lm/chat {%s} install %s#lw to install and be notified of updates." % {
+		chat.config.name, script.name
+	} )
+
 	client:msg( msg )
 end
 
