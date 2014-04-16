@@ -357,7 +357,7 @@ chat.prompt( function( client )
 			local script = scriptsMap[ name ]
 
 			if not script or script.updated > time then
-				prompts[ user ] = "#lg[SCRIPTS]"
+				prompts[ user ] = "#lg[/chat {%s} scripts]" % chat.config.name
 			end
 		end
 	end
