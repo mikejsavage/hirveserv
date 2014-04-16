@@ -159,7 +159,7 @@ chat.prompt( function( client )
 
 		local result = query:search()
 
-		prompts[ client.user ] = #result > 0 and "#ly[READ]" or ""
+		prompts[ client.user ] = #result > 0 and ( "#ly[/chat {%s} read]" % chat.config.name ) or ""
 	end
 
 	return prompts[ client.user ]
