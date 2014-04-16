@@ -117,14 +117,23 @@ local function scriptInfo( client, name )
 	client:msg( msg )
 end
 
-local function isMMBugged( version )
-	return version ~= "MudMaster 2k6 - 4.28 Build 19"
+local function isMMRecent( version )
+	local major, minor = version:match( "^MudMaster 2k6 - ([%d.]+) Build (%d+)$" )
+
+	if not major then
+		return false
+	end
+
+	local fmajor = tonumber( major )
+	minor = tonumber( minor )
+
+	return fmajor > 4.28 or ( major == "4.28" and build >= 18 )
 end
 
 chat.handler( "addScript", sendsPM, function( client, name, description, callback )
 	local lines = { }
 
-	local bugged = isMMBugged( client.version )
+	local bugged = not isMMRecent( client.version )
 
 	client:msg(
 		"You need to send me your script. You can do it with #lm/send*#lw commands."
