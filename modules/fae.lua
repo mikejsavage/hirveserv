@@ -58,7 +58,7 @@ chat.command( "fae", nil, function( client )
 		"#lwNewmoon: #lr%s" % os.date( "%a %b %d %H:%M:%S %Y", now + timeToNM ),
 		"#lwEclipse: #lr%s" % os.date( "%a %b %d %H:%M:%S %Y", now + timeToEC ),
 		"",
-		"#lmThese codes will be valid for %s" % niceTime( timeToChange ),
+		"#lmThese codes change in %s" % niceTime( timeToChange ),
 		"#lwXPXP:      #lg%2d %2d %2d" % { daysToEC + 2, daysToNM + 2,  2 },
 		"#lwRemstorms: #ly%2d %2d %2d" % { daysToEC + 3, daysToNM + 6, 90 },
 		"#lwRainstorm: #lc%2d %2d %2d" % { daysToEC + 3, daysToNM + 1, 63 },
