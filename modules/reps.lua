@@ -89,6 +89,10 @@ local silence = {
 	"notices .- get FAERIED!",
 	"%[.- has been faerie fired%]",
 	"REPORTS %-> %[.-%] is %[FAERIED%]",
+
+	"I have been Sanced",
+	"I have lost Sanctuary",
+	"I have been Disarmed by",
 }
 
 for _, spell in ipairs( patterns ) do
