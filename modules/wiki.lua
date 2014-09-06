@@ -136,8 +136,8 @@ chat.command( "wiki", "user", {
 			return
 		end
 
-		client:msg( "#lwShowing #ly%s#lw: #d(page #lw%d#d of #lw%d#d)\n%s",
-			name,
+		client:msg( "#lwShowing #ly%s#lw: #ly%s #d(#lw%d#d of #lw%d#d)\n%s",
+			name, pages[ name ].pages[ page ].title,
 			page, #pages[ name ].pages,
 			pages[ name ].pages[ page ].body
 		)
