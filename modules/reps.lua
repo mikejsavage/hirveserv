@@ -71,7 +71,9 @@ local patterns = {
 		"REPORTS %-> %[(.-)%] %[RESSED%] by",
 	},
 	{
-		"reports (.+) just HANDSED .- !",
+		"reports .- just HANDSED (.-) !",
+		"sees .- HANDS (.-) out of FORMATION!",
+		"REPORTS %-> %[(.-)%] has been %[HANDSED%] at",
 	},
 	{
 		"just %-RESCUED%- (.-) !",
