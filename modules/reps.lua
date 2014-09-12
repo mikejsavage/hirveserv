@@ -50,6 +50,7 @@ local patterns = {
 	},
 	{
 		"reports (.-) is CHILLED !",
+		"REPORTS %-> %[(.-)%] is %[CHILLED%]",
 	},
 	{
 		"reports (.-) is POISONED !",
