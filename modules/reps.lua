@@ -46,6 +46,7 @@ local patterns = {
 		"reports: (.-) is CURSED!",
 		"%[([^[]-) has been cursed%]",
 		"watches (.-) get CURSED!",
+		"REPORTS %-> %[(.-)%] is %[CURSED%]",
 	},
 	{
 		"reports (.-) is CHILLED !",
