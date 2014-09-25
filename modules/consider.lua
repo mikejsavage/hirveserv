@@ -60,16 +60,18 @@ local function buildConsiders()
 				local consider = { zone = name }
 
 				for line in mob:gmatch( "([^\n]+)" ) do
-					if not consider.name then
-						consider.name = line
-						consider.lower = line:lower()
-					else
-						if line:match( "^Strong against:" ) then
-							addResists( consider, "strong", line )
-						elseif line:match( "^Weak against:" ) then
-							addResists( consider, "weak", line )
+					if not line:match( "^%-%-" ) then
+						if not consider.name then
+							consider.name = line
+							consider.lower = line:lower()
 						else
-							consider.align = line
+							if line:match( "^Strong against:" ) then
+								addResists( consider, "strong", line )
+							elseif line:match( "^Weak against:" ) then
+								addResists( consider, "weak", line )
+							else
+								consider.align = line
+							end
 						end
 					end
 				end
