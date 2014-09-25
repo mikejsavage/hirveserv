@@ -58,9 +58,12 @@ local function buildConsiders()
 
 			for mob in ( mobs .. "\n\n" ):gmatch( "(.-)\n\n" ) do
 				local consider = { zone = name }
+				local comment = true
 
 				for line in mob:gmatch( "([^\n]+)" ) do
 					if not line:match( "^%-%-" ) then
+						comment = false
+
 						if not consider.name then
 							consider.name = line
 							consider.lower = line:lower()
@@ -76,9 +79,11 @@ local function buildConsiders()
 					end
 				end
 
-				assert( consider.name, "No name in: " .. f )
+				if not comment then
+					assert( consider.name, "No name in: " .. f )
 
-				table.insert( considers, consider )
+					table.insert( considers, consider )
+				end
 			end
 		end
 	end
