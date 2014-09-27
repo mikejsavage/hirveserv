@@ -2,7 +2,7 @@ local motd = io.contents( "data/motd.txt" )
 
 local function sendMotd( client )
 	if motd and motd ~= "" then
-		client:msg( "%s", motd )
+		client:msg( "%s", motd:gsub( "#", "##" ) )
 	end
 end
 
