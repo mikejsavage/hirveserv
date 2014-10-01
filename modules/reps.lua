@@ -84,6 +84,7 @@ local patterns = {
 		"watches (.+) get MUFFLED!",
 		"reports (.+) is MUFFLED !",
 		"%[([^[]-)%] has been Muffled",
+		"REPORTS %-> %[(.-)%] is %[MUFFLED%] at",
 	},
 }
 
