@@ -76,6 +76,7 @@ local patterns = {
 		"reports .- just HANDSED (.-) !",
 		"sees .- HANDS (.-) out of FORMATION!",
 		"REPORTS %-> %[(.-)%] has been %[HANDSED%] at",
+		":  (.-) has been hit with HAND OF WIND by",
 	},
 	{
 		"just %-RESCUED%- (.-) !",
