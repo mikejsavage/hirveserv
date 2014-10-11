@@ -47,7 +47,7 @@ Overview
 When I get bored of working on it, the project isn't dead and worthless
 and people can verify that I'm not doing anything malicious.
 
-### Modular/extensible/easily scriptable/whatever you want to call it
+### Modular
 
 hirveserv was designed to make it easy to add features. Most of the out
 of the box functionality is implemented in exactly the same way as any
