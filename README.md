@@ -64,7 +64,7 @@ for free.
 An incomplete list of features:
 
 * authentication
-  * fine-grained access control.
+  * fine-grained access control
   * password and IP authentication
   * temporary authentication
 * on the fly reloading
