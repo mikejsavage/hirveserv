@@ -91,8 +91,6 @@ local function addPrompt( newPrompts, callback )
 end
 
 local function loadModule( path, newCommands, newCommandNames, newHandlers, newEvents, newPrompts )
-	local fn = assert( loadfile( path ) )
-
 	local envchat = {
 		command = function( name, priv, handler, syntax, description )
 			addCommand( newCommands, newCommandNames, name, priv, handler, syntax, description )
@@ -116,7 +114,11 @@ local function loadModule( path, newCommands, newCommandNames, newHandlers, newE
 	setmetatable( envchat, meta( chat ) )
 
 	local env = setmetatable( { chat = envchat }, meta( _G ) )
-	setfenv( fn, env )
+	local fn = assert( loadfile( path, "t", env ) )
+
+	if _VERSION == "Lua 5.1" then
+		setfenv( fn, env )
+	end
 
 	assert( pcall( fn ) )
 end
