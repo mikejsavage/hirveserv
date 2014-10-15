@@ -36,11 +36,11 @@ local function addMultiPage( path, name )
 	local page = {
 		name = name,
 		title = title,
-		pages = { },
+		sections = { },
 	}
 
 	for file in files:gmatch( "([^\n]+)" ) do
-		table.insert( page.pages, loadPage( "%s/%s.txt" % { path, file } ) )
+		table.insert( page.sections, loadPage( "%s/%s.txt" % { path, file } ) )
 	end
 
 	checkClash( name )
@@ -92,54 +92,54 @@ chat.command( "wiki", "user", {
 
 	[ "^(%S+)$" ] = function( client, name )
 		name = name:lower()
+		local page = pages[ name ]
 
-		if not pages[ name ] then
+		if not page then
 			client:msg( "No wiki entry for #ly%s#d.", name )
-
 			return
 		end
 
-		if not pages[ name ].pages then
-			client:msg( "#lwShowing #ly%s#lw:\n#d%s", name, pages[ name ].body )
-
+		if not page.sections then
+			client:msg( "#lwShowing #ly%s#lw:\n#d%s", page.title, page.body )
 			return
 		end
 
-		local output = "#ly%s#lw is split into #ly%d#lw pages:" % {
-			name,
-			#pages[ name ].pages,
+		local output = "#ly%s#lw is split into #ly%d#lw sections:" % {
+			page.title,
+			#page.sections,
 		}
 
-		for i, page in ipairs( pages[ name ].pages ) do
+		for i, section in ipairs( page.sections ) do
 			output = output .. "\n    #ly%d #d- %s" % {
 				i,
-				page.title,
+				section.title,
 			}
 		end
 
 		client:msg( "%s", output )
 	end,
 
-	[ "^(%S+)%s+(%d+)$" ] = function( client, name, page )
+	[ "^(%S+)%s+(%d+)$" ] = function( client, name, num )
 		name = name:lower()
-		page = tonumber( page )
+		num = tonumber( num )
+		local page = pages[ name ]
 		
-		if not pages[ name ] then
+		if not page then
 			client:msg( "No wiki entry for #ly%s#d.", name )
-
 			return
 		end
 
-		if not pages[ name ].pages or not pages[ name ].pages[ page ] then
-			client:msg( "#lwBad page number." )
-
+		if not page.sections or not page.sections[ num ] then
+			client:msg( "#lwBad section number." )
 			return
 		end
+
+		local section = page.sections[ num ]
 
 		client:msg( "#lwShowing #ly%s#lw: #ly%s #d(#lw%d#d of #lw%d#d)\n%s",
-			name, pages[ name ].pages[ page ].title,
-			page, #pages[ name ].pages,
-			pages[ name ].pages[ page ].body
+			page.title, section.title,
+			num, #page.sections,
+			section.body
 		)
 	end,
 }, "<category/page> [page] [search]", "Super duper wiki" )
