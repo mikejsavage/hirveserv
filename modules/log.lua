@@ -1,5 +1,4 @@
 local logs = { }
-local maxLogs = 250
 
 local function sendLogs( client, messages, needle )
 	messages = math.min( tonumber( messages ) or 20, 50 )
@@ -36,7 +35,7 @@ local function addLog( message )
 		lower = message:lower():stripVT102(),
 	} )
 
-	if #logs > maxLogs then
+	if #logs > chat.config.logLines then
 		table.remove( logs, 1 )
 	end
 end
@@ -49,7 +48,7 @@ local function addMsg( message )
 		lower = message:lower():stripVT102(),
 	} )
 
-	if #logs > maxLogs then
+	if #logs > chat.config.logLines then
 		table.remove( logs, 1 )
 	end
 end

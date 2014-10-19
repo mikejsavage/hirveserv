@@ -6,6 +6,7 @@ local config = setmetatable( {
 	tempAuthDuration = 60,
 	chroot = false,
 	runas = false,
+	logLines = 2500,
 }, { __index = { } } )
 
 local fn, err = loadfile( "config.lua", "t", config )
