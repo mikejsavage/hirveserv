@@ -91,6 +91,12 @@ function Client:processData()
 			end
 		end
 	end
+
+	if self.state == "connecting" then
+		if self.dataBuffer:len() > 1024 then
+			self:kill()
+		end
+	end
 end
 
 function Client:raw( data )
