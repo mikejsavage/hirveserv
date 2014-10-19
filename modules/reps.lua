@@ -13,6 +13,7 @@ local patterns = {
 		"watches (.-) get PLAGUED!",
 		"notices (.-) get PLAGUED!",
 		"REPORTS %-> %[(.-)%] is %[PLAGUED%]",
+		"%- %[(.-)%]%[Plagued%]",
 	},
 	{
 		"reports (.-) is DISPELLED !",
@@ -23,6 +24,7 @@ local patterns = {
 		"notices (.-) is DISPELLED!",
 		"REPORTS %-> %[(.-)%] is %[DISPELLED%]",
 		"chats to everybody, '(.-)'s has just been DISPELLED!",
+		"%- %[(.-)%]%[Sanc%]%[Dispelled%]",
 	},
 	{
 		"reports (.-) just TELEPORTED !",
@@ -30,6 +32,7 @@ local patterns = {
 		"notices (.-) just TELEPORTED away!",
 		"watches as (.-) TELEPORTS away!",
 		"REPORTS %-> %[(.-)%] %[TELEPORTED%]",
+		"%- %[(.-)%]%[Teleported%]",
 	},
 	{
 		"reports (.-) is BLINDED !",
@@ -40,11 +43,13 @@ local patterns = {
 		"watches (.-) get BLINDED!",
 		"notices (.-) get BLINDED!",
 		"REPORTS %-> %[(.-)%] is %[BLIND%]",
+		"%- %[(.-)%]%[Blinded%]",
 	},
 	{
 		"reports (.-) is CURSED !",
 		"reports: (.-) is CURSED!",
 		"%[([^[]-) has been cursed%]",
+		"%[(^[]-)%] has been Cursed",
 		"watches (.-) get CURSED!",
 		"REPORTS %-> %[(.-)%] is %[CURSED%]",
 	},
@@ -59,6 +64,7 @@ local patterns = {
 		"%[([^[]-)%] has been Poisoned",
 		"watches as (.-) becomes POISONED!",
 		"REPORTS %-> %[(.-)%] is %[POISONED%]",
+		"%- %[(.-)%]%[Poisoned%]",
 	},
 	{
 		"reports (.-) is WEAKENED !",
@@ -71,6 +77,7 @@ local patterns = {
 		"reports .- just %-RESURRECTED%- (.-) !",
 		"reports .- just %+%+RESSED%+%+ (.-) !",
 		"REPORTS %-> %[(.-)%] %[RESSED%] by",
+		"%*%*%* (.-) was just RESURRECTED",
 	},
 	{
 		"reports .- just HANDSED (.-) !",
@@ -86,6 +93,7 @@ local patterns = {
 		"reports (.+) is MUFFLED !",
 		"%[([^[]-)%] has been Muffled",
 		"REPORTS %-> %[(.-)%] is %[MUFFLED%] at",
+		"%- %[(.-)%]%[Muffled%]",
 	},
 }
 
@@ -102,6 +110,8 @@ local silence = {
 	"I have been Sanced",
 	"I have lost Sanctuary",
 	"I have been Disarmed by",
+
+	"%[.-%]%[Imaged%]",
 }
 
 for _, spell in ipairs( patterns ) do
