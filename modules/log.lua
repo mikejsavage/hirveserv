@@ -1,7 +1,10 @@
 local logs = { }
 
+local defaultLines = 20
+local maxLines = 200
+
 local function sendLogs( client, messages, needle )
-	messages = math.min( tonumber( messages ) or 20, 50 )
+	messages = math.min( tonumber( messages ) or defaultLines, maxLines )
 	needle = needle and needle:lower() or ""
 
 	local output = { }
