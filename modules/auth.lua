@@ -358,7 +358,7 @@ chat.command( "addip", "user", {
 	end,
 
 	[ "^(%S+)%s+(%d+)$" ] = addIP,
-}, "<where you are connecting from> [network prefix]", "Add an authenticated IP" )
+}, "<name of PC, home/work/etc> [network prefix]", "Add an authenticated IP" )
 
 chat.command( "delip", "user", function( client, args )
 	local idx
