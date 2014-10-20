@@ -28,5 +28,13 @@ for file in lfs.dir( "data/users" ) do
 				print( file )
 			end
 		end
+
+		local name = file:match( "^(.+)%.json$" )
+		if bcrypt.verify( name, user.password ) then
+			print( file, "name" )
+		end
+		if bcrypt.verify( name:reverse(), user.password ) then
+			print( file, "eman" )
+		end
 	end
 end
