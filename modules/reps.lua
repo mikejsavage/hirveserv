@@ -112,6 +112,11 @@ local silence = {
 	"I have been Disarmed by",
 
 	"%[.-%]%[Imaged%]",
+
+	"lybicat.+TRIP",
+	"lybicat.+trip",
+	"TRIP.+lybicat",
+	"trip.+lybicat",
 }
 
 for _, spell in ipairs( patterns ) do
