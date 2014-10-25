@@ -216,11 +216,10 @@ chat.command( "whois", nil, function( client, name )
 		end
 	end
 
-	client:msg( "Whois #ly%s#lw: #lwprivs[#lm%s#lw] #lwclients[%s#lw] #lwversion[#lr%s#lw]",
+	client:msg( "Whois #ly%s#lw: #lwprivs[#lm%s#lw] #lwclients[%s#lw]",
 		other.name,
 		table.concat( privs, " " ),
-		table.concat( clients, " " ),
-		other.version or "<unknown>"
+		table.concat( clients, " " )
 	)
 end, "<account>", "Displays account info" )
 
