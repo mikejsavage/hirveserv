@@ -22,6 +22,8 @@ local CommandBytes = {
 
 local Commands = { }
 
+local MaxMessageLength = 4096
+
 for name, byte in pairs( CommandBytes ) do
 	Commands[ byte ] = name
 end
@@ -71,7 +73,32 @@ function MMClient:send( command, args )
 
 	assert( byte, "bad command: " .. command )
 
-	self:raw( byte .. args .. "\255" )
+	if args:len() < MaxMessageLength then
+		self:raw( byte .. args .. "\255" )
+	else
+		local head = 1
+		while head < args:len() do
+			local tail = head - 1
+			local hasNewline = true
+			local breakAt = head + MaxMessageLength
+
+			while true do
+				local newlinePos = args:find( "\n", tail + 1 )
+				if not newlinePos or newlinePos > breakAt then
+					break
+				end
+				tail = newlinePos
+			end
+
+			if tail == head - 1 then
+				tail = breakAt
+				hasNewline = false
+			end
+
+			self:raw( byte .. args:sub( head, tail - ( hasNewline and 1 or 0 ) ) .. "\255" )
+			head = tail + 1
+		end
+	end
 end
 
 local _M = { client = MMClient }
