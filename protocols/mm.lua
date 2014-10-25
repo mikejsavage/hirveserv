@@ -73,7 +73,7 @@ function MMClient:send( command, args )
 
 	assert( byte, "bad command: " .. command )
 
-	if args:len() < MaxMessageLength then
+	if args:len() < MaxMessageLength or self.version == "MudGangster" then
 		self:raw( byte .. args .. "\255" )
 	else
 		local head = 1
