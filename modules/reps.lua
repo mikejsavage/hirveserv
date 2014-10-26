@@ -76,6 +76,7 @@ local patterns = {
 	{
 		"reports .- just %-RESURRECTED%- (.-) !",
 		"reports .- just %+%+RESSED%+%+ (.-) !",
+		"reports .- just %+%+RESSED%+%+(.-) !",
 		"REPORTS %-> %[(.-)%] %[RESSED%] by",
 		"%*%*%* (.-) was just RESURRECTED",
 	},
