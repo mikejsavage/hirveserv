@@ -98,8 +98,6 @@ local patterns = {
 	},
 }
 
-local reps = { }
-
 local silence = {
 	"reports .- is FAERIED !",
 	"reports: .- is FAERIE FIRED!",
@@ -119,6 +117,12 @@ local silence = {
 	"TRIP.+lybicat",
 	"trip.+lybicat",
 }
+
+local badTargets = {
+	[ "My" ] = true,
+}
+
+local reps = { }
 
 for _, spell in ipairs( patterns ) do
 	table.insert( reps, {
@@ -143,7 +147,7 @@ local function isRepeatRep( message, now )
 	for _, spell in ipairs( reps ) do
 		local target = targetFromRep( spell, message )
 
-		if target then
+		if target and not badTargets[ target ] then
 			if spell.last.target == target and spell.last.gagUntil >= now then
 				spell.last.gagUntil = now + GagFor
 
