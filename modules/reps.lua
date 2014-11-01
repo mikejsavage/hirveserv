@@ -121,6 +121,8 @@ local silence = {
 local badTargets = {
 	[ "My" ] = true,
 	[ "I'm" ] = true,
+	[ "Someone" ] = true,
+	[ "someone" ] = true,
 }
 
 local reps = { }
