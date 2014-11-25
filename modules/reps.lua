@@ -14,6 +14,7 @@ local patterns = {
 		"notices (.-) get PLAGUED!",
 		"REPORTS %-> %[(.-)%] is %[PLAGUED%]",
 		"%- %[(.-)%]%[Plagued%]",
+		", '%((.-)%)%-%(Plagued%) at",
 	},
 	{
 		"reports (.-) is DISPELLED !",
@@ -25,6 +26,7 @@ local patterns = {
 		"REPORTS %-> %[(.-)%] is %[DISPELLED%]",
 		"chats to everybody, '(.-)'s has just been DISPELLED!",
 		"%- %[(.-)%]%[Sanc%]%[Dispelled%]",
+		", '%((.-)%)%-%(Sanctuary%)%(Dispelled%) at",
 	},
 	{
 		"reports (.-) just TELEPORTED !",
@@ -33,6 +35,7 @@ local patterns = {
 		"watches as (.-) TELEPORTS away!",
 		"REPORTS %-> %[(.-)%] %[TELEPORTED%]",
 		"%- %[(.-)%]%[Teleported%]",
+		", '%((.-)%)%-%(Teleported%) at",
 	},
 	{
 		"reports (.-) is BLINDED !",
@@ -44,6 +47,7 @@ local patterns = {
 		"notices (.-) get BLINDED!",
 		"REPORTS %-> %[(.-)%] is %[BLIND%]",
 		"%- %[(.-)%]%[Blinded%]",
+		", '%((.-)%)%-%(Blinded%) at",
 	},
 	{
 		"reports (.-) is CURSED !",
@@ -52,10 +56,12 @@ local patterns = {
 		"%[(^[]-)%] has been Cursed",
 		"watches (.-) get CURSED!",
 		"REPORTS %-> %[(.-)%] is %[CURSED%]",
+		", '%((.-)%)%-%(Cursed%) at",
 	},
 	{
 		"reports (.-) is CHILLED !",
 		"REPORTS %-> %[(.-)%] is %[CHILLED%]",
+		", '%((.-)%)%-%(Chilled%) at",
 	},
 	{
 		"reports (.-) is POISONED !",
@@ -65,6 +71,7 @@ local patterns = {
 		"watches as (.-) becomes POISONED!",
 		"REPORTS %-> %[(.-)%] is %[POISONED%]",
 		"%- %[(.-)%]%[Poisoned%]",
+		", '%((.-)%)%-%(Cursed%) at",
 	},
 	{
 		"reports (.-) is WEAKENED !",
@@ -72,6 +79,7 @@ local patterns = {
 		"reports: (.-) is WEAKENED!",
 		"REPORTS %-> %[(.-)%] is %[WEAKENED%]",
 		"%[([^[]-) has been weakened%]",
+		", '%((.-)%)%-%(Weakened%) at",
 	},
 	{
 		"reports .- just %-RESURRECTED%- (.-) !",
@@ -79,6 +87,7 @@ local patterns = {
 		"reports .- just %+%+RESSED%+%+(.-) !",
 		"REPORTS %-> %[(.-)%] %[RESSED%] by",
 		"%*%*%* (.-) was just RESURRECTED",
+		", '%((.-)%) has been %(Resurrected%) at",
 	},
 	{
 		"reports .- just HANDSED (.-) !",
