@@ -44,11 +44,16 @@ end
 
 local function onConnection()
 	-- TODO: error
-	local client = Client.new( server:accept() )
+	local socket = server:accept()
+
+	socket:settimeout( 0 )
+	socket:setoption( "keepalive", true )
+
+	local client = Client.new( socket )
 
 	ev.IO.new(
 		onData( client ),
-		client.socket:getfd(),
+		socket:getfd(),
 		ev.READ
 	):start( loop )
 end
@@ -63,6 +68,38 @@ local function sendPings()
 	end
 end
 
+local function startWSServer()
+	local websocket = require( "websocket" ).server.ev
+
+	local wsServer = websocket.listen( {
+		port = chat.config.wsPort,
+
+		protocols = {
+			chat = function( ws )
+				local client = Client.new( ws, true )
+
+				ws:on_message( function( ws, message )
+					local ok, err = pcall( client.onData, client, message )
+
+					if not ok then
+						log.error( "client.onData: %s", err )
+						client:kill()
+					end
+				end )
+
+				ws:on_close( function()
+					if client.state == "chatting" then
+						modules.fireEvent( "disconnect", client )
+					end
+
+					watcher:stop( loop )
+					client:kill()
+				end )
+			end,
+		}
+	} )
+end
+
 function _M.init()
 	server = assert( socket.bind( "*", chat.config.port ) )
 
@@ -74,6 +111,10 @@ function _M.init()
 		server:getfd(),
 		ev.READ
 	):start( loop )
+
+	if chat.config.wsPort then
+		startWSServer()
+	end
 
 	ev.Timer.new( sendPings, 30, 30 ):start( loop )
 end

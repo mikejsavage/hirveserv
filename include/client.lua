@@ -28,15 +28,14 @@ local function connectionTimeout( client )
 	end
 end
 
-function _M.new( socket )
-	socket:settimeout( 0 )
-	socket:setoption( "keepalive", true )
-
+function _M.new( socket, isws )
 	local client = {
 		dataBuffer = "",
 
 		socket = socket,
 		state = "connecting",
+
+		websocket = isws,
 
 		handlers = { },
 	}
@@ -55,7 +54,12 @@ function Client:kill( msg )
 	end
 
 	self.state = "killed"
-	self.socket:shutdown()
+
+	if self.isws then
+		self.socket:close()
+	else
+		self.socket:shutdown()
+	end
 
 	table.removeValue( chat.clients, self )
 
