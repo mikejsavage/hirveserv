@@ -95,6 +95,10 @@ local function startWSServer()
 					watcher:stop( loop )
 					client:kill()
 				end )
+
+				-- this doesn't mute handshake errors because
+				-- lua-websockets is great
+				ws:on_error( function() end )
 			end,
 		}
 	} )
