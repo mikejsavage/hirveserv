@@ -150,7 +150,7 @@ chat.handler( "addScript", sendsPM, function( client, name, description, callbac
 		client:msg(
 			"#lrNote that to work around a MM bug you will need to #lm/chat {%s} events#lw before sending events."
 			.. "\nYou can also download a fixed version from #lchttp://sourceforge.net/projects/mm2k6/files/mm2k6/MudMaster%%202k6%%20v4.2.8/"
-			% chat.config.name
+			, chat.config.name
 		)
 	end
 
