@@ -50,7 +50,7 @@ local function startWSServer()
 end
 
 chat.loop:wrap( function()
-	local server = socket.listen( "127.0.0.1", chat.config.port )
+	local server = socket.listen( "0.0.0.0", chat.config.port )
 
 	for con in server:clients() do
 		local client = Client.new( con )
