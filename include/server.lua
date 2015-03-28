@@ -38,7 +38,6 @@ local function startWSServer()
 						modules.fireEvent( "disconnect", client )
 					end
 
-					watcher:stop( loop )
 					client:kill()
 				end )
 
