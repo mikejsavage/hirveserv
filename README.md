@@ -100,7 +100,8 @@ Dependencies
 lua >= 5.1, libev, lua-ev, lua-cjson  
 lua-bcrypt for auth  
 tokyocabinet and tokyocabinet-lua for the bulletin board  
-lua-setuid for privilege dropping
+lua-setuid for privilege dropping  
+lua-arc4random for strong randomness
 
 
 Running
