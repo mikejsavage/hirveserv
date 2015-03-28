@@ -1,7 +1,5 @@
+local cqueues = require( "cqueues" )
 local lfs = require( "lfs" )
-
-local ev = require( "ev" )
-local loop = ev.Loop.default
 
 local json = require( "cjson.safe" )
 
@@ -14,13 +12,18 @@ local users = { }
 local tempAuths = { }
 
 -- temp auths garbage collection
-ev.Timer.new( function()
-	for name, time in pairs( tempAuths ) do
-		if time > os.time() then
-			tempAuths[ name ] = nil
+chat.loop:wrap( function()
+	while true do
+		cqueues.sleep( chat.config.tempAuthDuration * 2 )
+
+		local now = os.time()
+		for name, time in pairs( tempAuths ) do
+			if time > now then
+				tempAuths[ name ] = nil
+			end
 		end
 	end
-end, 1, chat.config.tempAuthDuration * 2 )
+end )
 
 local function saveUser( user )
 	if not user then
@@ -300,7 +303,7 @@ local function iptoint( ip )
 end
 
 local function currentIPIndex( client )
-	local addr = client.socket:getpeername()
+	local _, addr = client.socket:peername()
 	local n = iptoint( addr )
 
 	for i, ip in ipairs( client.user.ips ) do
@@ -343,7 +346,7 @@ local function addIP( client, name, prefix )
 		return
 	end
 
-	local ip = client.socket:getpeername()
+	local _, ip = client.socket:peername()
 
 	table.insert( client.user.ips, {
 		name = name,

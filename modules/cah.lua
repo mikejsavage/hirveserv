@@ -1,5 +1,4 @@
-local ev = require( "ev" )
-local loop = ev.Loop.default
+local cqueues = require( "cqueues" )
 
 local json = require( "cjson" )
 
@@ -307,7 +306,12 @@ local function advanceGame()
 	io.writeFile( "data/cah/state.json", json.encode( game ) )
 end
 
-ev.Timer.new( advanceGame, 60 * 5, 60 * 5 ):start( loop )
+chat.loop:wrap( function()
+	while true do
+		cqueues.sleep( 60 * 5 )
+		advanceGame()
+	end
+end )
 
 chat.listen( "reload", function()
 	io.writeFile( "data/cah/state.json", json.encode( game ) )

@@ -1,5 +1,4 @@
-local ev = require( "ev" )
-local loop = ev.Loop.default
+local cqueues = require( "cqueues" )
 
 local GagFor = 2
 
@@ -189,8 +188,7 @@ end
 chat.listen( "chat", function( from, message, recipients )
 	message = message:stripVT102()
 
-	local now = loop:update_now()
-
+	local now = cqueues.monotime()
 	if isRepeatRep( message, now ) or isSilenced( message ) then
 		table.clear( recipients )
 	end

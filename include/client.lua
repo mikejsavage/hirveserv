@@ -1,12 +1,10 @@
-local ev = require( "ev" )
-local loop = ev.Loop.default
-
+local cqueues = require( "cqueues" )
 local lfs = require( "lfs" )
 local json = require( "cjson.safe" )
 
 local modules = require( "include.modules" )
 
-local ConnectionTimeoutLength = 10
+local ConnectionTimeout = 10
 
 local _M = { }
 local Client = { }
@@ -21,13 +19,6 @@ for _, protocol in ipairs( chat.protocols ) do
 	setmetatable( protocol.client, { __index = Client } )
 end
 
-local function connectionTimeout( client )
-	return function( loop, timer )
-		client.socket:shutdown()
-		timer:stop( loop )
-	end
-end
-
 function _M.new( socket, isws )
 	local client = {
 		dataBuffer = "",
@@ -40,8 +31,13 @@ function _M.new( socket, isws )
 		handlers = { },
 	}
 
-	client.timerConnection = ev.Timer.new( connectionTimeout( client ), ConnectionTimeoutLength, 0 )
-	client.timerConnection:start( loop )
+	chat.loop:wrap( function()
+		cqueues.sleep( ConnectionTimeout )
+
+		if client.state == "connecting" then
+			client.socket:shutdown( "w" )
+		end
+	end )
 
 	setmetatable( client, { __index = Client } )
 
@@ -85,9 +81,6 @@ function Client:processData()
 
 			self.state = "connected"
 
-			self.timerConnection:stop( loop )
-			self.timerConnection = nil
-
 			if chat.config.auth then
 				self:pushHandler( "auth" )
 			else
@@ -104,7 +97,8 @@ function Client:processData()
 end
 
 function Client:raw( data )
-	self.socket:send( data )
+	self.socket:write( data )
+	self.socket:flush()
 end
 
 function Client:handler( command )

@@ -1,7 +1,6 @@
 #! /usr/bin/lua
 
-local ev = require( "ev" )
-local loop = ev.Loop.default
+local cqueues = require( "cqueues" )
 
 -- cd into binary dir for convenience
 local lfs = require( "lfs" )
@@ -10,6 +9,14 @@ local serverDir = arg[ 0 ]:match( "^(.-)/[^/]*$" )
 if serverDir then
 	lfs.chdir( serverDir )
 end
+
+-- init
+chat = { }
+chat.loop = cqueues.new()
+chat.config = require( "include.config" )
+
+require( "include.utils" )
+log = require( "include.log" )
 
 lfs.mkdir( "data" )
 
@@ -23,20 +30,8 @@ else
 	math.randomseed( os.time() )
 end
 
--- init
-chat = { }
-
-require( "include.sigint" )
-require( "include.utils" )
-log = require( "include.log" )
-
-chat.config = require( "include.config" )
-
-local server = require( "include.server" )
-local modules = require( "include.modules" )
-
-server.init()
-modules.load()
+require( "include.server" )
+require( "include.modules" ).load()
 
 if chat.config.chroot or chat.config.runas then
 	local setuid = require( "setuid" )
@@ -60,4 +55,4 @@ if chat.config.chroot or chat.config.runas then
 	end
 end
 
-loop:loop()
+assert( chat.loop:loop() )

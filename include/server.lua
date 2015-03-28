@@ -1,65 +1,11 @@
-local ev = require( "ev" )
-local socket = require( "socket" )
+local cqueues = require( "cqueues" )
+local socket = require( "cqueues.socket" )
 
 local Client = require( "include.client" )
 local modules = require( "include.modules" )
 
-local _M = { }
-
-local loop = ev.Loop.default
-local server
-
-local function onData( client )
-	return function( loop, watcher )
-		-- lol
-		local _, err, data = client.socket:receive( "*a" )
-
-		if err == "closed" then
-			if client.state == "chatting" then
-				modules.fireEvent( "disconnect", client )
-			end
-
-			watcher:stop( loop )
-			client:kill()
-
-			return
-		end
-
-		if not data then
-			data = _
-		end
-
-		if data then
-			local ok, errData = pcall( client.onData, client, data )
-
-			if not ok then
-				log.error( "client.onData: %s", errData )
-				client:kill()
-			end
-		else
-			log.error( "data == nil: %s", err )
-		end
-	end
-end
-
-local function onConnection()
-	-- TODO: error
-	local socket = server:accept()
-
-	socket:settimeout( 0 )
-	socket:setoption( "keepalive", true )
-
-	local client = Client.new( socket )
-
-	ev.IO.new(
-		onData( client ),
-		socket:getfd(),
-		ev.READ
-	):start( loop )
-end
-
 local function sendPings()
-	local now = tostring( loop:update_now() )
+	local now = tostring( cqueues.monotime() )
 
 	for _, client in ipairs( chat.clients ) do
 		if client.state ~= "connecting" then
@@ -104,23 +50,42 @@ local function startWSServer()
 	} )
 end
 
-function _M.init()
-	server = assert( socket.bind( "*", chat.config.port ) )
+chat.loop:wrap( function()
+	local server = socket.listen( "127.0.0.1", chat.config.port )
 
-	server:settimeout( 0 )
-	server:setoption( "keepalive", true )
+	for con in server:clients() do
+		local client = Client.new( con )
 
-	ev.IO.new(
-		onConnection,
-		server:getfd(),
-		ev.READ
-	):start( loop )
+		chat.loop:wrap( function()
+			while true do
+				local data = con:read( -4096 )
+				if not data then
+					break
+				end
 
-	if chat.config.wsPort then
-		startWSServer()
+				local ok, err = pcall( client.onData, client, data )
+				if not ok then
+					log.error( "client.onData: %s", err )
+					client:kill()
+				end
+			end
+
+			if client.state == "chatting" then
+				modules.fireEvent( "disconnect", client )
+			end
+
+			con:shutdown( "w" )
+		end )
 	end
+end)
 
-	ev.Timer.new( sendPings, 30, 30 ):start( loop )
+chat.loop:wrap( function()
+	while true do
+		cqueues.sleep( 30 )
+		sendPings()
+	end
+end )
+
+if chat.config.wsPort then
+	startWSServer()
 end
-
-return _M
