@@ -115,7 +115,7 @@ Create a `config.lua`, for example:
 	chroot = true
 	runas = "chat"
 
-See `include/defaults.lua` for a list of settings.
+See `include/config.lua` for a full list of settings.
 
 On first run it will prompt you to create an admin account and give you
 a password for it, which you should be able to connect normally with.
