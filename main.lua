@@ -12,7 +12,16 @@ if serverDir then
 end
 
 lfs.mkdir( "data" )
-math.randomseed( os.time() )
+
+-- use arc4random if it's installed
+local ok, arc4 = pcall( require, "arc4random" )
+if ok then
+	log.info( "Using arc4random" )
+	math.random = arc4.random
+else
+	-- TODO: seed from urandom?
+	math.randomseed( os.time() )
+end
 
 -- init
 chat = { }
