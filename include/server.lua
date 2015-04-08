@@ -65,15 +65,15 @@ chat.loop:wrap( function()
 				local ok, err = pcall( client.onData, client, data )
 				if not ok then
 					log.error( "client.onData: %s", err )
-					client:kill()
+					break
 				end
 			end
+
+			client:kill()
 
 			if client.state == "chatting" then
 				modules.fireEvent( "disconnect", client )
 			end
-
-			con:shutdown( "w" )
 		end )
 	end
 end)
