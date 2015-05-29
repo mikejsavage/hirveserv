@@ -49,6 +49,10 @@ function Client:kill( msg )
 		self:msg( msg )
 	end
 
+	if self.state == "chatting" then
+		modules.fireEvent( "disconnect", self )
+	end
+
 	self.state = "killed"
 
 	if self.isws then

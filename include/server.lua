@@ -34,10 +34,6 @@ local function startWSServer()
 				end )
 
 				ws:on_close( function()
-					if client.state == "chatting" then
-						modules.fireEvent( "disconnect", client )
-					end
-
 					client:kill()
 				end )
 
@@ -70,10 +66,6 @@ chat.loop:wrap( function()
 			end
 
 			client:kill()
-
-			if client.state == "chatting" then
-				modules.fireEvent( "disconnect", client )
-			end
 		end )
 	end
 end)
