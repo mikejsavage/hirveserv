@@ -26,6 +26,7 @@ local patterns = {
 		"chats to everybody, '(.-)'s has just been DISPELLED!",
 		"%- %[(.-)%]%[Sanc%]%[Dispelled%]",
 		", '%((.-)%)%-%(Sanctuary%)%(Dispelled%) at",
+		"chats to everybody, '%[(.-)'s%] has been Dispelled!",
 	},
 	{
 		"reports (.-) just TELEPORTED !",
