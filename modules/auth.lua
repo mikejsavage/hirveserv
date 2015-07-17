@@ -8,7 +8,7 @@ local words = require( "include.words" )
 
 lfs.mkdir( "data/users" )
 
-local users = { }
+chat.users = { }
 local tempAuths = { }
 
 -- temp auths garbage collection
@@ -81,7 +81,7 @@ for file in lfs.dir( "data/users" ) do
 		local contents, err = io.contents( "data/users/" .. file )
 
 		if contents then
-			users[ user ] = checkUser( user, json.decode( contents ) )
+			chat.users[ user ] = checkUser( user, json.decode( contents ) )
 		else
 			log.warn( "Couldn't read user json: %s", err )
 		end
@@ -109,7 +109,7 @@ chat.command( "adduser", "adduser", {
 	[ "^(%S+)$" ] = function( client, name )
 		local lower = name:lower()
 
-		if users[ lower ] and not users[ lower ].pending then
+		if chat.users[ lower ] and not chat.users[ lower ].pending then
 			client:msg( "#ly%s#lw already has an account!", name )
 
 			return
@@ -118,13 +118,13 @@ chat.command( "adduser", "adduser", {
 		local password = words.random()
 		local digest = bcrypt.digest( password, chat.config.bcryptRounds )
 
-		users[ lower ] = {
+		chat.users[ lower ] = {
 			password = digest,
 			pending = true,
 		}
 
-		checkUser( lower, users[ lower ] )
-		users[ lower ]:save()
+		checkUser( lower, chat.users[ lower ] )
+		chat.users[ lower ]:save()
 
 		client:msg( "Ok! Tell #ly%s#lw their password is #lm%s#lw.", name, password )
 		chat.msg( "#ly%s#lw added user #ly%s#lw.", client.name, lower )
@@ -134,7 +134,7 @@ chat.command( "adduser", "adduser", {
 chat.command( "deluser", "accounts", function( client, name )
 	local lower = name:lower()
 
-	if not users[ lower ] then
+	if not chat.users[ lower ] then
 		client:msg( "#ly%s#lw doesn't have an account.", name )
 
 		return
@@ -146,7 +146,7 @@ chat.command( "deluser", "accounts", function( client, name )
 		error( "Couldn't delete user: %s" % err )
 	end
 
-	users[ lower ] = nil
+	chat.users[ lower ] = nil
 
 	chat.msg( "#ly%s#lw deleted account #ly%s#lw.", client.name, lower )
 end, "<account>", "Remove an account" )
@@ -154,7 +154,7 @@ end, "<account>", "Remove an account" )
 chat.command( "reset", "accounts", function( client, name )
 	local lower = name:lower()
 
-	if not users[ lower ] then
+	if not chat.users[ lower ] then
 		client:msg( "#ly%s#lw doesn't have an account.", name )
 
 		return
@@ -163,9 +163,9 @@ chat.command( "reset", "accounts", function( client, name )
 	local password = words.random()
 	local digest = bcrypt.digest( password, chat.config.bcryptRounds )
 
-	users[ lower ].password = digest
-	users[ lower ].pending = true
-	users[ lower ]:save()
+	chat.users[ lower ].password = digest
+	chat.users[ lower ].pending = true
+	chat.users[ lower ]:save()
 
 	client:msg( "Ok! Tell #ly%s#lw their password is #lm%s#lw.", name, password )
 end, "<account>", "Reset someone's password" )
@@ -187,7 +187,7 @@ end, "<password>", "Change your password" )
 
 chat.command( "whois", nil, function( client, name )
 	local lower = name:lower()
-	local other = users[ lower ]
+	local other = chat.users[ lower ]
 
 	if not other then
 		other = chat.clientFromName( lower )
@@ -228,7 +228,7 @@ end, "<account>", "Displays account info" )
 
 chat.command( "addprivs", "accounts", {
 	[ "^(%S+)%s+(.-)$" ] = function( client, name, privs )
-		local other = users[ name:lower() ]
+		local other = chat.users[ name:lower() ]
 
 		if not other then
 			client:msg( "There's nobody called #ly%s#lw.", name )
@@ -254,7 +254,7 @@ chat.command( "addprivs", "accounts", {
 
 chat.command( "remprivs", "accounts", {
 	[ "^(%S+)%s+(.-)$" ] = function( client, name, privs )
-		local other = users[ name:lower() ]
+		local other = chat.users[ name:lower() ]
 
 		if not other then
 			client:msg( "There's nobody called #ly%s#lw.", name )
@@ -438,7 +438,7 @@ end )
 chat.handler( "auth", { "pm" }, function( client )
 	local lower = client.name:lower()
 
-	client.user = users[ client.name:lower() ]
+	client.user = chat.users[ client.name:lower() ]
 
 	if not client.user then
 		if tempAuths[ lower ] and os.time() < tempAuths[ lower ] then
@@ -474,7 +474,7 @@ chat.handler( "auth", { "pm" }, function( client )
 	end
 end )
 
-local makeFirstAccount = chat.config.auth and #table.keys( users ) == 0
+local makeFirstAccount = chat.config.auth and #table.keys( chat.users ) == 0
 
 if makeFirstAccount then
 	io.stdout:write( "Let's make an account! What do you want the username to be? " )
@@ -495,14 +495,14 @@ if makeFirstAccount then
 
 	local digest = bcrypt.digest( password, chat.config.bcryptRounds )
 
-	users[ name ] = {
+	chat.users[ name ] = {
 		password = digest,
 		pending = true,
 		privs = { all = true },
 	}
 
-	checkUser( name, users[ name ] )
-	users[ name ]:save()
+	checkUser( name, chat.users[ name ] )
+	chat.users[ name ]:save()
 
 	print( "Ok! %s's password is %s." % { name, password } )
 end
