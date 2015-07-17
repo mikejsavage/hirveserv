@@ -50,7 +50,7 @@ chat.command( "whatsapp", "user", {
 		elseif claims[ client.user ] then
 			client:msg( "#ly%s#lw is claiming they're you. Use #lmwhatsapp confirm#lw if that's true.", claims[ client.user ] )
 		else
-			client:msg( "todo" )
+			client:msg( "Message #ly%s#lw to #lm%s#lw to register.", client.user.name, chat.config.whatsit )
 		end
 	end,
 
