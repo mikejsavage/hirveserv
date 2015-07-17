@@ -101,7 +101,8 @@ lua >= 5.2 or luajit, cqeueues, lua-cjson
 lua-bcrypt for auth  
 tokyocabinet and tokyocabinet-lua for the bulletin board  
 lua-setuid for privilege dropping  
-lua-arc4random for strong randomness
+lua-arc4random for strong randomness  
+whatsit for WhatsApp integration
 
 
 Running

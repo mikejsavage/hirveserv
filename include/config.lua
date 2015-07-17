@@ -7,6 +7,7 @@ local config = setmetatable( {
 	chroot = false,
 	runas = false,
 	logLines = 2500,
+	whatsit = false,
 }, { __index = { } } )
 
 local fn, err = loadfile( "config.lua", "t", config )
