@@ -23,14 +23,15 @@ end
 
 local function whatsappBroadcast( numbers, message )
 	for i, number in ipairs( numbers ) do
-		numbers[ i ] = number .. "@s.whatsapp.net"
+		whatsappMessage( number, message )
+		-- numbers[ i ] = number .. "@s.whatsapp.net"
 	end
 
-	whatsit:write( json.encode( {
-		action = "broadcast",
-		to = numbers,
-		body = message,
-	} ) .. "\n" )
+	-- whatsit:write( json.encode( {
+	-- 	action = "broadcast",
+	-- 	to = numbers,
+	-- 	body = message,
+	-- } ) .. "\n" )
 end
 
 local function numberToUser( phone )
