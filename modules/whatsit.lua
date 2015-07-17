@@ -46,7 +46,7 @@ end
 chat.command( "whatsapp", "user", {
 	[ "^$" ] = function( client )
 		if client.user.settings.whatsapp then
-			client:msg( "Your saved phone number is: #lm%s", client.user.settings.whatsapp )
+			client:msg( "Your saved phone number is: #ly%s#lw. Use #lmwhatsapp forget#lw to stop receiving messages.", client.user.settings.whatsapp )
 		elseif claims[ client.user ] then
 			client:msg( "#ly%s#lw is claiming they're you. Use #lmwhatsapp confirm#lw if that's true.", claims[ client.user ] )
 		else
@@ -63,6 +63,13 @@ chat.command( "whatsapp", "user", {
 		client.user.settings.whatsapp = claims[ client.user ]
 		client.user:save()
 		claims[ client.user ] = nil
+
+		client:msg( "Ok!" )
+	end,
+
+	[ "^forget$" ] = function( client )
+		client.user.settings.whatsapp = nil
+		client.user:save()
 
 		client:msg( "Ok!" )
 	end,
