@@ -1,13 +1,13 @@
 local hours = 60 * 60
 local days = 24 * hours
 
-local medOffset = -5 * hours
+local medOffset = -4 * hours
 
 local newmoonPeriod = 15 * days
 local eclipsePeriod = 30 * days
 
-local newmoonReference = 1397589046
-local eclipseReference = 1397656546
+local newmoonReference = 1446891046
+local eclipseReference = 1446958546
 
 local function niceTime( ts )
 	local unit = "second"
