@@ -1,12 +1,20 @@
-require( "tokyocabinet" )
+local json = require( "cjson.safe" )
+
+lfs.mkdir( "data/board" )
 
 local PostsPerPage = 8
 
-local posts = tokyocabinet.tdbnew()
+local posts = { }
 
-posts:setxmsiz( 8 * 1024 )
-posts:open( "data/posts.tct", posts.OWRITER + posts.OCREAT )
-posts:setindex( "date", posts.ITDECIMAL + posts.ITKEEP )
+while true do
+	local i = #posts + 1
+	local post = io.contents( "data/board/%d.json" % i )
+	if not post then
+		break
+	end
+
+	posts[ i ] = json.decode( post )
+end
 
 local prompts = { }
 
@@ -25,14 +33,8 @@ end
 local function getNiceTitle( title, tags )
 	title = title:gsub( "#", "##" )
 
-	if type( tags ) == "table" then
-		for _, tag in ipairs( tags ) do
-			title = title .. tagColour( tag ) .. " ##" .. tag
-		end
-	else
-		for tag in tags:gmatch( "(%S+)" ) do
-			title = title .. tagColour( tag ) .. " ##" .. tag
-		end
+	for _, tag in ipairs( tags ) do
+		title = title .. tagColour( tag ) .. " ##" .. tag
 	end
 
 	return title
@@ -48,21 +50,16 @@ local function getHeader( post, id )
 end
 
 local function showBoard( client, page )
-	local query = tokyocabinet.tdbqrynew( posts )
-
-	query:setorder( "", query.QONUMDESC )
-	query:setlimit( PostsPerPage, ( page - 1 ) * PostsPerPage )
-
-	local result = query:search()
 	local output = { "#lwBulletin board:" }
 
-	for _, id in ipairs( result ) do
-		local post = posts[ id ]
+	local first = #posts - PostsPerPage * ( page - 1 )
+	local last = math.max( 1, ( first - PostsPerPage ) + 1 )
 
-		table.insert( output, getHeader( post, id ) )
+	for i = first, last, -1 do
+		table.insert( output, getHeader( posts[ i ], i ) )
 	end
 
-	if #result == PostsPerPage and posts[ page * PostsPerPage + 1 ] then
+	if ( first - last ) + 1 == PostsPerPage and posts[ page * PostsPerPage + 1 ] then
 		table.insert( output, "#lyread p%d#lw for more" % ( page + 1 ) )
 	end
 
@@ -101,7 +98,7 @@ chat.command( "read", "user", {
 }, "<post/p1/p2/etc>", "Look at the bulletin board" )
 
 chat.command( "post", "user", function( client, args )
-	local title, tagsStr = args:match( "^([^#]+)(.*)$" )
+	local title, tags = args:match( "^([^#]+)(.*)$" )
 
 	if not title then
 		client:msg( "Syntax: post <title> [##tag1 ##tag2 ...]" )
@@ -116,32 +113,29 @@ chat.command( "post", "user", function( client, args )
 
 		title = title:trim()
 
-		local tagsMap = { }
-		local tags = { }
-
-		for tag in tagsStr:gmatch( "#(%S+)" ) do
-			tagsMap[ tag ] = true
-		end
-
-		for tag in pairs( tagsMap ) do
-			table.insert( tags, tag )
-		end
-
-		table.sort( tags )
-
-		local id = posts:genuid()
-		posts[ id ] = {
+		local post = {
 			author = client.user.name,
 			date = os.time(),
-			tags = table.concat( tags, " " ),
 			title = title,
+			tags = { },
 			body = body,
 		}
-		posts:sync()
+
+		local tagsMap = { }
+		for tag in tags:gmatch( "#(%S+)" ) do
+			tagsMap[ tag ] = true
+		end
+		for tag in pairs( tagsMap ) do
+			table.insert( post.tags, tag )
+		end
+		table.sort( post.tags )
+
+		io.writeFile( "data/board/%d.json" % ( #posts + 1 ), json.encode( post ) )
+		posts[ #posts + 1 ] = post
 
 		table.clear( prompts )
 
-		chat.msg( "#ly%s#lw added a new post: #lm%s", client.user.name, getNiceTitle( title, tags ) )
+		chat.msg( "#ly%s#lw added a new post: #lm%s", client.user.name, getNiceTitle( title, post.tags ) )
 	end )
 end, "Post a message to the bulletin board" )
 
@@ -151,15 +145,13 @@ end )
 
 chat.prompt( function( client )
 	if client.user and not prompts[ client.user ] then
-		local query = tokyocabinet.tdbqrynew( posts )
+		local setPrompt = #posts > 0 and posts[ #posts ].date > ( client.user.settings.lastRead or 0 )
 
-		if client.user.settings.lastRead then
-			query:addcond( "date", query.QCNUMGT, client.user.settings.lastRead )
+		if #posts > 0 and client.user.settings.lastRead then
+			setPrompt = posts[ #posts ].date > client.user.settings.lastRead
 		end
 
-		local result = query:search()
-
-		prompts[ client.user ] = #result > 0 and "#ly[READ]" or ""
+		prompts[ client.user ] = setPrompt and "#ly[READ]" or ""
 	end
 
 	return prompts[ client.user ]

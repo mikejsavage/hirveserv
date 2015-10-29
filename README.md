@@ -32,6 +32,11 @@ you will be unable to load any new Lua modules on the fly.
 Upgrading
 ---------
 
+If you are running a version of hirveserv released before 29th Oct 2015
+and `data/board.tct` exists, you will need to run `tokyo-to-json.lua` to
+update the bulletin board to use the new format before loading the new
+module.
+
 If you are running a version of hirveserv from before the total rewrite
 (`data/users.sq3` exists) then you will need to run the latest old
 version of hirveserv to update the database to its most recent format
@@ -99,7 +104,6 @@ Dependencies
 
 lua >= 5.2 or luajit, cqeueues, lua-cjson  
 lua-bcrypt for auth  
-tokyocabinet and tokyocabinet-lua for the bulletin board  
 lua-setuid for privilege dropping  
 lua-arc4random for strong randomness  
 whatsit for WhatsApp integration
