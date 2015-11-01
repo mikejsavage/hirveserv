@@ -1,7 +1,7 @@
 local hours = 60 * 60
 local days = 24 * hours
 
-local medOffset = -4 * hours
+local medOffset = -5 * hours
 
 local newmoonPeriod = 15 * days
 local eclipsePeriod = 30 * days
