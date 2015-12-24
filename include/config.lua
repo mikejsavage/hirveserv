@@ -12,9 +12,8 @@ local config = setmetatable( {
 
 local fn, err = loadfile( "config.lua", "t", config )
 if not fn then
-	log.warn( "couldn't read config: %s", err )
-
-	return config
+	log.error( "reading config.lua failed: %s", err )
+	os.exit( 1 )
 end
 
 if _VERSION == "Lua 5.1" then
@@ -24,7 +23,6 @@ end
 local ok, err_run = pcall( fn )
 if not ok then
 	log.error( "reading config.lua failed: %s", err )
-
 	os.exit( 1 )
 end
 
