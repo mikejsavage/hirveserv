@@ -7,7 +7,7 @@ local function generic( tag )
 		local msg = form:format( ... )
 
 		print( "[" .. tag:upper() .. "]", form:format( ... ) )
-		modules.fireEvent( "error", tag, msg )
+		modules.fireEvent( tag, tag, msg )
 	end
 end
 
