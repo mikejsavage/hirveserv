@@ -1,5 +1,3 @@
-local cqueues = require( "cqueues" )
-
 local json = require( "cjson" )
 
 local white = json.decode( io.contents( "data/cah/white.json" ) )
@@ -193,7 +191,7 @@ end
 local function cmdVote( client, args )
 	if game.state ~= "votes" then
 		client:msg( "You can't vote now!" )
-		
+
 		return
 	end
 
@@ -306,12 +304,7 @@ local function advanceGame()
 	io.writeFile( "data/cah/state.json", json.encode( game ) )
 end
 
-chat.loop:wrap( function()
-	while true do
-		cqueues.sleep( 60 * 5 )
-		advanceGame()
-	end
-end )
+chat.every( 60 * 5, advanceGame )
 
 chat.listen( "reload", function()
 	io.writeFile( "data/cah/state.json", json.encode( game ) )

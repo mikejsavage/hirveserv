@@ -102,7 +102,7 @@ as appropriate.
 Dependencies
 ------------
 
-lua >= 5.2 or luajit, cqeueues, lua-cjson  
+lua >= 5.1, lua-cjson  
 lua-bcrypt for auth  
 lua-setuid for privilege dropping  
 lua-arc4random for strong randomness  

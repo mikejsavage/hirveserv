@@ -1,5 +1,3 @@
-local cqueues = require( "cqueues" )
-
 local GagFor = 2
 
 local patterns = {
@@ -185,11 +183,11 @@ local function isSilenced( message )
 
 	return false
 end
-			
+
 chat.listen( "chat", function( from, message, recipients )
 	message = message:stripVT102()
 
-	local now = cqueues.monotime()
+	local now = chat.now()
 	if isRepeatRep( message, now ) or isSilenced( message ) then
 		table.clear( recipients )
 	end

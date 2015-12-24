@@ -1,4 +1,3 @@
-local cqueues = require( "cqueues" )
 local lfs = require( "lfs" )
 
 local json = require( "cjson.safe" )
@@ -12,15 +11,11 @@ chat.users = { }
 local tempAuths = { }
 
 -- temp auths garbage collection
-chat.loop:wrap( function()
-	while true do
-		cqueues.sleep( chat.config.tempAuthDuration * 2 )
-
-		local now = os.time()
-		for name, time in pairs( tempAuths ) do
-			if time > now then
-				tempAuths[ name ] = nil
-			end
+chat.every( chat.config.tempAuthDuration * 2, function()
+	local now = os.time()
+	for name, time in pairs( tempAuths ) do
+		if time > now then
+			tempAuths[ name ] = nil
 		end
 	end
 end )
@@ -173,7 +168,7 @@ end, "<account>", "Reset someone's password" )
 chat.command( "setpw", "user", function( client, password )
 	if password == "" then
 		client:msg( "No empty passwords." )
-		
+
 		return
 	end
 
@@ -303,7 +298,7 @@ local function iptoint( ip )
 end
 
 local function currentIPIndex( client )
-	local _, addr = client.socket:peername()
+	local addr = client.socket:getpeername()
 	local n = iptoint( addr )
 
 	for i, ip in ipairs( client.user.ips ) do
@@ -383,7 +378,7 @@ chat.command( "delip", "user", function( client, args )
 
 		if not idx then
 			client:msg( "You aren't authenticated from #lm%s#lw. Use #lylsip#lw for a list.", args )
-			
+
 			return
 		end
 	end
@@ -395,7 +390,7 @@ chat.command( "delip", "user", function( client, args )
 
 	client:msg( "Removed #ly%s#lw from authenticated IPs.", name )
 end, "[name]", "Remove an authenticated IP" )
-		
+
 
 chat.handler( "register", { "pm" }, function( client )
 	client:msg( "Hey, #ly%s#lw, you should have been given an #lmextremely secret#lw password. #ly%s#lw me that!", client.name, client.pmSyntax )

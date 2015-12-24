@@ -123,7 +123,7 @@ chat.command( "wiki", "user", {
 		name = name:lower()
 		num = tonumber( num )
 		local page = pages[ name ]
-		
+
 		if not page then
 			client:msg( "No wiki entry for #ly%s#d.", name )
 			return

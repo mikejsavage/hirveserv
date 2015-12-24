@@ -1,11 +1,13 @@
-local cqueues = require( "cqueues" )
-local socket = require( "cqueues.socket" )
+local ev = require( "ev" )
+local socket = require( "socket" )
 
 local Client = require( "include.client" )
 local modules = require( "include.modules" )
 
+local PingInterval = 30
+
 local function sendPings()
-	local now = tostring( cqueues.monotime() )
+	local now = tostring( chat.now() )
 
 	for _, client in ipairs( chat.clients ) do
 		if client.state ~= "connecting" then
@@ -45,37 +47,65 @@ local function startWSServer()
 	} )
 end
 
-chat.loop:wrap( function()
-	local server = socket.listen( "0.0.0.0", chat.config.port )
+server = assert( socket.bind( "*", chat.config.port ) )
+server:settimeout( 0 )
+server:setoption( "keepalive", true )
 
-	for con in server:clients() do
-		local client = Client.new( con )
+local function onData( client )
+	return function( loop, watcher )
+		-- lol
+		local _, err, data = client.socket:receive( "*a" )
 
-		chat.loop:wrap( function()
-			while true do
-				local data = con:read( -4096 )
-				if not data then
-					break
-				end
-
-				local ok, err = pcall( client.onData, client, data )
-				if not ok then
-					log.error( "client.onData: %s", err )
-					break
-				end
-			end
-
+		if err == "closed" then
+			watcher:stop( loop )
 			client:kill()
-		end )
-	end
-end)
 
-chat.loop:wrap( function()
-	while true do
-		cqueues.sleep( 30 )
-		sendPings()
+			return
+		end
+
+		if not data then
+			data = _
+		end
+
+		if data then
+			local ok, errData = pcall( client.onData, client, data )
+
+			if not ok then
+				log.error( "client.onData: %s", errData )
+				client:kill()
+			end
+		else
+			log.error( "data == nil: %s", err )
+		end
 	end
-end )
+end
+
+local function onConnection()
+	local socket, err = server:accept()
+	if not socket then
+		log.warn( "server:accept failed: %s", err )
+		return
+	end
+
+	socket:settimeout( 0 )
+	socket:setoption( "keepalive", true )
+
+	local client = Client.new( socket )
+
+	ev.IO.new(
+		onData( client ),
+		socket:getfd(),
+		ev.READ
+	):start( chat.loop )
+end
+
+ev.IO.new(
+	onConnection,
+	server:getfd(),
+	ev.READ
+):start( chat.loop )
+
+chat.every( PingInterval, sendPings )
 
 if chat.config.wsPort then
 	startWSServer()

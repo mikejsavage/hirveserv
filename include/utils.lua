@@ -1,3 +1,5 @@
+local ev = require( "ev" )
+
 -- TODO: this is awful
 getmetatable( "" ).__mod = function( self, form )
 	if type( form ) == "table" then
@@ -249,4 +251,22 @@ end
 
 function string.uint( n )
 	return uconv( 4, n )
+end
+
+function chat.delay( wait, cb )
+	local timer = ev.Timer.new( cb, wait, 0 )
+	timer:start( chat.loop )
+
+	return timer
+end
+
+function chat.every( interval, cb )
+	local timer = ev.Timer.new( cb, interval, interval )
+	timer:start( chat.loop )
+
+	return timer
+end
+
+function chat.now()
+	return chat.loop:now()
 end

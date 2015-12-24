@@ -1,4 +1,3 @@
-local cqueues = require( "cqueues" )
 local json = require( "cjson.safe" )
 
 local sends = {
@@ -183,7 +182,7 @@ chat.handler( "addScript", sendsPM, function( client, name, description, callbac
 				client:msg( "Valid commands are #lgdone#lw or #lgcancel#lw." )
 			end
 		else
-			local now = cqueues.monotime()
+			local now = chat.now()
 
 			if command == "sendEvent" and not acceptEvents then
 				if not lastEvent or now - lastEvent >= 0.4 then

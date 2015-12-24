@@ -38,7 +38,7 @@ local function expandCommand( command )
 	elseif not validCommands[ command ] then
 		return nil
 	end
-	
+
 	return command
 end
 
@@ -85,7 +85,7 @@ chat.handler( "editor", { "pm" }, function( client, initorcb, callback )
 					local numbered = { }
 
 					for i, line in ipairs( lines ) do
-						numbered[ i ] = "#lw%2d.#d %s" % { i, line } 
+						numbered[ i ] = "#lw%2d.#d %s" % { i, line }
 					end
 
 					client:msg( "Your message:\n%s", table.concat( numbered, "\n" ) )

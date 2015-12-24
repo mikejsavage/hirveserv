@@ -1,6 +1,6 @@
 #! /usr/bin/lua
 
-local cqueues = require( "cqueues" )
+local ev = require( "ev" )
 
 -- cd into binary dir for convenience
 local lfs = require( "lfs" )
@@ -12,11 +12,13 @@ end
 
 -- init
 chat = { }
-chat.loop = cqueues.new()
-chat.config = require( "include.config" )
+chat.loop = ev.Loop.default
 
+require( "include.sigint" )
 require( "include.utils" )
 log = require( "include.log" )
+
+chat.config = require( "include.config" )
 
 lfs.mkdir( "data" )
 
@@ -55,4 +57,4 @@ if chat.config.chroot or chat.config.runas then
 	end
 end
 
-assert( chat.loop:loop() )
+chat.loop:loop()

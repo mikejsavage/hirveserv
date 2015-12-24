@@ -1,4 +1,3 @@
-local cqueues = require( "cqueues" )
 local lfs = require( "lfs" )
 local json = require( "cjson.safe" )
 
@@ -31,11 +30,9 @@ function _M.new( socket, isws )
 		handlers = { },
 	}
 
-	chat.loop:wrap( function()
-		cqueues.sleep( ConnectionTimeout )
-
+	chat.delay( ConnectionTimeout, function()
 		if client.state == "connecting" then
-			client.socket:shutdown( "w" )
+			client.socket:shutdown()
 		end
 	end )
 
@@ -101,8 +98,7 @@ function Client:processData()
 end
 
 function Client:raw( data )
-	self.socket:write( data )
-	self.socket:flush()
+	self.socket:send( data )
 end
 
 function Client:handler( command )
