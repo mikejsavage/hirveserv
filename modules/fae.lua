@@ -34,7 +34,7 @@ local function niceTime( ts )
 end
 
 chat.command( "fae", nil, function( client )
-	local now = os.time() + medOffset
+	local now = os.time( os.date( "!*t" ) ) + medOffset
 
 	local timeToNM = newmoonPeriod - ( ( now - newmoonReference ) % newmoonPeriod )
 	local timeToEC = eclipsePeriod - ( ( now - eclipseReference ) % eclipsePeriod )
