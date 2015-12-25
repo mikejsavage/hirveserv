@@ -3,7 +3,7 @@ local ev = require( "ev" )
 -- TODO: this is awful
 getmetatable( "" ).__mod = function( self, form )
 	if type( form ) == "table" then
-		local ok, err = pcall( string.format, self, unpack( form ) )
+		local ok, err = pcall( string.format, self, table.unpack( form ) )
 
 		if not ok then
 			print( self )
@@ -13,7 +13,7 @@ getmetatable( "" ).__mod = function( self, form )
 			error( err, 2 )
 		end
 
-		return self:format( unpack( form ) )
+		return self:format( table.unpack( form ) )
 	end
 
 	local ok, err = pcall( string.format, self, form )
@@ -105,6 +105,8 @@ function io.writeFile( path, contents )
 	assert( file:write( contents ) )
 	assert( file:close() )
 end
+
+table.unpack = table.unpack or unpack
 
 function table.insertBy( self, value, cmp )
 	local idx = 1
