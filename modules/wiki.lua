@@ -50,13 +50,13 @@ local function addMultiPage( path, name )
 end
 
 local function buildWiki()
-	if not io.readable( "data/wiki" ) then
+	if not io.readable( chat.config.dataDir .. "/wiki" ) then
 		return
 	end
 
-	for file in lfs.dir( "data/wiki" ) do
+	for file in lfs.dir( chat.config.dataDir .. "/wiki" ) do
 		if file ~= "." and file ~= ".." then
-			local fullPath = "data/wiki/" .. file
+			local fullPath = chat.config.dataDir .. "/wiki/" .. file
 			local attr = lfs.attributes( fullPath )
 
 			file = file:lower()

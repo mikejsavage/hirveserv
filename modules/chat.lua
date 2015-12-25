@@ -1,4 +1,4 @@
-local modules = require( "include.modules" )
+local modules = require( "modules" )
 
 local function handleChat( from, message )
 	local recipients = { }

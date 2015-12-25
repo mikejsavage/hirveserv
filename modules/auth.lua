@@ -3,9 +3,9 @@ local lfs = require( "lfs" )
 local json = require( "cjson.safe" )
 
 local bcrypt = require( "bcrypt" )
-local words = require( "include.words" )
+local words = require( "words" )
 
-lfs.mkdir( "data/users" )
+lfs.mkdir( chat.config.dataDir .. "/users" )
 
 chat.users = { }
 local tempAuths = { }
@@ -25,7 +25,7 @@ local function saveUser( user )
 		return
 	end
 
-	local file = assert( io.open( "data/users/%s.json" % user.name, "w" ) )
+	local file = assert( io.open( "%s/users/%s.json" % { chat.config.dataDir, user.name }, "w" ) )
 
 	local toSave = {
 		password = user.password,
@@ -69,11 +69,11 @@ local function checkUser( name, decoded, err )
 	return decoded
 end
 
-for file in lfs.dir( "data/users" ) do
+for file in lfs.dir( chat.config.dataDir .. "/users" ) do
 	local user = file:match( "^(%l+)%.json$" )
 
 	if user then
-		local contents, err = io.contents( "data/users/" .. file )
+		local contents, err = io.contents( chat.config.dataDir .. "/users/" .. file )
 
 		if contents then
 			chat.users[ user ] = checkUser( user, json.decode( contents ) )
@@ -135,7 +135,7 @@ chat.command( "deluser", "accounts", function( client, name )
 		return
 	end
 
-	local ok, err = os.remove( "data/users/%s.json" % lower )
+	local ok, err = os.remove( "%s/users/%s.json" % { chat.config.dataDir, lower } )
 
 	if not ok then
 		error( "Couldn't delete user: %s" % err )

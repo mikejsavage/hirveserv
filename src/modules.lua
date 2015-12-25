@@ -91,6 +91,8 @@ local function addPrompt( newPrompts, callback )
 end
 
 local function loadModule( path, newCommands, newCommandNames, newHandlers, newEvents, newPrompts )
+	log.info( "Loading module: " .. path )
+
 	local envchat = {
 		command = function( name, priv, handler, syntax, description )
 			addCommand( newCommands, newCommandNames, name, priv, handler, syntax, description )
@@ -157,13 +159,11 @@ function _M.load()
 	local newEvents = { }
 	local newPrompts = { }
 
-	log.info( "Loading modules..." )
-
-	for module in lfs.dir( "modules" ) do
+	for module in lfs.dir( chat.config.dataDir .. "/modules" ) do
 		if module:match( "%.lua$" ) then
-			log.info( "modules/%s", module )
-
-			loadModule( "modules/" .. module, newCommands, newCommandNames, newHandlers, newEvents, newPrompts )
+			loadModule( chat.config.dataDir .. "/modules/" .. module,
+				newCommands, newCommandNames, newHandlers,
+				newEvents, newPrompts )
 		end
 	end
 

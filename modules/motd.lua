@@ -1,4 +1,4 @@
-local motd = io.contents( "data/motd.txt" )
+local motd = io.contents( chat.config.dataDir .. "/motd.txt" )
 
 local function sendMotd( client )
 	if motd and motd ~= "" then
@@ -7,7 +7,7 @@ local function sendMotd( client )
 end
 
 local function updateMotd( client, newMotd )
-	local file = assert( io.open( "data/motd.txt", "w" ) )
+	local file = assert( io.open( chat.config.dataDir .. "/motd.txt", "w" ) )
 	file:write( newMotd )
 	file:close()
 

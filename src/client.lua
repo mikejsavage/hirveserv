@@ -1,7 +1,7 @@
 local lfs = require( "lfs" )
 local json = require( "cjson.safe" )
 
-local modules = require( "include.modules" )
+local modules = require( "modules" )
 
 local ConnectionTimeout = 10
 

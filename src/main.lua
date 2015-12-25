@@ -1,5 +1,3 @@
-#! /usr/bin/lua
-
 local ev = require( "ev" )
 
 -- cd into binary dir for convenience
@@ -14,11 +12,11 @@ end
 chat = { }
 chat.loop = ev.Loop.default
 
-require( "include.sigint" )
-require( "include.utils" )
-log = require( "include.log" )
+require( "sigint" )
+require( "utils" )
+log = require( "log" )
 
-chat.config = require( "include.config" )
+chat.config = require( "config" ).load( arg[ 1 ] )
 
 lfs.mkdir( "data" )
 
@@ -32,8 +30,8 @@ else
 	math.randomseed( os.time() )
 end
 
-require( "include.server" )
-require( "include.modules" ).load()
+require( "server" )
+require( "modules" ).load()
 
 if chat.config.chroot or chat.config.runas then
 	local setuid = require( "setuid" )

@@ -1,8 +1,8 @@
 local ev = require( "ev" )
 local socket = require( "socket" )
 
-local Client = require( "include.client" )
-local modules = require( "include.modules" )
+local Client = require( "client" )
+local modules = require( "modules" )
 
 local PingInterval = 30
 

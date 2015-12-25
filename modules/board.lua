@@ -1,6 +1,6 @@
 local json = require( "cjson.safe" )
 
-lfs.mkdir( "data/board" )
+lfs.mkdir( chat.config.dataDir .. "/board" )
 
 local PostsPerPage = 8
 
@@ -8,7 +8,7 @@ local posts = { }
 
 while true do
 	local i = #posts + 1
-	local post = io.contents( "data/board/%d.json" % i )
+	local post = io.contents( chat.config.dataDir .. "/board/%d.json" % i )
 	if not post then
 		break
 	end
@@ -130,7 +130,7 @@ chat.command( "post", "user", function( client, args )
 		end
 		table.sort( post.tags )
 
-		io.writeFile( "data/board/%d.json" % ( #posts + 1 ), json.encode( post ) )
+		io.writeFile( "%s/board/%d.json" % { chat.config.dataDir, #posts + 1 }, json.encode( post ) )
 		posts[ #posts + 1 ] = post
 
 		table.clear( prompts )

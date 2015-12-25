@@ -4,7 +4,7 @@ local MaxResults = 10
 
 local considers = { }
 
-lfs.mkdir( "data/consider" )
+lfs.mkdir( chat.config.dataDir .. "/consider" )
 
 local colours = {
 	acid = "#g",
@@ -49,9 +49,9 @@ local function addResists( consider, key, line )
 end
 
 local function buildConsiders()
-	for f in lfs.dir( "data/consider" ) do
+	for f in lfs.dir( chat.config.dataDir .. "/consider" ) do
 		if f:match( "%.txt$" ) then
-			local zone = assert( io.contents( "data/consider/" .. f ) )
+			local zone = assert( io.contents( chat.config.dataDir .. "/consider/" .. f ) )
 			local name, mobs = zone:match( "^([^\n]+)\n\n(.+)$" )
 
 			assert( name, "Bad zone: " .. f )

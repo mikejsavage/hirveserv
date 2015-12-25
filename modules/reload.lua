@@ -1,4 +1,4 @@
-local modules = require( "include.modules" )
+local modules = require( "modules" )
 
 chat.command( "reload", "all", function( client )
 	chat.event( "reload" )

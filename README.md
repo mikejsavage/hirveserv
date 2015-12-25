@@ -32,6 +32,14 @@ you will be unable to load any new Lua modules on the fly.
 Upgrading
 ---------
 
+On the 25th Dec 2015, hirveserv transitioned into a more
+traditional/proper filesystem layout, with the binary in `$PATH`, the
+config in `/etc`, and the data/modules in `/var`. Everything inside the
+data directory should be moved to `/var/lib/hirveserv` (or whatever you
+set `dataDir` to), and so should the modules directory. For example,
+your filesystem might contain `/var/lib/hirveserv/board` and
+`/var/lib/hirveserv/modules`.
+
 If you are running a version of hirveserv released before 29th Oct 2015
 and `data/board.tct` exists, you will need to run `tokyo-to-json.lua` to
 update the bulletin board to use the new format before loading the new
@@ -112,7 +120,7 @@ whatsit for WhatsApp integration
 Running
 -------
 
-Create a `config.lua`, for example:
+Create `/etc/hirveserv.conf`, for example:
 
 	name = "winnerserv"
 	port = 4055
@@ -120,8 +128,15 @@ Create a `config.lua`, for example:
 	chroot = true
 	runas = "chat"
 
-See `include/config.lua` for a full list of settings.
+See `src/config.lua` for a full list of settings and their defaults.
+
+Next, move the modules folder and `data/cah` into `/var/lib/hirveserv`
+(or whatever you set `dataDir` to in the config).
 
 On first run it will prompt you to create an admin account and give you
 a password for it, which you should be able to connect normally with.
 You can then `/chat 1 help` to get a list of commands.
+
+If you would like to run more than instance simultaneously, hirveserv
+looks at its first command line argument for an alternative config
+location, which can point to its own data directory.

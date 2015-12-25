@@ -39,7 +39,7 @@ local function validScript( script )
 end
 
 local function loadScripts()
-	for file in lfs.dir( "data/scripts" ) do
+	for file in lfs.dir( chat.config.dataDir .. "/scripts" ) do
 		local name = file:match( "^(.+)%.json$" )
 
 		if not name then
@@ -47,7 +47,7 @@ local function loadScripts()
 				log.warn( "Stray file in data/scripts: %s", file )
 			end
 		else
-			local script = json.decode( io.contents( "data/scripts/" .. file ) )
+			local script = json.decode( io.contents( chat.config.dataDir .. "/scripts/" .. file ) )
 
 			if script and validScript( script ) then
 				local lower = name:lower()
@@ -66,10 +66,11 @@ local function loadScripts()
 end
 
 local function saveScript( name )
-	io.writeFile( "data/scripts/" .. name .. ".json", json.encode( scriptsMap[ name:lower() ] ) )
+	io.writeFile( "%s/scripts/%s.json" % { chat.config.dataDir, name },
+		json.encode( scriptsMap[ name:lower() ] ) )
 end
 
-lfs.mkdir( "data/scripts" )
+lfs.mkdir( chat.config.dataDir .. "/scripts" )
 
 loadScripts()
 
@@ -287,7 +288,7 @@ local function deleteScript( client, name )
 		return
 	end
 
-	assert( os.remove( "data/scripts/" .. name .. ".json" ) )
+	assert( os.remove( "%s/scripts/%s.json" % { chat.config.dataDir, name } ) )
 
 	table.removeValue( scripts, scriptsMap[ lower ] )
 	scriptsMap[ lower ] = nil

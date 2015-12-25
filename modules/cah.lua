@@ -1,7 +1,7 @@
 local json = require( "cjson" )
 
-local white = json.decode( io.contents( "data/cah/white.json" ) )
-local black = json.decode( io.contents( "data/cah/black.json" ) )
+local white = json.decode( io.contents( chat.config.dataDir .. "/cah/white.json" ) )
+local black = json.decode( io.contents( chat.config.dataDir .. "/cah/black.json" ) )
 
 local MINPLAYERS = 4
 local HANDSIZE = 10
@@ -16,7 +16,7 @@ local HANDSIZE = 10
 -- the Card Czar, and every player draws back up to ten cards.[9]
 
 local function loadGame()
-	local state = io.contents( "data/cah/state.json" )
+	local state = io.contents( chat.config.dataDir .. "/cah/state.json" )
 	local default = {
 		state = "answers",
 
@@ -301,11 +301,11 @@ local function advanceGame()
 		end
 	end
 
-	io.writeFile( "data/cah/state.json", json.encode( game ) )
+	io.writeFile( chat.config.dataDir .. "/cah/state.json", json.encode( game ) )
 end
 
 chat.every( 60 * 5, advanceGame )
 
 chat.listen( "reload", function()
-	io.writeFile( "data/cah/state.json", json.encode( game ) )
+	io.writeFile( chat.config.dataDir .. "/cah/state.json", json.encode( game ) )
 end )
