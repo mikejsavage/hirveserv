@@ -139,10 +139,6 @@ chat.command( "post", "user", function( client, args )
 	end )
 end, "Post a message to the bulletin board" )
 
-chat.listen( "reload", function()
-	posts:close()
-end )
-
 chat.prompt( function( client )
 	if client.user and not prompts[ client.user ] then
 		local setPrompt = #posts > 0 and posts[ #posts ].date > ( client.user.settings.lastRead or 0 )
