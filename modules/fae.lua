@@ -34,7 +34,7 @@ local function niceTime( ts )
 end
 
 chat.command( "fae", nil, function( client )
-	local now = os.time( os.date( "!*t" ) ) + medOffset
+	local now = os.time() + medOffset
 
 	local timeToNM = newmoonPeriod - ( ( now - newmoonReference ) % newmoonPeriod )
 	local timeToEC = eclipsePeriod - ( ( now - eclipseReference ) % eclipsePeriod )
@@ -54,9 +54,9 @@ chat.command( "fae", nil, function( client )
 		"You should check the current/newmoon/eclipse times against Med's #lmtime#lw command.",
 		"If they're different then the codes are wrong.",
 		"",
-		"#lwNow:     #lr%s" % os.date( "%a %b %d %H:%M:%S %Y", now ),
-		"#lwNewmoon: #lr%s" % os.date( "%a %b %d %H:%M:%S %Y", now + timeToNM ),
-		"#lwEclipse: #lr%s" % os.date( "%a %b %d %H:%M:%S %Y", now + timeToEC ),
+		"#lwNow:     #lr%s" % os.date( "!%a %b %d %H:%M:%S %Y", now ),
+		"#lwNewmoon: #lr%s" % os.date( "!%a %b %d %H:%M:%S %Y", now + timeToNM ),
+		"#lwEclipse: #lr%s" % os.date( "!%a %b %d %H:%M:%S %Y", now + timeToEC ),
 		"",
 		"#lmThese codes change in %s" % niceTime( timeToChange ),
 		"#lwXPXP:      #lg%2d %2d %2d" % { daysToEC + 2, daysToNM + 2,  2 },
