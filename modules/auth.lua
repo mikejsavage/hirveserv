@@ -341,7 +341,7 @@ local function addIP( client, name, prefix )
 		return
 	end
 
-	local _, ip = client.socket:peername()
+	local ip = client.socket:getpeername()
 
 	table.insert( client.user.ips, {
 		name = name,
