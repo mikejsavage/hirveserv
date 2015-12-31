@@ -16,37 +16,6 @@ local function sendPings()
 	end
 end
 
-local function startWSServer()
-	local websocket = require( "websocket" ).server.ev
-
-	local wsServer = websocket.listen( {
-		port = chat.config.wsPort,
-
-		protocols = {
-			chat = function( ws )
-				local client = Client.new( ws, true )
-
-				ws:on_message( function( ws, message )
-					local ok, err = pcall( client.onData, client, message )
-
-					if not ok then
-						log.error( "client.onData: %s", err )
-						client:kill()
-					end
-				end )
-
-				ws:on_close( function()
-					client:kill()
-				end )
-
-				-- this doesn't mute handshake errors because
-				-- lua-websockets is great
-				ws:on_error( function() end )
-			end,
-		}
-	} )
-end
-
 server = assert( socket.bind( "*", chat.config.port ) )
 server:settimeout( 0 )
 server:setoption( "keepalive", true )
@@ -106,7 +75,3 @@ ev.IO.new(
 ):start( chat.loop )
 
 chat.every( PingInterval, sendPings )
-
-if chat.config.wsPort then
-	startWSServer()
-end

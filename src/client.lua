@@ -18,14 +18,12 @@ for _, protocol in ipairs( chat.protocols ) do
 	setmetatable( protocol.client, { __index = Client } )
 end
 
-function _M.new( socket, isws )
+function _M.new( socket )
 	local client = {
 		dataBuffer = "",
 
 		socket = socket,
 		state = "connecting",
-
-		websocket = isws,
 
 		handlers = { },
 	}
@@ -51,12 +49,7 @@ function Client:kill( msg )
 	end
 
 	self.state = "killed"
-
-	if self.isws then
-		self.socket:close()
-	else
-		self.socket:shutdown()
-	end
+	self.socket:shutdown()
 
 	table.removeValue( chat.clients, self )
 
