@@ -110,11 +110,12 @@ as appropriate.
 Dependencies
 ------------
 
-lua >= 5.1, lua-cjson  
-lua-bcrypt for auth  
-lua-setuid for privilege dropping  
-lua-arc4random for strong randomness  
-whatsit for WhatsApp integration
+- lua >= 5.1, lua-ev, lua-cjson (`luarocks install lua-ev`, `luarocks
+  install lua-cjson`)
+- lua-bcrypt for auth (`luarocks install bcrypt`)
+- lua-setuid for privilege dropping (`luarocks install setuid`)
+- lua-arc4random for strong randomness (`luarocks install arc4random`)
+- whatsit for WhatsApp integration
 
 
 Running
