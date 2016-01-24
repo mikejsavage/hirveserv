@@ -126,11 +126,11 @@ Running
 
 2. Create `/etc/hirveserv.conf`, for example:
 
-	name = "winnerserv"
-	port = 4055
-	auth = false
-	chroot = true
-	runas = "chat"
+        name = "winnerserv"
+        port = 4055
+        auth = false
+        chroot = true
+        runas = "chat"
 
   See `src/config.lua` for a full list of settings and their defaults.
 
