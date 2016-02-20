@@ -2,7 +2,7 @@ local GagFor = 2
 
 local patterns = {
 	{
-		"reports (.-) is PLAGUED !",
+		"reports (.-) is PLAGUED",
 		"reports: (.-) is PLAGUED",
 		"reports: (.-) has been PLAGUED!",
 		"%[([^%[]-)%] has been Plagued",
