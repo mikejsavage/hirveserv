@@ -12,6 +12,7 @@ local patterns = {
 		"REPORTS %-> %[(.-)%] is %[PLAGUED%]",
 		"%- %[(.-)%]%[Plagued%]",
 		", '%((.-)%)%-%(Plagued%) at",
+		"%((.-)%) got %(PLAGUED%) at",
 	},
 	{
 		"reports (.-) is DISPELLED !",
@@ -25,6 +26,7 @@ local patterns = {
 		"%- %[(.-)%]%[Sanc%]%[Dispelled%]",
 		", '%((.-)%)%-%(Sanctuary%)%(Dispelled%) at",
 		"chats to everybody, '%[(.-)'s%] has been Dispelled!",
+		"%((.-)'s%) %(SANCTUARY%) got %(DISPELLED%) at",
 	},
 	{
 		"reports (.-) just TELEPORTED !",
@@ -34,6 +36,7 @@ local patterns = {
 		"REPORTS %-> %[(.-)%] %[TELEPORTED%]",
 		"%- %[(.-)%]%[Teleported%]",
 		", '%((.-)%)%-%(Teleported%) at",
+		"%((.-)%) %(TELEPORTED%) at",
 	},
 	{
 		"reports (.-) is BLINDED !",
@@ -46,6 +49,7 @@ local patterns = {
 		"REPORTS %-> %[(.-)%] is %[BLIND%]",
 		"%- %[(.-)%]%[Blinded%]",
 		", '%((.-)%)%-%(Blinded%) at",
+		"%((.-)%) got %(BLINDED%) at",
 	},
 	{
 		"reports (.-) is CURSED !",
@@ -55,11 +59,13 @@ local patterns = {
 		"watches (.-) get CURSED!",
 		"REPORTS %-> %[(.-)%] is %[CURSED%]",
 		", '%((.-)%)%-%(Cursed%) at",
+		"%((.-)%) got %(CURSED%) at",
 	},
 	{
 		"reports (.-) is CHILLED !",
 		"REPORTS %-> %[(.-)%] is %[CHILLED%]",
 		", '%((.-)%)%-%(Chilled%) at",
+		"%((.-)%) got %(CHILLED%) at",
 	},
 	{
 		"reports (.-) is POISONED !",
@@ -69,7 +75,8 @@ local patterns = {
 		"watches as (.-) becomes POISONED!",
 		"REPORTS %-> %[(.-)%] is %[POISONED%]",
 		"%- %[(.-)%]%[Poisoned%]",
-		", '%((.-)%)%-%(Cursed%) at",
+		", '%((.-)%)%-%(Poisoned%) at",
+		"%((.-)%) got %(POISONED%) at",
 	},
 	{
 		"reports (.-) is WEAKENED !",
@@ -78,6 +85,7 @@ local patterns = {
 		"REPORTS %-> %[(.-)%] is %[WEAKENED%]",
 		"%[([^%[]-) has been weakened%]",
 		", '%((.-)%)%-%(Weakened%) at",
+		"%((.-)%) got %(WEAKENED%) at",
 	},
 	{
 		"reports .- just %-RESURRECTED%- (.-) !",
@@ -92,6 +100,7 @@ local patterns = {
 		"sees .- HANDS (.-) out of FORMATION!",
 		"REPORTS %-> %[(.-)%] has been %[HANDSED%] at",
 		":  (.-) has been hit with HAND OF WIND by",
+		"%(.-%) %(HANDSED%) %((.-)%) at",
 	},
 	{
 		"just %-RESCUED%- (.-) !",
@@ -112,6 +121,7 @@ local silence = {
 	"notices .- get FAERIED!",
 	"%[.- has been faerie fired%]",
 	"REPORTS %-> %[.-%] is %[FAERIED%]",
+	"got %(FAERIE FIRED%) at",
 
 	"I have been Sanced",
 	"I have lost Sanctuary",
