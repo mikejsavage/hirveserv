@@ -105,7 +105,7 @@ local function scriptInfo( client, name )
 	local msg = {
 		"Script: #lm%s#lw:" % script.name,
 		"#lwAuthor: #ly%s" % script.author,
-		"#lwLast updated: #lg%s" % os.date( "%e %b", script.updated ),
+		"#lwLast updated: #lg%s" % os.date( "%e %b %y", script.updated ),
 	}
 
 	if script.long then
