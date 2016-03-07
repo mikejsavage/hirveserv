@@ -113,6 +113,9 @@ local patterns = {
 		"REPORTS %-> %[(.-)%] is %[MUFFLED%] at",
 		"%- %[(.-)%]%[Muffled%]",
 	},
+	{
+		"just saw (.-) recite a teleport !",
+	},
 }
 
 local silence = {
