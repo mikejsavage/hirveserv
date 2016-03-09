@@ -126,6 +126,7 @@ local silence = {
 	"%[.- has been faerie fired%]",
 	"REPORTS %-> %[.-%] is %[FAERIED%]",
 	"got %(FAERIE FIRED%) at",
+	"%((.-)%)%-%(Faerie Fired%) at"
 
 	"I have been Sanced",
 	"I have lost Sanctuary",
