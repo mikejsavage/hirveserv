@@ -27,7 +27,7 @@ local patterns = {
 		", '%((.-)%)%-%(Sanctuary%)%(Dispelled%) at",
 		"chats to everybody, '%[(.-)'s%] has been Dispelled!",
 		"%((.-)'s%) %(SANCTUARY%) got %(DISPELLED%) at",
-		".(.-)'s. ASS has no .SANCTUARY.",
+		"' .(.-)'s. ASS has no .SANCTUARY.",
 	},
 	{
 		"reports (.-) just TELEPORTED !",
