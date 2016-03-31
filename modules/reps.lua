@@ -94,7 +94,7 @@ local patterns = {
 		"reports .- just %+%+RESSED%+%+(.-) !",
 		"REPORTS %-> %[(.-)%] %[RESSED%] by",
 		"%*%*%* (.-) was just RESURRECTED",
-		", '%((.-)%) has been %(Resurrected%) at",
+		"%((.-)%) has been %(Resurrected%) at",
 	},
 	{
 		"reports .- just HANDSED (.-) !",
