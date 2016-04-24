@@ -70,7 +70,7 @@ local function checkUser( name, decoded, err )
 end
 
 for file in lfs.dir( chat.config.dataDir .. "/users" ) do
-	local user = file:match( "^(%l+)%.json$" )
+	local user = file:match( "^(.+)%.json$" )
 
 	if user then
 		local contents, err = io.contents( chat.config.dataDir .. "/users/" .. file )
