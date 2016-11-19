@@ -13,6 +13,7 @@ local patterns = {
 		"%- %[(.-)%]%[Plagued%]",
 		", '%((.-)%)%-%(Plagued%) at",
 		"%((.-)%) got %(PLAGUED%) at",
+		"%[([^%[]-) has been PLAGUED!%]",
 	},
 	{
 		"reports (.-) is DISPELLED !",
@@ -28,6 +29,7 @@ local patterns = {
 		"chats to everybody, '%[(.-)'s%] has been Dispelled!",
 		"%((.-)'s%) %(SANCTUARY%) got %(DISPELLED%) at",
 		"' .(.-)'s. ASS has no .SANCTUARY.",
+		"%[([^%[]-) has been DISPELLED!%]",
 	},
 	{
 		"reports (.-) just TELEPORTED !",
@@ -78,6 +80,7 @@ local patterns = {
 		"%- %[(.-)%]%[Poisoned%]",
 		", '%((.-)%)%-%(Poisoned%) at",
 		"%((.-)%) got %(POISONED%) at",
+		"%[([^%[]-) has been POISONED!%]",
 	},
 	{
 		"reports (.-) is WEAKENED !",
@@ -112,6 +115,7 @@ local patterns = {
 		"%[([^%[]-)%] has been Muffled",
 		"REPORTS %-> %[(.-)%] is %[MUFFLED%] at",
 		"%- %[(.-)%]%[Muffled%]",
+		"%[([^%[]-) has been MUFFLED!%]",
 	},
 	{
 		"just saw (.-) recite a teleport !",
