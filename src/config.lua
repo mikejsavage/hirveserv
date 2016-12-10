@@ -5,6 +5,7 @@ function _M.load( path )
 
 	local config = setmetatable( {
 		name = "hirveserv",
+		debug = false,
 		port = 4050,
 		auth = false,
 		bcryptRounds = 5,

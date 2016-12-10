@@ -168,6 +168,10 @@ function Client:onCommand( command, args )
 	elseif command == "version" then
 		self.version = args
 	elseif command ~= "pingResponse" then
+		if chat.config.debug then
+			print( self.name, command, args:stripVT102() )
+		end
+
 		local coro, name = self:handler( command )
 
 		if coro then
