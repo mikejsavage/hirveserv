@@ -88,6 +88,11 @@ chat.command( "snoop", "user", {
 	end,
 
 	[ "^(%S+)$" ] = function( client, stream )
+		if streams[ client.user.name ] then
+			client:msg( "You can't snoop and stream at the same time." )
+			return
+		end
+
 		if snooping[ client ] then
 			client:msg( "Stopped snooping #ly%s#lw.", snooping[ client ] )
 			table.removeValue( streams[ snooping[ client ] ].snoopers, client )
