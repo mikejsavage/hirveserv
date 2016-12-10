@@ -17,6 +17,8 @@ local CommandBytes = {
 	sendList = "\16",
 	sendArray = "\17",
 	sendBarItem = "\18",
+	snoopStart = "\30",
+	snoopData = "\31",
 	sendSubstitute = "\33",
 }
 
@@ -48,6 +50,10 @@ function MMClient:processData()
 				self.acceptCommands = true
 			elseif args:match( "<CHAT> .- is no longer accepting commands from you %." ) then
 				self.acceptCommands = false
+			elseif args:match( "<CHAT> You are now allowed to snoop .-%." ) then
+				self.allowSnoop = true
+			elseif args:match( "You are no longer allowed to snoop .-%." ) then
+				self.allowSnoop = false
 			end
 		end
 
@@ -66,6 +72,10 @@ function MMClient:processData()
 end
 
 function MMClient:send( command, args )
+	if not args then
+		args = ""
+	end
+
 	enforce( command, "command", "string" )
 	enforce( args, "args", "string" )
 
