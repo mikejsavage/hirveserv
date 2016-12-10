@@ -1,4 +1,4 @@
-SOURCES = $(wildcard src/*.lua)
+SOURCES = $(wildcard src/*.lua src/protocols/*.lua)
 TARGET = hirveserv
 
 all: $(TARGET)
