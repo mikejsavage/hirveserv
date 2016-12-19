@@ -121,7 +121,7 @@ chat.command( "unsnoop", "user", function( client )
 
 	client:msg( "Stopped snooping #ly%s#lw.", snooping[ client ] )
 
-	table.removeValue( streams[ snooping[ client ] ], client )
+	table.removeValue( streams[ snooping[ client ] ].snoopers, client )
 	snooping[ client ] = nil
 end, "Stop watching livestreams" )
 
