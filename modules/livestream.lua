@@ -109,7 +109,7 @@ chat.command( "snoop", "user", {
 		table.insert( streams[ stream ].snoopers, client )
 		snooping[ client ] = stream
 
-		client:msg( "Snooping #ly%s#lw! #lm%s#lw me #lmunsnoop#lw to stop snooping.", client.pmSyntax, stream )
+		client:msg( "Snooping #ly%s#lw! #lm%s#lw me #lmunsnoop#lw to stop snooping.", stream, client.pmSyntax )
 	end,
 }, "Watch a livestream" )
 
