@@ -93,7 +93,7 @@ function io.contents( path )
 		return nil, err
 	end
 
-	local contents = file:read( "*a" )
+	local contents = file:read( "*a" ):gsub( "\r", "" )
 
 	file:close()
 
