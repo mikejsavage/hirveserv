@@ -110,12 +110,13 @@ as appropriate.
 Dependencies
 ------------
 
-- lua >= 5.1, lua-ev, lua-cjson (`luarocks install lua-ev`, `luarocks
-  install lua-cjson`)
+- lua >= 5.1, lua-ev, lua-cjson, luafilesystem and luasocket (`luarocks install lua-ev`, `luarocks
+  install lua-cjson`, `luarocks install luafilesystem`, `luarockets
+  install luasocket`)
+- libev, libssl-dev and git for building some of the rocks
 - lua-bcrypt for auth (`luarocks install bcrypt`)
 - lua-setuid for privilege dropping (`luarocks install setuid`)
 - lua-arc4random for strong randomness (`luarocks install arc4random`)
-- whatsit for WhatsApp integration
 
 
 Running
