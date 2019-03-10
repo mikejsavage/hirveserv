@@ -110,9 +110,11 @@ as appropriate.
 Dependencies
 ------------
 
-- lua >= 5.1, lua-ev, lua-cjson, luafilesystem and luasocket (`luarocks install lua-ev`, `luarocks
-  install lua-cjson`, `luarocks install luafilesystem`, `luarockets
-  install luasocket`)
+- lua >= 5.1, lua-ev, lua-cjson, luafilesystem and luasocket (`luarocks
+  install
+  https://raw.githubusercontent.com/brimworks/lua-ev/master/rockspec/lua-ev-scm-1.rockspec`,
+  `luarocks install lua-cjson`, `luarocks install luafilesystem`,
+  `luarockets install luasocket`)
 - libev, libssl-dev and git for building some of the rocks
 - lua-bcrypt for auth (`luarocks install bcrypt`)
 - lua-setuid for privilege dropping (`luarocks install setuid`)
