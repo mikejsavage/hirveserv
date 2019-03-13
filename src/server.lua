@@ -58,6 +58,7 @@ local function onConnection()
 
 	socket:settimeout( 0 )
 	socket:setoption( "keepalive", true )
+	socket:setoption( "tcp-nodelay", true )
 
 	local client = Client.new( socket )
 
