@@ -25,7 +25,7 @@ local scriptsMap = { }
 local prompts = { }
 
 local function validScript( script )
-	return pcall( function()
+	return chat.pcall( function()
 		assert( type( script.author ) == "string" )
 		assert( type( script.description ) == "string" )
 		assert( not script.long or type( script.long ) == "string" )

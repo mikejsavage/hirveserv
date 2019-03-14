@@ -37,7 +37,7 @@ local function onData( client )
 		end
 
 		if data then
-			local ok, errData = pcall( client.onData, client, data )
+			local ok, errData = chat.pcall( client.onData, client, data )
 
 			if not ok then
 				log.error( "client.onData: %s", errData )

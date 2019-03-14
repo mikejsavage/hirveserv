@@ -1,9 +1,16 @@
 local ev = require( "ev" )
 
+function chat.pcall( f, ... )
+	if _VERSION == "Lua 5.1" then
+		return pcall( f, ... )
+	end
+	return xpcall( f, debug.traceback, ... )
+end
+
 -- TODO: this is awful
 getmetatable( "" ).__mod = function( self, form )
 	if type( form ) == "table" then
-		local ok, err = pcall( string.format, self, table.unpack( form ) )
+		local ok, err = chat.pcall( string.format, self, table.unpack( form ) )
 
 		if not ok then
 			print( self )
@@ -16,7 +23,7 @@ getmetatable( "" ).__mod = function( self, form )
 		return self:format( table.unpack( form ) )
 	end
 
-	local ok, err = pcall( string.format, self, form )
+	local ok, err = chat.pcall( string.format, self, form )
 
 	if not ok then
 		print( self )

@@ -232,7 +232,7 @@ function Client:hop()
 	self.coros = { }
 
 	if self.state == "chatting" then
-		local ok, err = pcall( Client.pushHandler, self, "chat" )
+		local ok, err = chat.pcall( Client.pushHandler, self, "chat" )
 
 		if not ok then
 			log.error( "hop failed for %s (state %s): %s", self.name, self.state, err )

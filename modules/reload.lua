@@ -3,7 +3,7 @@ local modules = require( "modules" )
 chat.command( "reload", "all", function( client )
 	chat.event( "reload" )
 
-	local ok, err = pcall( modules.load )
+	local ok, err = chat.pcall( modules.load )
 
 	if not ok then
 		client:msg( "Failed: %s", err )

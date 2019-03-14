@@ -122,7 +122,7 @@ local function loadModule( path, newCommands, newCommandNames, newHandlers, newE
 		setfenv( fn, env )
 	end
 
-	assert( pcall( fn ) )
+	assert( chat.pcall( fn ) )
 end
 
 local function makeHelp( newCommands, newCommandNames )

@@ -182,7 +182,7 @@ chat.command( "rebuildwiki", "all", function( client )
 	local oldPages = pages
 	local oldSections = sections
 
-	local ok, err = pcall( buildWiki )
+	local ok, err = chat.pcall( buildWiki )
 
 	if not ok then
 		client:msg( "Rebuild failed! %s", err )

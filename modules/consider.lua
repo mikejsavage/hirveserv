@@ -112,7 +112,7 @@ end, "Search consider database" )
 chat.command( "rebuildconsider", "all", function( client )
 	considers = { }
 
-	local ok, err = pcall( buildConsiders )
+	local ok, err = chat.pcall( buildConsiders )
 
 	if not ok then
 		client:msg( "Rebuild failed! %s", err )

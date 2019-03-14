@@ -49,7 +49,7 @@ local function handlePM( client, message, silent )
 	local badSyntax = true
 
 	for _, callback in ipairs( command.callbacks ) do
-		local ok, err, subs = pcall( string.gsub, args, callback.pattern, function( ... )
+		local ok, err, subs = chat.pcall( string.gsub, args, callback.pattern, function( ... )
 			callback.callback( client, ... )
 		end )
 
