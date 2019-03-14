@@ -4,10 +4,4 @@ TODO
 config.lua
 .tags
 
-data/board
-data/consider
-data/users
-data/scripts
-data/wiki
-data/motd.txt
-data/cah/state.json
+data
