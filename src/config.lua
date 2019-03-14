@@ -10,8 +10,6 @@ function _M.load( path )
 		auth = false,
 		bcryptRounds = 5,
 		tempAuthDuration = 60,
-		chroot = false,
-		runas = false,
 		logLines = 2500,
 		dataDir = "/var/lib/hirveserv",
 		whatsit = false,

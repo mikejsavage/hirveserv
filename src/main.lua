@@ -33,26 +33,4 @@ end
 require( "server" )
 require( "modules" ).load()
 
-if chat.config.chroot or chat.config.runas then
-	local setuid = require( "setuid" )
-
-	if chat.config.chroot then
-		local ok, err = setuid.chroot( ".", chat.config.runas or nil )
-
-		if not ok then
-			log.error( "Failed chroot: %s", err )
-
-			return
-		end
-	elseif chat.config.runas then
-		local ok, err = setuid.setuser( chat.config.runas )
-
-		if not ok then
-			log.error( "Failed setuser: %s", err )
-
-			return
-		end
-	end
-end
-
 chat.loop:loop()
