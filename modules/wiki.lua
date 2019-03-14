@@ -1,11 +1,5 @@
-local EntriesPerPage = 10
-
-local pages = { }
-local pagesList = { }
-
-local function checkClash( name )
-	assert( not pages[ name ], "name clash: %s" % name )
-end
+local pages
+local sections
 
 local function loadPage( path )
 	local page = assert( io.contents( path ) )
@@ -17,7 +11,11 @@ local function loadPage( path )
 	}
 end
 
-local function addPage( path, name )
+local function checkClash( name )
+	assert( not pages[ name ], "name clash: %s" % name )
+end
+
+local function addPage( section, path, name )
 	if not name then
 		return
 	end
@@ -26,10 +24,10 @@ local function addPage( path, name )
 
 	pages[ name ] = loadPage( path, name )
 	pages[ name ].name = name
-	table.insert( pagesList, name )
+	table.insert( sections[ section ].pages, name )
 end
 
-local function addMultiPage( path, name )
+local function addMultiPage( section, path, name )
 	local info = assert( io.contents( "%s/%s.txt" % { path, name } ) )
 	local title, files = info:match( "^([^\n]+)%s+(.+)$" )
 
@@ -46,48 +44,83 @@ local function addMultiPage( path, name )
 	checkClash( name )
 
 	pages[ name ] = page
-	table.insert( pagesList, name )
+	table.insert( sections[ section ].pages, name )
+end
+
+local function loadSection()
+	local contents = io.contents( chat.config.dataDir .. "/wiki/sections.txt" )
+	if not contents then
+		table.insert( sections, { pages = { } } )
+		return { }, 1
+	end
+
+	local map = { }
+	local default = 1
+
+	for line in contents:gmatch( "([^\n]+)" ) do
+		if line:find( ":" ) then
+			if sections[ #sections ] and #sections[ #sections ].pages == 0 then
+				default = #sections
+			end
+			table.insert( sections, { title = line, pages = { } } )
+		elseif line ~= "" then
+			map[ line ] = #sections
+		end
+	end
+
+	return map, default
 end
 
 local function buildWiki()
+	pages = { }
+	sections = { }
+
 	if not io.readable( chat.config.dataDir .. "/wiki" ) then
 		return
 	end
 
+	local secMap, defaultSection = loadSection()
+
 	for file in lfs.dir( chat.config.dataDir .. "/wiki" ) do
-		if file ~= "." and file ~= ".." then
-			local fullPath = chat.config.dataDir .. "/wiki/" .. file
+		if file:sub( 1, 1 ) ~= "." and file ~= "sections.txt" then
+			local fullPath = "%s/wiki/%s" % { chat.config.dataDir, file }
 			local attr = lfs.attributes( fullPath )
 
 			file = file:lower()
 
 			if attr.mode == "directory" then
-				addMultiPage( fullPath, file )
+				addMultiPage( secMap[ file ] or defaultSection, fullPath, file )
 			else
 				local name = file:match( "^(.+)%.txt$" )
-
-				addPage( fullPath, name )
+				addPage( secMap[ name ] or defaultSection, fullPath, name )
 			end
 		end
 	end
 
-	table.sort( pagesList )
+	for _, section in ipairs( sections ) do
+		table.sort( section.pages )
+	end
 end
 
 chat.command( "wiki", "user", {
 	[ "^$" ] = function( client )
-		local output = "#lwThe wiki has the following entries:"
+		local output = { "#lwWiki:" }
 
-		for _, name in ipairs( pagesList ) do
-			local page = pages[ name ]
-
-			output = output .. "\n    #ly%s #d- %s" % {
-				page.name,
-				page.title,
-			}
+		for _, section in ipairs( sections ) do
+			if section.title then
+				if section ~= sections[ 1 ] then
+					table.insert( output, "" )
+				end
+				table.insert( output, "#lw%s" % section.title )
+				table.insert( output, "" )
+			end
+			for _, name in ipairs( section.pages ) do
+				local page = pages[ name ]
+				table.insert( output, "    #ly%s #d- %s" % { page.name, page.title } )
+			end
 		end
 
-		client:msg( "%s", output )
+		client:msg( output )
 	end,
 
 	[ "^(%S+)$" ] = function( client, name )
@@ -110,7 +143,8 @@ chat.command( "wiki", "user", {
 		}
 
 		for i, section in ipairs( page.sections ) do
-			output = output .. "\n    #ly%d #d- %s" % {
+			output = output .. "\n    #ly%s %d #d- %s" % {
+				name,
 				i,
 				section.title,
 			}
@@ -142,16 +176,18 @@ chat.command( "wiki", "user", {
 			section.body
 		)
 	end,
-}, "<category/page> [page] [search]", "Super duper wiki" )
+}, "<page> [subpage]", "Super duper wiki" )
 
 chat.command( "rebuildwiki", "all", function( client )
-	pages = { }
-	pagesList = { }
+	local oldPages = pages
+	local oldSections = sections
 
 	local ok, err = pcall( buildWiki )
 
 	if not ok then
 		client:msg( "Rebuild failed! %s", err )
+		pages = oldPages
+		sections = oldSections
 	else
 		client:msg( "Rebuilt." )
 	end
