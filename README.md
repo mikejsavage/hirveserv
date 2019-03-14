@@ -61,8 +61,8 @@ Running
 
   See `src/config.lua` for a full list of settings and their defaults.
 
-3. Move the modules folder and `data/cah` into `/var/lib/hirveserv` (or
-   whatever you set `dataDir` to in the config).
+3. Move the modules folder  into `/var/lib/hirveserv` (or whatever you
+   set `dataDir` to in the config).
 
 On first run it will prompt you to create an admin account and give you
 a password for it, which you should be able to connect normally with.
