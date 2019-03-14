@@ -178,6 +178,59 @@ chat.command( "wiki", "user", {
 	end,
 }, "<page> [subpage]", "Super duper wiki" )
 
+local function searchString( str, needle )
+	return str:lower():find( needle, 1, true )
+end
+
+local function searchPage( page, needle )
+	local res = "    #ly%s#d - %s" % { page.name, page.title }
+
+	if searchString( page.name, needle ) then
+		return res
+	end
+
+	if searchString( page.title, needle ) then
+		return res
+	end
+
+	if page.sections then
+		for i, section in ipairs( page.sections )  do
+			if searchString( section.body, needle ) then
+				return "    #ly%s %d#d - %s" % { page.name, i, section.title }
+			end
+		end
+	elseif searchString( page.body, needle ) then
+		return res
+	end
+end
+
+local function search( needle )
+	local output = { "#lwResults for #ly%s#lw:" % needle }
+
+	for _, section in ipairs( sections ) do
+		for _, name in ipairs( section.pages ) do
+			local res = searchPage( pages[ name ], needle )
+			if res then
+				table.insert( output, res )
+				if #output >= 10 then
+					table.insert( output, "#lwToo many results. Try to be more specific!" )
+					return output
+				end
+			end
+		end
+	end
+
+	if #output == 1 then
+		return { "#lwCouldn't find anything about #ly%s" % needle }
+	end
+
+	return output
+end
+
+chat.command( "search", "user", function( client, needle )
+	client:msg( search( needle:lower() ) )
+end, "Search wiki" )
+
 chat.command( "rebuildwiki", "all", function( client )
 	local oldPages = pages
 	local oldSections = sections
