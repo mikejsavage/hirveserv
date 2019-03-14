@@ -68,9 +68,9 @@ On first run it will prompt you to create an admin account and give you
 a password for it, which you should be able to connect normally with.
 You can then `/chat 1 help` to get a list of commands.
 
-If you would like to run more than instance simultaneously, hirveserv
-looks at its first command line argument for an alternative config
-location, which can point to its own data directory.
+If you would like to run more than one instance simultaneously,
+hirveserv looks at its first command line argument for an alternative
+config location, which can point to its own data directory.
 
 
 Upgrading
