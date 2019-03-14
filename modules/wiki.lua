@@ -205,30 +205,38 @@ local function searchPage( page, needle )
 end
 
 local function search( needle )
-	local output = { "#lwResults for #ly%s#lw:" % needle }
+	local results = { }
 
 	for _, section in ipairs( sections ) do
 		for _, name in ipairs( section.pages ) do
 			local res = searchPage( pages[ name ], needle )
 			if res then
-				table.insert( output, res )
-				if #output >= 10 then
-					table.insert( output, "#lwToo many results. Try to be more specific!" )
-					return output
+				table.insert( results, res )
+				if #results >= 10 then
+					return results, true
 				end
 			end
 		end
 	end
 
-	if #output == 1 then
-		return { "#lwCouldn't find anything about #ly%s" % needle }
-	end
-
-	return output
+	return results
 end
 
 chat.command( "search", "user", function( client, needle )
-	client:msg( search( needle:lower() ) )
+	local results, truncated = search( needle:lower() )
+	table.sort( results )
+
+	if #results == 0 then
+		client:msg( "#lwCouldn't find anything about #ly%s", needle )
+		return
+	end
+
+	table.insert( results, 1, "#lwResults for #ly%s#lw:" % needle )
+	if truncated then
+		table.insert( results, "#lwToo many results. Try to be more specific!" )
+	end
+
+	client:msg( results )
 end, "Search wiki" )
 
 chat.command( "rebuildwiki", "all", function( client )
