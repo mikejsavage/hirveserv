@@ -115,7 +115,9 @@ local patterns = {
 		"%[([^%[]-)%] has been Muffled",
 		"REPORTS %-> %[(.-)%] is %[MUFFLED%] at",
 		"%- %[(.-)%]%[Muffled%]",
+		"%[([^%[]-) has been MUFFLED%]",
 		"%[([^%[]-) has been MUFFLED!%]",
+		"%[([^%[]-) IS MUFFLED!!%]",
 	},
 	{
 		"just saw (.-) recite a teleport !",
