@@ -32,6 +32,9 @@ local patterns = {
 		"%[([^%[]-) has been DISPELLED!%]",
 	},
 	{
+		"%[([^%[]-) has been dispelled%] %[fireshield%]",
+	},
+	{
 		"reports (.-) just TELEPORTED !",
 		"reports: (.-) has just TELEPORTED",
 		"notices (.-) just TELEPORTED away!",
