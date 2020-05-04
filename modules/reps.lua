@@ -46,6 +46,7 @@ local patterns = {
 		"- [TARGET][Teleported]",
 		", '(TARGET)-(Teleported) at",
 		"(TARGET) (TELEPORTED) at",
+		"TARGET chants the magical words 'Seeyoulatamadafaka'!",
 	},
 	{
 		"reports TARGET is BLINDED !",
