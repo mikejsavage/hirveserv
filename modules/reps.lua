@@ -154,7 +154,7 @@ local silence = {
 }
 
 local function makePattern( x )
-	return ( x:patternEscape():gsub( "BLAH", ".-" ):gsub( "%%%?%%%?", "." ):gsub( "TARGET", "([^%%[%%]%%(%%)%*]-)" ) )
+	return ( x:patternEscape():gsub( "BLAH", ".-" ):gsub( "%%%?%%%?", "." ):gsub( "TARGET", "([^%%[%%]%%(%%)%%*]-)" ) )
 end
 
 local badTargets = {
