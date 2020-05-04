@@ -154,7 +154,7 @@ local silence = {
 }
 
 local function makePattern( x )
-	return ( x:patternEscape():gsub( "BLAH", ".-" ):gsub( "%%%?%%%?", "." ):gsub( "TARGET", "([^%%[%%]%%(%%)]-)" ) )
+	return ( x:patternEscape():gsub( "BLAH", ".-" ):gsub( "%%%?%%%?", "." ):gsub( "TARGET", "([^%%[%%]%%(%%)%*]-)" ) )
 end
 
 local badTargets = {
@@ -170,7 +170,6 @@ for _, spell in ipairs( patterns ) do
 	local p = { }
 	for _, pattern in ipairs( spell ) do
 		table.insert( p, makePattern( pattern ) )
-		print( pattern, "->", makePattern( pattern ) )
 	end
 
 	table.insert( reps, {
