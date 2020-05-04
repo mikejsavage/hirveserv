@@ -18,7 +18,7 @@ local patterns = {
 	{
 		"reports TARGET is DISPELLED !",
 		"reports: TARGET SANCTUARY has faded!",
-		"[TARGET] has lost Sanctury",
+		"[TARGET] has lost Sanctuary",
 		"[TARGET has been dispelled] [sanctuary]",
 		"watches as TARGET loses SANCTUARY!",
 		"notices TARGET is DISPELLED!",
@@ -33,6 +33,9 @@ local patterns = {
 	},
 	{
 		"[TARGET has been dispelled] [fireshield]",
+	},
+	{
+		"[TARGET has been dispelled] [iceshield]",
 	},
 	{
 		"reports TARGET just TELEPORTED !",
