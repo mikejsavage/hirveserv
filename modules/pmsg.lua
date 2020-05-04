@@ -7,6 +7,8 @@ local function sendPM( silent )
 				target = target.user
 			end
 
+			message = message:gsub( "#", "##" )
+
 			target:msg( "PM from #ly%s#lw:#d %s", client.name, message )
 
 			if not silent then
