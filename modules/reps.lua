@@ -191,6 +191,10 @@ local function isRepeatRep( message, now )
 	for _, spell in ipairs( reps ) do
 		local target = targetFromRep( spell, message )
 
+		if target == "HIRVETEST" then
+			return true
+		end
+
 		if target and not badTargets[ target ] then
 			if spell.last.target == target and spell.last.gagUntil >= now then
 				spell.last.gagUntil = now + GagFor
