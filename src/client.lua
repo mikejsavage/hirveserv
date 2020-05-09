@@ -101,7 +101,7 @@ function Client:onData( data )
 				self:kill()
 			end
 
-			self.websocket.buffer = self.websocket.buffer:sub( len + 1 )
+			self.websocket.buffer = self.websocket.buffer:sub( len )
 			self.websocket.expect_continuation = expect_continuation
 		end
 	end

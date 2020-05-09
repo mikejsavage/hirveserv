@@ -89,6 +89,7 @@ function _M.parse_frame( data )
 
 		if MASK == 0 then
 			frame.data = data:sub( pos, pos + data_length )
+			pos = pos + data_length
 			assert( #frame.data == data_length )
 		else
 			local key = { string.unpack( "BBBB", data, pos ) }
