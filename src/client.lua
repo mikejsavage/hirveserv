@@ -1,6 +1,16 @@
 local lfs = require( "lfs" )
 local json = require( "cjson.safe" )
 
+local lua53_or_higher = _VERSION ~= "Lua 5.1" and _VERSION ~= "Lua 5.2"
+
+local websocket
+if lua53_or_higher then
+	log.info( "Using websockets" )
+	websocket = require( "websocket" )
+else
+	log.info( "Upgrade to Lua 5.3 or higher to enable websockets" )
+end
+
 local modules = require( "modules" )
 
 local ConnectionTimeout = 10
@@ -59,12 +69,61 @@ function Client:kill( msg )
 end
 
 function Client:onData( data )
-	self.dataBuffer = self.dataBuffer .. data
+	if not self.websocket then
+		self.dataBuffer = self.dataBuffer .. data
+		self:processData()
+	else
+		self.websocket.buffer = self.websocket.buffer .. data
 
-	self:processData()
+		while true do
+			local frame, len = websocket.parse_frame( self.websocket.buffer )
+			if not frame then
+				break
+			end
+
+			local ok, data, response, expect_continuation = websocket.process_frame( frame, self.websocket.expect_continuation )
+
+			if data then
+				table.insert( self.websocket.frames, data )
+
+				if not expect_continuation then
+					self.dataBuffer = self.dataBuffer .. table.concat( self.websocket.frames, "" )
+					self.websocket.frames = { }
+					self:processData()
+				end
+			end
+
+			if response then
+				self.websocket:send( response )
+			end
+
+			if not ok then
+				self:kill()
+			end
+
+			self.websocket.buffer = self.websocket.buffer:sub( len + 1 )
+			self.websocket.expect_continuation = expect_continuation
+		end
+	end
 end
 
 function Client:processData()
+	if lua53_or_higher and not self.websocket then
+		local ok, len, response = websocket.handshake( self.dataBuffer )
+		if ok then
+			self.socket:send( response )
+
+			local rest = self.dataBuffer:sub( len )
+			self.websocket = {
+				buffer = "",
+				frames = { },
+				expect_continuation = false,
+			}
+			self.dataBuffer = ""
+			self:onData( rest )
+		end
+	end
+
 	for _, protocol in ipairs( chat.protocols ) do
 		if protocol.accept( self ) then
 			setmetatable( self, { __index = protocol.client } )
@@ -91,7 +150,11 @@ function Client:processData()
 end
 
 function Client:raw( data )
-	self.socket:send( data )
+	if not self.websocket then
+		self.socket:send( data )
+	else
+		self.socket:send( websocket.binary( data ) )
+	end
 end
 
 function Client:handler( command )

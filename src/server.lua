@@ -76,3 +76,7 @@ ev.IO.new(
 ):start( chat.loop )
 
 chat.every( PingInterval, sendPings )
+
+if chat.config.wsPort then
+	startWSServer()
+end
