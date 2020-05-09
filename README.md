@@ -24,6 +24,8 @@ An incomplete list of features:
   * if everyone reports the same event, gag all but the first one
   * currently only setup for Medievia but easy enough to modify
   * big spam reduction for PvP
+* websockets
+  * web clients and regular clients both connect to a single port
 * scripts repository
   * users can upload scripts to the server
   * other users can then install scripts with one command
@@ -33,8 +35,9 @@ An incomplete list of features:
 Dependencies
 ------------
 
-hirveserv depends on lua (5.1/5.2/5.3 all work), OpenSSL, libev (and
--dev packages if your OS uses those). It also depends on some lua
+hirveserv depends on Lua, OpenSSL, libev (and -dev packages if your OS
+uses those). hirveserv supports Lua 5.1 and onwards, but websockets only
+work when using Lua 5.3 or newer. hirveserv also depends on some Lua
 modules:
 
 ```sh
@@ -50,10 +53,12 @@ luarocks install arc4random
 Running
 -------
 
-1. Run `make` and put the resulting hirveserv binary somewhere in
+1. Install the dependences as listed above
+
+2. Run `make` and put the resulting hirveserv binary somewhere in
    `$PATH`.
 
-2. Create `/etc/hirveserv.conf`, for example:
+3. Create `/etc/hirveserv.conf`, for example:
 
         name = "winnerserv"
         port = 4055
@@ -61,12 +66,15 @@ Running
 
   See `src/config.lua` for a full list of settings and their defaults.
 
-3. Move the modules folder  into `/var/lib/hirveserv` (or whatever you
+4. Move the modules folder  into `/var/lib/hirveserv` (or whatever you
    set `dataDir` to in the config).
 
-On first run it will prompt you to create an admin account and give you
-a password for it, which you should be able to connect normally with.
-You can then `/chat 1 help` to get a list of commands.
+5. The first time you run hirveserv it will prompt you to make an admin
+   account.
+
+6. After that you can run hirveserv like any other service.
+
+Once you've connected you can `/chat 1 help` to get a list of commands.
 
 If you would like to run more than one instance simultaneously,
 hirveserv looks at its first command line argument for an alternative

@@ -12,7 +12,6 @@ function _M.load( path )
 		tempAuthDuration = 60,
 		logLines = 2500,
 		dataDir = "/var/lib/hirveserv",
-		whatsit = false,
 	}, { __index = { } } )
 
 	local fn, err = loadfile( path, "t", config )
