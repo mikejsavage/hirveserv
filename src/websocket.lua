@@ -51,9 +51,9 @@ local function make_frame( opcode, data, fin )
 	if #data <= 125 then
 		result = result .. string.char( #data )
 	elseif #data <= 0xFFFF then
-		result = result .. string.pack( "<BI2", 126, #data )
+		result = result .. string.pack( ">BI2", 126, #data )
 	else
-		result = result .. string.pack( "<BI8", 127, #data )
+		result = result .. string.pack( ">BI8", 127, #data )
 	end
 
 	return result .. data
@@ -82,9 +82,9 @@ function _M.parse_frame( data )
 		local data_length = bit32.band( b1, 0x7F )
 
 		if data_length == 126 then
-			data_length, pos = string.unpack( "<I2", data, pos )
+			data_length, pos = string.unpack( ">I2", data, pos )
 		elseif data_length == 127 then
-			data_length, pos = string.unpack( "<I8", data, pos )
+			data_length, pos = string.unpack( ">I8", data, pos )
 		end
 
 		if MASK == 0 then
