@@ -1,7 +1,7 @@
-local motd = io.contents( chat.config.dataDir .. "/motd.txt" )
+local motd = io.contents( chat.config.dataDir .. "/motd.txt" ) or ""
 
 local function sendMotd( client )
-	if motd and motd ~= "" then
+	if motd ~= "" then
 		client:msg( "%s", motd:gsub( "#", "##" ) )
 	end
 end
@@ -43,6 +43,5 @@ chat.command( "editmotd", "user", function( client )
 		updateMotd( client, newMotd )
 	end )
 end, "Update MOTD using the editor" )
-
 
 chat.listen( "connect", sendMotd )
