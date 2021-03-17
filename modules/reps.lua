@@ -33,6 +33,7 @@ local patterns = {
 	},
 	{
 		"[TARGET has been dispelled] [fireshield]",
+		"reports: TARGET's FIRESHIELD has been dispelled.",
 	},
 	{
 		"[TARGET has been dispelled] [iceshield]",
