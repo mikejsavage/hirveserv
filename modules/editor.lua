@@ -35,11 +35,9 @@ local function expandCommand( command )
 
 	if shortCommands[ command ] then
 		return shortCommands[ command ]
-	elseif not validCommands[ command ] then
-		return nil
 	end
 
-	return command
+	return validCommands[ command ] and command
 end
 
 chat.handler( "editor", { "pm" }, function( client, initorcb, callback )
@@ -107,17 +105,15 @@ chat.handler( "editor", { "pm" }, function( client, initorcb, callback )
 
 				if not line then
 					client:msg( "Syntax: <line> [text]" )
-				end
-
-				if real == "insert" or real == "i" then
+				elseif real == "insert" then
 					table.insert( lines, line, text )
-				elseif real == "replace" or real == "r" then
+				elseif real == "replace" then
 					if not lines[ line ] then
 						client:msg( "Bad line index." )
 					else
 						lines[ line ] = text
 					end
-				elseif real == "delete" or real == "d" then
+				elseif real == "delete" then
 					if not lines[ line ] then
 						client:msg( "Bad line index." )
 					else
