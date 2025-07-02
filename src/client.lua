@@ -21,7 +21,7 @@ local Client = { }
 chat.clients = { }
 
 chat.protocols = {
-	require( "protocols.mm" )
+	( require( "protocols.mm" ) ),
 }
 
 for _, protocol in ipairs( chat.protocols ) do
