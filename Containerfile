@@ -9,6 +9,9 @@ RUN luarocks-5.4 install lua-cjson
 RUN luarocks-5.4 install https://luarocks.org/manifests/brimworks/lua-ev-scm-1.rockspec
 RUN luarocks-5.4 install luafilesystem
 RUN luarocks-5.4 install luasocket
+RUN apk del luarocks5.4 gcc git make
+RUN rm /var/cache/apk/*
+RUN rm -r /var/cache/luarocks
 
 RUN echo "auth = true" > /etc/hirveserv.conf
 RUN echo "dataDir = \"/hirveserv\"" >> /etc/hirveserv.conf
